@@ -1,0 +1,26 @@
+{
+  "name": "دار الفرقان لتحفيظ القرآن الكريم",
+  "short_name": "دار الفرقان",
+  "description": "تحفيظ القرآن الكريم ومنح الإجازات وتعليم التجويد والقراءات بكفر الشيخ",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#3A181E",
+  "theme_color": "#3A181E",
+  "dir": "rtl",
+  "lang": "ar",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
