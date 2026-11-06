@@ -86,7 +86,6 @@ body.dark-mode .del-btn{background:#3b1012;color:#ff9b9e}
 .msg.ok{display:block;background:#e5f3e2;color:#1d5a14}
 .top-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px}
 .form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
-.hint{font-size:.82rem;color:var(--text-muted);margin-top:4px;display:block}
 .hidden{display:none !important}
 </style>
 </head>
@@ -133,6 +132,7 @@ body.dark-mode .del-btn{background:#3b1012;color:#ff9b9e}
       <button id="logoutBtn" class="btn-outline" type="button">تسجيل الخروج</button>
     </div>
 
+    <!-- أزرار التنقل بين أقسام الإدارة -->
     <div class="admin-tabs">
       <button class="tab-btn active" data-tab="tabRegs" type="button">📋 طلبات التسجيل</button>
       <button class="tab-btn" data-tab="tabConsults" type="button">🎙️ استشارات التلاوة والحفظ</button>
@@ -221,14 +221,14 @@ body.dark-mode .del-btn{background:#3b1012;color:#ff9b9e}
     <!-- 3. قسم رفع وإدارة المكتبة والمعرض -->
     <div id="tabMedia" class="admin-panel hidden">
       <div class="card">
-        <h3 style="margin-top:0;color:var(--wine)">➕ إضافة صورة للمعرض أو كتاب PDF للمكتبة</h3>
+        <h3 style="margin-top:0;color:var(--wine)">➕ رفع ملف جديد (صورة للمعرض أو كتاب PDF للمكتبة)</h3>
         <form id="mediaForm">
           <div class="form-grid">
             <div>
               <label for="mediaType">نوع الإضافة (أين سيظهر؟)</label>
               <select id="mediaType">
-                <option value="image">🖼️ صورة من الجهاز (تذهب لمعرض الصور للعرض فقط)</option>
-                <option value="pdf">📚 كتاب أو متن على Google Drive (يذهب للمكتبة للتحميل)</option>
+                <option value="image">🖼️ صورة (تذهب لمعرض الصور للعرض فقط)</option>
+                <option value="pdf">📚 ملف PDF (يذهب لمكتبة المتون للتحميل)</option>
               </select>
             </div>
             <div>
@@ -244,21 +244,18 @@ body.dark-mode .del-btn{background:#3b1012;color:#ff9b9e}
           <label for="mediaDesc">وصف مختصر (اختياري)</label>
           <input id="mediaDesc" placeholder="نبذة قصيرة تظهر تحت العنوان...">
 
-          <!-- يظهر عند اختيار صورة -->
-          <div id="imageUploadBox" style="margin-top:8px">
-            <label for="mediaFile">اختر الصورة من هاتفك أو جهازك</label>
-            <input id="mediaFile" type="file" accept="image/*">
-            <span class="hint">يتم ضغط الصورة وضبط جودتها تلقائياً لتعمل في المعرض بسرعة عالية.</span>
+          <div class="form-grid" style="margin-top:8px">
+            <div>
+              <label for="mediaFile">اختر الصورة أو ملف الـ PDF من جهازك</label>
+              <input id="mediaFile" type="file" accept="image/*,.pdf">
+            </div>
+            <div>
+              <label for="mediaUrl">أو ضع رابط مباشر / رابط Google Drive (اختياري لملفات PDF الكبيرة)</label>
+              <input id="mediaUrl" type="url" dir="ltr" placeholder="https://...">
+            </div>
           </div>
 
-          <!-- يظهر عند اختيار ملف PDF -->
-          <div id="pdfLinkBox" class="hidden" style="margin-top:8px">
-            <label for="mediaUrl">رابط الملف على Google Drive</label>
-            <input id="mediaUrl" type="url" dir="ltr" placeholder="https://drive.google.com/file/d/.../view?usp=sharing">
-            <span class="hint">ارفع الملف على Google Drive مهما كان حجمه (حتى 2 جيجا أو أكثر)، واجعل المشاركة "أي شخص لديه الرابط" ثم الصق الرابط هنا.</span>
-          </div>
-
-          <button id="mediaSubmitBtn" class="primary" type="submit" style="margin-top:16px">⬆️ حفظ ونشر في القسم المخصص</button>
+          <button id="mediaSubmitBtn" class="primary" type="submit" style="margin-top:16px">⬆️ رفع وحفظ في القسم المخصص</button>
           <div id="mediaMsg" class="msg"></div>
         </form>
       </div>
@@ -313,6 +310,7 @@ import { firebaseConfig } from "./firebase-config.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getFirestore, collection, onSnapshot, doc, setDoc, addDoc, updateDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
 const ADMIN_EMAILS = [
   "bdallhhshad7@gmail.com",
@@ -333,10 +331,14 @@ themeToggle.onclick = () => {
 };
 
 const app = initializeApp(firebaseConfig), auth = getAuth(app), db = getFirestore(app);
+let storage = null;
+try { storage = getStorage(app); } catch(e) {}
+
 const $ = id => document.getElementById(id);
 let allRows = [], allUsers = [], allMedia = [], allConsults = [];
 let unsubRegs = null, unsubUsers = null, unsubMedia = null, unsubConsults = null;
 
+// التنقل بين تبويبات لوحة التحكم
 document.querySelectorAll(".tab-btn").forEach(btn => {
   btn.onclick = () => {
     document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
@@ -346,11 +348,11 @@ document.querySelectorAll(".tab-btn").forEach(btn => {
   };
 });
 
+// تحديث التصنيفات حسب نوع الملف المرفوع
 const CATEGORIES = {
   image: ["الحلقات القرآنية", "حفلات التكريم والإجازات", "المسابقات والأنشطة"],
   pdf: ["متون التجويد", "متون القراءات", "علوم القرآن والتفسير", "آداب وحلقات"]
 };
-
 function updateCategoryOptions() {
   const type = $("mediaType").value;
   const sel = $("mediaCategory");
@@ -361,11 +363,6 @@ function updateCategoryOptions() {
     opt.textContent = c;
     sel.append(opt);
   });
-
-  // إظهار خانة رفع الصورة أو خانة رابط جوجل درايف حسب الاختيار
-  const isImage = type === "image";
-  $("imageUploadBox").classList.toggle("hidden", !isImage);
-  $("pdfLinkBox").classList.toggle("hidden", isImage);
 }
 $("mediaType").onchange = updateCategoryOptions;
 updateCategoryOptions();
@@ -392,6 +389,7 @@ function formatWaPhone(phone) {
   return clean;
 }
 
+// ضغط الصور تلقائياً لرفعها بسرعة فائقة
 function compressImage(file, maxWidth = 1100, quality = 0.8) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -414,6 +412,16 @@ function compressImage(file, maxWidth = 1100, quality = 0.8) {
   });
 }
 
+function fileToDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const r = new FileReader();
+    r.onload = () => resolve(r.result);
+    r.onerror = reject;
+    r.readAsDataURL(file);
+  });
+}
+
+// رفع صور المعرض أو ملفات الـ PDF للمكتبة
 $("mediaForm").onsubmit = async e => {
   e.preventDefault();
   const type = $("mediaType").value;
@@ -423,25 +431,33 @@ $("mediaForm").onsubmit = async e => {
   const file = $("mediaFile").files[0];
   let finalUrl = $("mediaUrl").value.trim();
 
-  if (type === "image" && !file) {
+  if (!file && !finalUrl) {
     $("mediaMsg").className = "msg err";
-    $("mediaMsg").textContent = "يرجى اختيار الصورة من جهازك أولاً.";
-    return;
-  }
-
-  if (type === "pdf" && !finalUrl) {
-    $("mediaMsg").className = "msg err";
-    $("mediaMsg").textContent = "يرجى لصق رابط الملف من Google Drive.";
+    $("mediaMsg").textContent = "يرجى اختيار ملف من جهازك أو وضع رابط مباشر.";
     return;
   }
 
   $("mediaSubmitBtn").disabled = true;
   $("mediaMsg").className = "msg ok";
-  $("mediaMsg").textContent = "جاري الحفظ والنشر...";
+  $("mediaMsg").textContent = "جاري معالجة ورفع الملف...";
 
   try {
-    if (type === "image") {
-      finalUrl = await compressImage(file);
+    if (file) {
+      if (type === "image") {
+        // ضغط الصورة وحفظها مباشرة لضمان عملها الفوري في المعرض
+        finalUrl = await compressImage(file);
+      } else {
+        // ملف PDF: إذا كان صغيراً نحفظه مباشرة أو نرفعه لـ Firebase Storage
+        if (file.size <= 720 * 1024) {
+          finalUrl = await fileToDataUrl(file);
+        } else if (storage) {
+          const fileRef = sRef(storage, `library/${Date.now()}_${file.name}`);
+          await uploadBytes(fileRef, file);
+          finalUrl = await getDownloadURL(fileRef);
+        } else {
+          throw new Error("PDF_TOO_LARGE");
+        }
+      }
     }
 
     await addDoc(collection(db, "media"), {
@@ -456,16 +472,17 @@ $("mediaForm").onsubmit = async e => {
     $("mediaMsg").className = "msg ok";
     $("mediaMsg").textContent = type === "image"
       ? "✅ تم رفع الصورة وإضافتها إلى معرض الصور بنجاح!"
-      : "✅ تم إضافة الكتاب إلى مكتبة المتون بنجاح!";
+      : "✅ تم رفع الكتاب وإضافته إلى مكتبة المتون بنجاح!";
     $("mediaForm").reset();
     updateCategoryOptions();
   } catch (err) {
     $("mediaMsg").className = "msg err";
-    $("mediaMsg").textContent = "حدث خطأ أثناء الحفظ. تأكد من تحديث قواعد Firestore Rules.";
+    $("mediaMsg").textContent = "تعذر رفع الملف الكبير. إذا لم تكن خدمة Storage مفعلة، يمكنك رفع ملف PDF أقل من 700 كيلوبايت أو وضع رابط Google Drive للملف في خانة الرابط.";
   }
   $("mediaSubmitBtn").disabled = false;
 };
 
+// 1. جدول طلبات التسجيل
 function renderTable() {
   const search = $("searchInput").value.trim().toLowerCase();
   const progFilter = $("filterProgram").value;
@@ -554,6 +571,7 @@ function renderTable() {
   });
 }
 
+// 2. جدول استشارات التلاوة والحفظ
 function renderConsults() {
   const tbody = $("consultTableBody");
   tbody.replaceChildren();
@@ -634,11 +652,12 @@ function renderConsults() {
   });
 }
 
+// 3. جدول محتويات المكتبة والمعرض
 function renderMedia() {
   const tbody = $("mediaTableBody");
   tbody.replaceChildren();
   if (!allMedia.length) {
-    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:24px">لم يتم إضافة صور أو كتب بعد.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:24px">لم يتم رفع صور أو ملفات PDF بعد.</td></tr>`;
     return;
   }
 
@@ -672,7 +691,7 @@ function renderMedia() {
       const a = document.createElement("a");
       a.href = m.url;
       a.target = "_blank";
-      a.textContent = "فتح رابط Drive";
+      a.textContent = "فتح ملف PDF";
       tdPrev.append(a);
     }
 
@@ -689,15 +708,10 @@ function renderMedia() {
       const newTitle = prompt("تعديل العنوان:", m.title || "");
       if (newTitle === null) return;
       const newDesc = prompt("تعديل الوصف:", m.description || "");
-      const updates = {
+      await updateDoc(doc(db, "media", m.id), {
         title: newTitle.trim() || m.title,
         description: newDesc !== null ? newDesc.trim() : m.description
-      };
-      if (m.type === "pdf") {
-        const newUrl = prompt("تعديل رابط Google Drive:", m.url || "");
-        if (newUrl && newUrl.trim()) updates.url = newUrl.trim();
-      }
-      await updateDoc(doc(db, "media", m.id), updates);
+      });
     };
 
     const delBtn = document.createElement("button");
@@ -714,8 +728,10 @@ function renderMedia() {
   });
 }
 
+// 4. جدول سجل الحسابات مع رقم التليفون وإمكانية الحذف
 function renderUsers() {
   const q = ($("userSearchInput").value || "").trim().toLowerCase();
+  // دمج أرقام الهواتف من طلبات التسجيل في حال كان الحساب قديماً
   const phoneByUid = {};
   const nameByUid = {};
   allRows.forEach(r => {
@@ -724,6 +740,7 @@ function renderUsers() {
   });
 
   const mergedUsers = [...allUsers];
+  // إضافة أي حساب له طلب تسجيل سابق ولم يدخل بعد التحديث الجديد
   allRows.forEach(r => {
     if (r.uid && !mergedUsers.some(u => u.id === r.uid)) {
       mergedUsers.push({
@@ -792,6 +809,7 @@ function renderUsers() {
       try {
         await setDoc(doc(db, "blocked_users", u.id), { blockedAt: serverTimestamp(), email: u.email || "" });
         await deleteDoc(doc(db, "users", u.id));
+        // حذف طلباته المرتبطة أيضاً
         const userRegs = allRows.filter(r => r.uid === u.id);
         for (const reg of userRegs) {
           await deleteDoc(doc(db, "registrations", reg.id));
