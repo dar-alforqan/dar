@@ -146,7 +146,8 @@ a:focus-visible,button:focus-visible,.search-input:focus-visible{outline:3px sol
 </div>
 
 <script type="module">
-import { firebaseConfig } from "./firebase-config.js";
+import { firebaseConfig, initAppCheck } from "./firebase-config.js";
+  initAppCheck(app);
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, collection, query, where, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
