@@ -4,9 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>دار الفرقان | تحفيظ القرآن الكريم والإجازات والتجويد والقراءات</title>
-<meta name="description" content="دار الفرقان بكفر الشيخ: تحفيظ القرآن الكريم، منح الإجازات، تعليم التجويد والقراءات. سجّل الآن.">
+<meta name="description" content="دار الفرقان بكفر الشيخ: تحفيظ القرآن الكريم، منح الإجازات، تعليم التجويد والقراءات، مكتبة المتون ومعرض الأنشطة.">
 
-<!-- أيقونة الموقع وإعدادات تطبيق الهاتف PWA -->
 <link rel="icon" type="image/png" href="icon.png">
 <link rel="apple-touch-icon" href="icon.png">
 <link rel="manifest" href="manifest.json">
@@ -50,12 +49,13 @@ html{scroll-behavior:smooth}
 body{margin:0;font-family:Tahoma,"Segoe UI",Arial,sans-serif;background:var(--cream);color:var(--ink);line-height:1.8;transition:background .25s ease,color .25s ease}
 a{color:inherit}
 .wrap{max-width:1000px;margin:0 auto;padding:0 18px}
-nav{background:var(--nav-bg);position:sticky;top:0;z-index:5;transition:background .25s ease}
-nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-top:10px;padding-bottom:10px}
-.brand{font-family:"Traditional Arabic","Amiri",Georgia,serif;font-size:1.6rem;font-weight:700;color:var(--gold);text-decoration:none;display:flex;align-items:center;gap:10px}
+nav{background:var(--nav-bg);position:sticky;top:0;z-index:20;transition:background .25s ease;border-bottom:1px solid rgba(250,200,27,.2)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-top:10px;padding-bottom:10px;flex-wrap:wrap}
+.brand{font-family:"Traditional Arabic","Amiri",Georgia,serif;font-size:1.55rem;font-weight:700;color:var(--gold);text-decoration:none;display:flex;align-items:center;gap:10px}
 .brand img{width:38px;height:38px;border-radius:50%;object-fit:cover;border:1px solid var(--gold)}
-nav .links{display:flex;gap:10px;align-items:center;font-size:.95rem}
-nav .links a{color:var(--cream);text-decoration:none}
+nav .links{display:flex;gap:12px;align-items:center;font-size:.92rem;flex-wrap:wrap}
+nav .links a{color:#F6E7DD;text-decoration:none;font-weight:700;transition:color .2s}
+nav .links a:hover{color:var(--gold)}
 nav .links a.btn{background:var(--gold);color:#3A181E;padding:6px 14px;border-radius:20px;font-weight:700}
 
 .theme-btn,.install-btn{
@@ -78,17 +78,21 @@ nav .links a.btn{background:var(--gold);color:#3A181E;padding:6px 14px;border-ra
 .hero-logo{width:110px;height:110px;border-radius:50%;object-fit:cover;border:3px solid var(--gold);margin-bottom:12px;box-shadow:0 4px 16px rgba(0,0,0,.35)}
 .hero h1{font-family:"Traditional Arabic","Amiri",Georgia,serif;font-size:clamp(2.2rem,7vw,3.6rem);margin:0 0 6px;color:var(--gold)}
 .hero p{font-size:1.15rem;max-width:560px;margin:10px auto 26px;opacity:.92}
-.cta{display:inline-block;padding:13px 28px;border-radius:30px;font-weight:700;text-decoration:none;font-size:1.05rem}
+.cta{display:inline-block;padding:12px 26px;border-radius:30px;font-weight:700;text-decoration:none;font-size:1rem;margin:4px}
 .cta.gold{background:var(--gold);color:#3A181E}
-.cta.line{border:2px solid var(--gold);color:var(--gold);margin-inline-start:10px}
+.cta.line{border:2px solid var(--gold);color:var(--gold)}
 section{padding:54px 0}
 h2{font-family:"Traditional Arabic","Amiri",Georgia,serif;font-size:2rem;color:var(--wine);margin:0 0 8px;text-align:center}
 h2::after{content:"";display:block;width:60px;height:4px;background:var(--gold);margin:8px auto 0;border-radius:2px}
 .lead{text-align:center;max-width:620px;margin:14px auto 30px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px}
-.card{background:var(--card-bg);border:1px solid var(--line);border-top:4px solid var(--gold);border-radius:10px;padding:20px;transition:background .25s ease,border-color .25s ease}
-.card h3{font-family:"Traditional Arabic","Amiri",Georgia,serif;margin:0 0 6px;color:var(--wine);font-size:1.4rem}
-.card p{margin:0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.card{background:var(--card-bg);border:1px solid var(--line);border-top:4px solid var(--gold);border-radius:10px;padding:20px;transition:transform .2s ease,background .25s ease,border-color .25s ease;display:flex;flex-direction:column;justify-content:space-between}
+.card.clickable{text-decoration:none;cursor:pointer}
+.card.clickable:hover{transform:translateY(-4px);box-shadow:0 8px 20px rgba(0,0,0,.08)}
+.card h3{font-family:"Traditional Arabic","Amiri",Georgia,serif;margin:0 0 6px;color:var(--wine);font-size:1.45rem}
+.card p{margin:0 0 14px}
+.card-link{display:inline-block;background:var(--gold);color:#3A181E;padding:8px 16px;border-radius:20px;font-weight:700;font-size:.9rem;text-align:center;text-decoration:none;align-self:flex-start}
+
 .steps{counter-reset:s;list-style:none;padding:0;max-width:560px;margin:0 auto}
 .steps li{counter-increment:s;background:var(--card-bg);border:1px solid var(--line);border-radius:10px;padding:14px 56px 14px 16px;margin-bottom:10px;position:relative;transition:background .25s ease,border-color .25s ease}
 .steps li::before{content:counter(s);position:absolute;right:14px;top:12px;width:30px;height:30px;border-radius:50%;background:var(--step-num-bg);color:var(--step-num-color);display:grid;place-items:center;font-weight:700}
@@ -119,7 +123,6 @@ footer{
   text-decoration:underline;
 }
 
-/* زر الواتساب العائم */
 .wa-float{
   position:fixed;
   bottom:20px;
@@ -142,16 +145,11 @@ footer{
   box-shadow:0 6px 18px rgba(37,211,102,.45);
   background:#20b858;
 }
-.wa-float svg{
-  width:30px;
-  height:30px;
-  fill:currentColor;
-}
+.wa-float svg{width:30px;height:30px;fill:currentColor}
 
 a:focus-visible,.cta:focus-visible,.theme-btn:focus-visible,.install-btn:focus-visible,.wa-float:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
-@media(max-width:520px){
+@media(max-width:600px){
   nav .links a.hide{display:none}
-  .cta.line{margin:10px 0 0}
   .wa-float{width:50px;height:50px;bottom:16px;left:16px}
   .wa-float svg{width:26px;height:26px}
 }
@@ -159,13 +157,14 @@ a:focus-visible,.cta:focus-visible,.theme-btn:focus-visible,.install-btn:focus-v
 </head>
 <body>
 <nav><div class="wrap">
-  <a class="brand" href="#">
+  <a class="brand" href="index.html">
     <img src="icon.png" alt="شعار دار الفرقان">
     <span>دار الفرقان</span>
   </a>
   <div class="links">
     <a class="hide" href="#programs">البرامج</a>
-    <a class="hide" href="#contact">تواصل معنا</a>
+    <a href="library.html">📚 المكتبة</a>
+    <a href="gallery.html">🖼️ المعرض</a>
     <button id="installBtn" class="install-btn" type="button">📲 تثبيت</button>
     <a class="btn" href="account.html">حسابي</a>
     <button id="themeToggle" class="theme-btn" type="button" aria-label="تبديل الوضع">🌙 ليلي</button>
@@ -177,7 +176,8 @@ a:focus-visible,.cta:focus-visible,.theme-btn:focus-visible,.install-btn:focus-v
   <h1>دار الفرقان</h1>
   <p>لتحفيظ القرآن الكريم ومنح الإجازات وتعليم التجويد والقراءات</p>
   <a class="cta gold" href="account.html">سجّل الآن</a>
-  <a class="cta line" href="#programs">تعرّف على البرامج</a>
+  <a class="cta line" href="library.html">📚 مكتبة المتون</a>
+  <a class="cta line" href="gallery.html">🖼️ معرض الصور</a>
 </div></header>
 
 <section id="about"><div class="wrap">
@@ -186,28 +186,58 @@ a:focus-visible,.cta:focus-visible,.theme-btn:focus-visible,.install-btn:focus-v
 </div></section>
 
 <section id="programs" class="alt"><div class="wrap">
-  <h2>برامجنا</h2>
+  <h2>برامجنا التعليمية</h2>
   <p class="lead">اختر البرنامج المناسب لمستواك.</p>
   <div class="grid">
-    <div class="card"><h3>تحفيظ القرآن</h3><p>حفظ ومراجعة منتظمة مع متابعة فردية لكل طالب.</p></div>
-    <div class="card"><h3>الإجازات</h3><p>الإجازة في القرآن الكريم لمن أتقن الحفظ والأداء.</p></div>
-    <div class="card"><h3>التجويد</h3><p>تعلّم أحكام التلاوة وتصحيح النطق وإتقان الأداء.</p></div>
-    <div class="card"><h3>القراءات</h3><p>دراسة القراءات القرآنية على أيدي المتخصصين.</p></div>
+    <div class="card"><div><h3>تحفيظ القرآن</h3><p>حفظ ومراجعة منتظمة مع متابعة فردية لكل طالب.</p></div></div>
+    <div class="card"><div><h3>الإجازات</h3><p>الإجازة بالسند المتصل في القرآن الكريم لمن أتقن الحفظ والأداء.</p></div></div>
+    <div class="card"><div><h3>التجويد</h3><p>تعلّم أحكام التلاوة وتصحيح النطق وإتقان الأداء عمليًا ونظريًا.</p></div></div>
+    <div class="card"><div><h3>القراءات</h3><p>دراسة القراءات القرآنية ومتونها على أيدي المتخصصين.</p></div></div>
   </div>
 </div></section>
 
-<section id="join"><div class="wrap">
+<section id="sections"><div class="wrap">
+  <h2>أقسام المنصة والخدمات</h2>
+  <p class="lead">اضغط على أي قسم للانتقال إليه مباشرة.</p>
+  <div class="grid">
+    <a class="card clickable" href="library.html">
+      <div>
+        <h3>📚 مكتبة المتون والكتب</h3>
+        <p>تصفح وحمّل المتون العلمية وكتب التجويد والقراءات بصيغة PDF مع إمكانية المعاينة المباشرة.</p>
+      </div>
+      <span class="card-link">فتح المكتبة ←</span>
+    </a>
+
+    <a class="card clickable" href="gallery.html">
+      <div>
+        <h3>🖼️ معرض الصور والأنشطة</h3>
+        <p>شاهد صور الحلقات القرآنية، حفلات التكريم، والمسابقات الخاصة بطلاب دار الفرقان.</p>
+      </div>
+      <span class="card-link">فتح المعرض ←</span>
+    </a>
+
+    <a class="card clickable" href="account.html#consultSection">
+      <div>
+        <h3>🎙️ استشارات الحفظ وتصحيح التلاوة</h3>
+        <p>سجّل تلاوتك صوتيًا أو أرسل سؤالك في الحفظ والتجويد ليقوم مشايخ الدار بالاستماع والرد عليك.</p>
+      </div>
+      <span class="card-link">إرسال تلاوة أو استشارة ←</span>
+    </a>
+  </div>
+</div></section>
+
+<section id="join" class="alt"><div class="wrap">
   <h2>طريقة التسجيل</h2>
   <p class="lead">ثلاث خطوات بسيطة.</p>
   <ol class="steps">
-    <li>أنشئ حسابًا بالبريد الإلكتروني وكلمة المرور.</li>
-    <li>املأ نموذج الطلب واختر البرنامج المناسب.</li>
-    <li>سنتواصل معك على الواتساب لتحديد موعد البداية.</li>
+    <li>أنشئ حسابًا بالبريد الإلكتروني ورقم الواتساب وكلمة المرور.</li>
+    <li>املأ نموذج الطلب واختر البرنامج المناسب أو أرسل تلاوتك للتقييم.</li>
+    <li>سنتواصل معك على الواتساب أو داخل حسابك لتحديد موعد البداية.</li>
   </ol>
-  <p style="text-align:center;margin-top:22px"><a class="cta gold" href="account.html">أنشئ حسابك</a></p>
+  <p style="text-align:center;margin-top:22px"><a class="cta gold" href="account.html">أنشئ حسابك الآن</a></p>
 </div></section>
 
-<section id="contact" class="alt"><div class="wrap">
+<section id="contact"><div class="wrap">
   <h2>تواصل معنا</h2>
   <p class="lead">يسعدنا تواصلك في أي وقت.</p>
   <div class="contact">
@@ -227,13 +257,11 @@ a:focus-visible,.cta:focus-visible,.theme-btn:focus-visible,.install-btn:focus-v
   </div>
 </footer>
 
-<!-- زر الواتساب العائم -->
 <a href="https://wa.me/201099262489?text=%D8%A7%D9%84%D8%B3%D9%84%D8%A7%D9%85%20%D8%B9%D9%84%D9%8A%D9%83%D9%85%D8%8C%20%D8%B9%D9%86%D8%AF%D9%8A%20%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%A8%D8%AE%D8%B5%D9%88%D8%B5%20%D8%AF%D8%A7%D8%B1%20%D8%A7%D9%84%D9%81%D8%B1%D9%82%D8%A7%D9%86" class="wa-float" target="_blank" rel="noopener" aria-label="تواصل معنا عبر واتساب" title="تواصل معنا عبر واتساب">
   <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16.004 3.2c-7.068 0-12.8 5.732-12.8 12.8 0 2.256.588 4.46 1.706 6.404L3.2 28.8l6.564-1.682a12.74 12.74 0 0 0 6.24 1.626h.006c7.066 0 12.79-5.732 12.79-12.8 0-3.42-1.332-6.636-3.75-9.054A12.716 12.716 0 0 0 16.004 3.2zm0 23.386h-.004a10.61 10.61 0 0 1-5.408-1.48l-.388-.23-4.028 1.032 1.074-3.926-.252-.402a10.584 10.584 0 0 1-1.638-5.66c0-5.862 4.77-10.632 10.638-10.632 2.84 0 5.51 1.108 7.518 3.118a10.566 10.566 0 0 1 3.114 7.52c0 5.864-4.768 10.66-10.626 10.66zm5.834-7.972c-.32-.16-1.892-.934-2.186-1.04-.292-.108-.506-.16-.72.16-.212.32-.826 1.04-1.012 1.254-.186.212-.374.24-.694.08-.32-.16-1.35-.498-2.572-1.586-.95-.848-1.592-1.896-1.778-2.216-.186-.32-.02-.492.14-.652.144-.144.32-.374.48-.56.16-.186.212-.32.32-.534.106-.212.054-.4-.026-.56-.08-.16-.72-1.734-.986-2.374-.26-.624-.526-.538-.72-.548l-.614-.01c-.212 0-.56.08-.852.4-.294.32-1.12 1.094-1.12 2.668s1.146 3.094 1.306 3.308c.16.212 2.256 3.444 5.466 4.83.764.33 1.36.526 1.824.674.766.244 1.464.21 2.016.128.614-.092 1.892-.774 2.16-1.52.266-.746.266-1.386.186-1.52-.08-.134-.292-.214-.612-.374z"/></svg>
 </a>
 
 <script>
-  // إدارة الوضع الليلي
   const themeToggle = document.getElementById("themeToggle");
   const savedTheme = localStorage.getItem("theme") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
 
@@ -246,19 +274,16 @@ a:focus-visible,.cta:focus-visible,.theme-btn:focus-visible,.install-btn:focus-v
       if (themeToggle) themeToggle.textContent = "🌙 ليلي";
     }
   }
-
   applyTheme(savedTheme);
 
   if (themeToggle) {
     themeToggle.onclick = () => {
-      const isDark = document.body.classList.contains("dark-mode");
-      const nextTheme = isDark ? "light" : "dark";
+      const nextTheme = document.body.classList.contains("dark-mode") ? "light" : "dark";
       localStorage.setItem("theme", nextTheme);
       applyTheme(nextTheme);
     };
   }
 
-  // تسجيل Service Worker وتفعيل زر تثبيت التطبيق
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
       navigator.serviceWorker.register("./sw.js").catch(() => {});
@@ -279,9 +304,7 @@ a:focus-visible,.cta:focus-visible,.theme-btn:focus-visible,.install-btn:focus-v
       if (!deferredPrompt) return;
       deferredPrompt.prompt();
       const { outcome } = await deferredPrompt.userChoice;
-      if (outcome === "accepted") {
-        installBtn.style.display = "none";
-      }
+      if (outcome === "accepted") installBtn.style.display = "none";
       deferredPrompt = null;
     });
   }
