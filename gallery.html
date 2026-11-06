@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>معرض الصور والأنشطة | دار الفرقان</title>
+<link rel="icon" type="image/png" href="icon.png">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#3A181E">
+
+<style>
+:root{
+  --wine:#3A181E;
+  --cream:#F6E7DD;
+  --gold:#FAC81B;
+  --ink:#2a1015;
+  --card-bg:#ffffff;
+  --line:#d9c3b5;
+  --header-bg:var(--wine);
+  --header-text:var(--cream);
+  --text-muted:#6b5249;
+}
+body.dark-mode{
+  --wine:#FAC81B;
+  --cream:#121212;
+  --ink:#f3f3f3;
+  --card-bg:#1e1e1e;
+  --line:#333333;
+  --header-bg:#0a0a0a;
+  --header-text:#ffffff;
+  --text-muted:#a0a0a0;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Tahoma,"Segoe UI",Arial,sans-serif;background:var(--cream);color:var(--ink);line-height:1.7;transition:background .25s ease,color .25s ease;user-select:none;-webkit-user-select:none}
+header{background:var(--header-bg);color:var(--header-text);padding:18px 20px;border-bottom:5px solid var(--gold);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.brand-box{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit}
+.brand-box img{width:46px;height:46px;border-radius:50%;object-fit:cover;border:2px solid var(--gold)}
+header h1{font-family:"Traditional Arabic","Amiri",Georgia,serif;font-size:1.85rem;margin:0;color:var(--gold)}
+header p{margin:2px 0 0;opacity:.85;font-size:.9rem}
+.header-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.nav-btn{background:transparent;border:1px solid var(--gold);color:var(--gold);padding:6px 14px;border-radius:20px;cursor:pointer;font:inherit;font-size:.88rem;font-weight:700;text-decoration:none}
+.nav-btn.gold{background:var(--gold);color:#3A181E}
+
+main{max-width:1050px;margin:0 auto;padding:28px 16px 70px}
+.cats{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;justify-content:center}
+.cat-btn{padding:7px 16px;border:1px solid var(--wine);background:transparent;color:var(--wine);border-radius:20px;cursor:pointer;font:inherit;font-size:.9rem;font-weight:700}
+.cat-btn.active{background:var(--wine);color:var(--cream)}
+body.dark-mode .cat-btn.active{color:#121212}
+
+.gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px}
+.photo-card{background:var(--card-bg);border:1px solid var(--line);border-radius:12px;overflow:hidden;cursor:pointer;transition:transform .2s ease,box-shadow .2s ease;position:relative}
+.photo-card:hover{transform:translateY(-4px);box-shadow:0 8px 22px rgba(0,0,0,.14)}
+.img-wrap{position:relative;width:100%;height:220px;overflow:hidden;background:#222}
+.img-wrap img{width:100%;height:100%;object-fit:cover;pointer-events:none;-webkit-user-drag:none}
+.img-shield{position:absolute;inset:0;z-index:2}
+.caption{padding:14px}
+.caption strong{display:block;font-family:"Traditional Arabic","Amiri",Georgia,serif;font-size:1.3rem;color:var(--wine)}
+.caption p{margin:4px 0 0;font-size:.88rem;color:var(--text-muted)}
+
+/* عارض الصور البصري فقط */
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:100;display:none;flex-direction:column;align-items:center;justify-content:center;padding:20px}
+.lightbox.open{display:flex}
+.lightbox-img-wrap{position:relative;max-width:92vw;max-height:78vh;display:flex;align-items:center;justify-content:center}
+.lightbox-img-wrap img{max-width:92vw;max-height:78vh;border-radius:10px;border:2px solid var(--gold);pointer-events:none;-webkit-user-drag:none}
+.lightbox-caption{color:#fff;margin-top:12px;text-align:center;max-width:600px}
+.lightbox-close{position:absolute;top:20px;left:20px;background:var(--gold);color:#3A181E;border:0;padding:8px 18px;border-radius:20px;font:inherit;font-weight:700;cursor:pointer;z-index:105}
+</style>
+</head>
+<body oncontextmenu="return false">
+
+<header>
+  <a href="index.html" class="brand-box">
+    <img src="icon.png" alt="شعار دار الفرقان">
+    <div>
+      <h1>معرض الصور والأنشطة</h1>
+      <p>صور الحلقات القرآنية والتكريمات بدار الفرقان</p>
+    </div>
+  </a>
+  <div class="header-actions">
+    <a href="index.html" class="nav-btn">الرئيسية</a>
+    <a href="library.html" class="nav-btn">📚 المكتبة</a>
+    <a href="account.html" class="nav-btn gold">حسابي</a>
+    <button id="themeToggle" class="nav-btn" type="button">🌙 ليلي</button>
+  </div>
+</header>
+
+<main>
+  <div class="cats">
+    <button class="cat-btn active" data-cat="all">كل الصور</button>
+    <button class="cat-btn" data-cat="الحلقات القرآنية">الحلقات القرآنية</button>
+    <button class="cat-btn" data-cat="حفلات التكريم والإجازات">حفلات التكريم والإجازات</button>
+    <button class="cat-btn" data-cat="المسابقات والأنشطة">المسابقات والأنشطة</button>
+  </div>
+
+  <div id="galleryGrid" class="gallery-grid">
+    <p style="grid-column:1/-1;text-align:center;padding:40px">جاري تحميل المعرض...</p>
+  </div>
+</main>
+
+<div id="lightbox" class="lightbox" role="dialog" aria-modal="true">
+  <button id="closeLightbox" class="lightbox-close" type="button">إغلاق ✕</button>
+  <div class="lightbox-img-wrap">
+    <img id="lightboxImg" src="" alt="">
+    <div class="img-shield"></div>
+  </div>
+  <div class="lightbox-caption">
+    <strong id="lightboxTitle" style="font-size:1.3rem;color:var(--gold);display:block"></strong>
+    <span id="lightboxDesc" style="font-size:.92rem;opacity:.9"></span>
+  </div>
+</div>
+
+<script type="module">
+import { firebaseConfig } from "./firebase-config.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, query, where, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const themeToggle = document.getElementById("themeToggle");
+const currentTheme = localStorage.getItem("theme") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+function applyTheme(t) {
+  document.body.classList.toggle("dark-mode", t === "dark");
+  themeToggle.textContent = t === "dark" ? "☀️ نهاري" : "🌙 ليلي";
+}
+applyTheme(currentTheme);
+themeToggle.onclick = () => {
+  const next = document.body.classList.contains("dark-mode") ? "light" : "dark";
+  localStorage.setItem("theme", next);
+  applyTheme(next);
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const grid = document.getElementById("galleryGrid");
+let allPhotos = [];
+let activeCat = "all";
+
+function renderPhotos() {
+  const filtered = allPhotos.filter(p => activeCat === "all" || p.category === activeCat);
+  grid.replaceChildren();
+
+  if (!filtered.length) {
+    grid.innerHTML = `<p style="grid-column:1/-1;text-align:center;padding:40px">لا توجد صور مضافة في هذا القسم حالياً.</p>`;
+    return;
+  }
+
+  filtered.forEach(p => {
+    const card = document.createElement("div");
+    card.className = "photo-card";
+
+    const imgWrap = document.createElement("div");
+    imgWrap.className = "img-wrap";
+    const img = document.createElement("img");
+    img.src = p.url;
+    img.alt = p.title || "صورة نشاط";
+    img.draggable = false;
+    const shield = document.createElement("div");
+    shield.className = "img-shield";
+    imgWrap.append(img, shield);
+
+    const cap = document.createElement("div");
+    cap.className = "caption";
+    const st = document.createElement("strong");
+    st.textContent = p.title || "نشاط بدار الفرقان";
+    const desc = document.createElement("p");
+    desc.textContent = p.description || p.category || "";
+    cap.append(st, desc);
+
+    card.append(imgWrap, cap);
+    card.onclick = () => {
+      document.getElementById("lightboxImg").src = p.url;
+      document.getElementById("lightboxTitle").textContent = p.title || "";
+      document.getElementById("lightboxDesc").textContent = p.description || "";
+      document.getElementById("lightbox").classList.add("open");
+    };
+    grid.append(card);
+  });
+}
+
+document.querySelectorAll(".cat-btn").forEach(btn => {
+  btn.onclick = () => {
+    document.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    activeCat = btn.dataset.cat;
+    renderPhotos();
+  };
+});
+
+document.getElementById("closeLightbox").onclick = () => {
+  document.getElementById("lightbox").classList.remove("open");
+  document.getElementById("lightboxImg").src = "";
+};
+document.getElementById("lightbox").onclick = (e) => {
+  if (e.target.id === "lightbox") document.getElementById("closeLightbox").click();
+};
+
+onSnapshot(query(collection(db, "media"), where("type", "==", "image")), snap => {
+  allPhotos = snap.docs
+    .map(d => ({ id: d.id, ...d.data() }))
+    .sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+  renderPhotos();
+}, () => {
+  grid.innerHTML = `<p style="grid-column:1/-1;text-align:center;padding:40px">حدث خطأ أثناء تحميل المعرض.</p>`;
+});
+</script>
+</body>
+</html>
