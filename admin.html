@@ -2,8 +2,9 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>لوحة التحكم الشاملة | دار الفرقان</title>
+<meta name="robots" content="noindex, nofollow">
 
 <link rel="icon" type="image/png" href="icon.png">
 <link rel="apple-touch-icon" href="icon.png">
@@ -24,44 +25,50 @@
   --header-text:var(--cream);
   --text-muted:#6b5249;
   --row-hover:#fdf8f4;
+  --on-wine:var(--cream);
 }
 
 body.dark-mode{
   --wine:#FAC81B;
-  --cream:#121212;
-  --ink:#f3f3f3;
-  --card-bg:#1e1e1e;
-  --input-bg:#2a2a2a;
-  --line:#333333;
-  --header-bg:#0a0a0a;
-  --header-text:#ffffff;
-  --text-muted:#a0a0a0;
-  --row-hover:#262626;
+  --cream:#18090d;
+  --ink:#f3e8df;
+  --card-bg:#2a1016;
+  --input-bg:#200b10;
+  --line:#3d1e25;
+  --err:#ff9b9e;
+  --header-bg:#200b10;
+  --header-text:#f3e8df;
+  --text-muted:#b9a39a;
+  --row-hover:#33161c;
+  --on-wine:#200b10;
 }
 
 *{box-sizing:border-box}
 body{margin:0;font-family:Tahoma,"Segoe UI",Arial,sans-serif;background:var(--cream);color:var(--ink);line-height:1.6;transition:background .25s ease,color .25s ease}
-header{background:var(--header-bg);color:var(--header-text);padding:18px 20px;border-bottom:5px solid var(--gold);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+header{background:var(--header-bg);color:var(--header-text);padding:18px 20px;padding-top:calc(18px + env(safe-area-inset-top,0));border-bottom:5px solid var(--gold);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
 .brand-box{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit}
 .brand-box img{width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid var(--gold)}
-header h1{font-family:"Traditional Arabic","Amiri",Georgia,serif;font-size:1.8rem;margin:0;color:var(--gold)}
+header h1{font-family:"Traditional Arabic","Amiri",Georgia,serif;font-size:1.8rem;margin:0;color:var(--gold);line-height:1.3}
 header p{margin:2px 0 0;font-size:.88rem;opacity:.85}
 .header-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.theme-btn,.nav-link{background:transparent;border:1px solid var(--gold);color:var(--gold);padding:6px 14px;border-radius:20px;cursor:pointer;font:inherit;font-size:.85rem;font-weight:bold;text-decoration:none}
+.theme-btn,.nav-link{background:transparent;border:1px solid var(--gold);color:var(--gold);padding:6px 14px;border-radius:20px;cursor:pointer;font:inherit;font-size:.85rem;font-weight:bold;text-decoration:none;transition:filter .2s}
+.theme-btn:hover,.nav-link:hover{filter:brightness(1.15)}
 
-main{max-width:1150px;margin:0 auto;padding:24px 16px 60px}
+main{max-width:1150px;margin:0 auto;padding:24px 16px calc(60px + env(safe-area-inset-bottom,0))}
 .card{background:var(--card-bg);border:1px solid var(--line);border-radius:10px;padding:20px;margin-bottom:20px}
 .auth-box{max-width:440px;margin:40px auto}
 label{display:block;font-weight:600;margin:12px 0 4px;font-size:.92rem}
 input,select,textarea{width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;font:inherit;background:var(--input-bg);color:var(--ink)}
-.primary{padding:11px 20px;background:var(--gold);color:#3A181E;border:0;border-radius:8px;font:inherit;font-weight:700;cursor:pointer}
-.primary:disabled{opacity:.6}
+input:focus,select:focus,textarea:focus,button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offset:1px}
+input:focus,select:focus,textarea:focus{border-color:var(--gold)}
+.primary{padding:11px 20px;background:var(--gold);color:#3A181E;border:0;border-radius:8px;font:inherit;font-weight:700;cursor:pointer;transition:filter .2s}
+.primary:hover{filter:brightness(1.06)}
+.primary:disabled{opacity:.6;cursor:wait}
 .btn-outline{padding:8px 16px;background:transparent;border:1px solid var(--wine);color:var(--wine);border-radius:8px;font:inherit;font-weight:700;cursor:pointer}
 
 .admin-tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}
 .tab-btn{flex:1;min-width:170px;padding:12px;border:2px solid var(--wine);background:var(--card-bg);color:var(--wine);border-radius:10px;font:inherit;font-weight:700;cursor:pointer;transition:.2s}
-.tab-btn.active{background:var(--wine);color:var(--cream)}
-body.dark-mode .tab-btn.active{color:#121212}
+.tab-btn.active{background:var(--wine);color:var(--on-wine)}
 
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:20px}
 .stat-card{background:var(--card-bg);border:1px solid var(--line);border-top:4px solid var(--gold);border-radius:10px;padding:14px 16px;text-align:center}
@@ -84,9 +91,20 @@ body.dark-mode .del-btn{background:#3b1012;color:#ff9b9e}
 .msg{margin-top:12px;padding:10px;border-radius:8px;display:none}
 .msg.err{display:block;background:#fbe3e3;color:var(--err)}
 .msg.ok{display:block;background:#e5f3e2;color:#1d5a14}
+body.dark-mode .msg.err{background:#3b1012;color:#ff9b9e}
+body.dark-mode .msg.ok{background:#0e2e13;color:#85e085}
 .top-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px}
 .form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.hint{font-size:.82rem;color:var(--text-muted);margin-top:4px;display:block}
+.badge{display:inline-block;min-width:22px;padding:0 7px;border-radius:11px;background:var(--gold);color:#3A181E;font-size:.8rem;line-height:22px}
 .hidden{display:none !important}
+
+/* إشعار منبثق بدل alert */
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(24px + env(safe-area-inset-bottom,0));z-index:200;max-width:92%;padding:12px 20px;border-radius:10px;font-weight:700;box-shadow:0 6px 18px rgba(0,0,0,.35);display:none;border:1px solid var(--gold);background:var(--header-bg);color:var(--header-text)}
+.toast.show{display:block}
+.toast.err{background:#a4161a;color:#fff;border-color:#a4161a}
+
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
 <body>
@@ -103,7 +121,7 @@ body.dark-mode .del-btn{background:#3b1012;color:#ff9b9e}
     <a href="index.html" class="nav-link">الرئيسية</a>
     <a href="library.html" class="nav-link">📚 المكتبة</a>
     <a href="gallery.html" class="nav-link">🖼️ المعرض</a>
-    <button id="themeToggle" class="theme-btn" type="button">🌙 ليلي</button>
+    <button id="themeToggle" class="theme-btn" type="button" aria-label="تبديل الوضع">🌙 ليلي</button>
   </div>
 </header>
 
@@ -112,11 +130,11 @@ body.dark-mode .del-btn{background:#3b1012;color:#ff9b9e}
     <h2 style="margin-top:0">تسجيل دخول الإدارة</h2>
     <form id="loginForm">
       <label for="email">البريد الإلكتروني للمسؤول</label>
-      <input id="email" type="email" dir="ltr" required>
+      <input id="email" type="email" dir="ltr" autocomplete="username" required>
       <label for="password">كلمة المرور</label>
-      <input id="password" type="password" dir="ltr" required>
+      <input id="password" type="password" dir="ltr" autocomplete="current-password" required>
       <button class="primary" style="width:100%;margin-top:16px" type="submit" id="loginBtn">دخول</button>
-      <div id="loginMsg" class="msg"></div>
+      <div id="loginMsg" class="msg" role="alert"></div>
     </form>
   </section>
 
@@ -132,15 +150,13 @@ body.dark-mode .del-btn{background:#3b1012;color:#ff9b9e}
       <button id="logoutBtn" class="btn-outline" type="button">تسجيل الخروج</button>
     </div>
 
-    <!-- أزرار التنقل بين أقسام الإدارة -->
     <div class="admin-tabs">
       <button class="tab-btn active" data-tab="tabRegs" type="button">📋 طلبات التسجيل</button>
-      <button class="tab-btn" data-tab="tabConsults" type="button">🎙️ استشارات التلاوة والحفظ</button>
+      <button class="tab-btn" data-tab="tabConsults" type="button">🎙️ استشارات التلاوة والحفظ <span id="consultsBadge" class="badge hidden">0</span></button>
       <button class="tab-btn" data-tab="tabMedia" type="button">📚🖼️ رفع وإدارة المكتبة والمعرض</button>
       <button class="tab-btn" data-tab="tabUsers" type="button">👥 سجل الحسابات (<span id="usersCountBadge">0</span>)</button>
     </div>
 
-    <!-- 1. قسم طلبات التسجيل -->
     <div id="tabRegs" class="admin-panel">
       <div class="stats">
         <div class="stat-card"><strong id="statTotal">0</strong><span>إجمالي الطلبات</span></div>
@@ -198,7 +214,6 @@ body.dark-mode .del-btn{background:#3b1012;color:#ff9b9e}
       </div>
     </div>
 
-    <!-- 2. قسم استشارات الحفظ وتصحيح التلاوة -->
     <div id="tabConsults" class="admin-panel hidden">
       <div class="table-wrap">
         <table>
@@ -218,17 +233,16 @@ body.dark-mode .del-btn{background:#3b1012;color:#ff9b9e}
       </div>
     </div>
 
-    <!-- 3. قسم رفع وإدارة المكتبة والمعرض -->
     <div id="tabMedia" class="admin-panel hidden">
       <div class="card">
-        <h3 style="margin-top:0;color:var(--wine)">➕ رفع ملف جديد (صورة للمعرض أو كتاب PDF للمكتبة)</h3>
+        <h3 style="margin-top:0;color:var(--wine)">➕ إضافة صورة للمعرض أو كتاب PDF للمكتبة</h3>
         <form id="mediaForm">
           <div class="form-grid">
             <div>
               <label for="mediaType">نوع الإضافة (أين سيظهر؟)</label>
               <select id="mediaType">
-                <option value="image">🖼️ صورة (تذهب لمعرض الصور للعرض فقط)</option>
-                <option value="pdf">📚 ملف PDF (يذهب لمكتبة المتون للتحميل)</option>
+                <option value="image">🖼️ صورة من الجهاز (تذهب لمعرض الصور للعرض فقط)</option>
+                <option value="pdf">📚 كتاب أو متن على Google Drive (يذهب للمكتبة للتحميل)</option>
               </select>
             </div>
             <div>
@@ -244,19 +258,20 @@ body.dark-mode .del-btn{background:#3b1012;color:#ff9b9e}
           <label for="mediaDesc">وصف مختصر (اختياري)</label>
           <input id="mediaDesc" placeholder="نبذة قصيرة تظهر تحت العنوان...">
 
-          <div class="form-grid" style="margin-top:8px">
-            <div>
-              <label for="mediaFile">اختر الصورة أو ملف الـ PDF من جهازك</label>
-              <input id="mediaFile" type="file" accept="image/*,.pdf">
-            </div>
-            <div>
-              <label for="mediaUrl">أو ضع رابط مباشر / رابط Google Drive (اختياري لملفات PDF الكبيرة)</label>
-              <input id="mediaUrl" type="url" dir="ltr" placeholder="https://...">
-            </div>
+          <div id="imageUploadBox" style="margin-top:8px">
+            <label for="mediaFile">اختر الصورة من هاتفك أو جهازك</label>
+            <input id="mediaFile" type="file" accept="image/*">
+            <span class="hint">يتم ضغط الصورة وضبط جودتها تلقائياً لتعمل في المعرض بسرعة عالية.</span>
           </div>
 
-          <button id="mediaSubmitBtn" class="primary" type="submit" style="margin-top:16px">⬆️ رفع وحفظ في القسم المخصص</button>
-          <div id="mediaMsg" class="msg"></div>
+          <div id="pdfLinkBox" class="hidden" style="margin-top:8px">
+            <label for="mediaUrl">رابط الملف على Google Drive</label>
+            <input id="mediaUrl" type="url" dir="ltr" placeholder="https://drive.google.com/file/d/.../view?usp=sharing">
+            <span class="hint">ارفع الملف على Google Drive مهما كان حجمه (حتى 2 جيجا أو أكثر)، واجعل المشاركة "أي شخص لديه الرابط" ثم الصق الرابط هنا.</span>
+          </div>
+
+          <button id="mediaSubmitBtn" class="primary" type="submit" style="margin-top:16px">⬆️ حفظ ونشر في القسم المخصص</button>
+          <div id="mediaMsg" class="msg" role="status"></div>
         </form>
       </div>
 
@@ -279,7 +294,6 @@ body.dark-mode .del-btn{background:#3b1012;color:#ff9b9e}
       </div>
     </div>
 
-    <!-- 4. قسم سجل الحسابات -->
     <div id="tabUsers" class="admin-panel hidden">
       <div class="card" style="margin-bottom:14px">
         <label for="userSearchInput" style="margin-top:0">بحث في الحسابات بالاسم أو البريد أو رقم التليفون</label>
@@ -305,20 +319,26 @@ body.dark-mode .del-btn{background:#3b1012;color:#ff9b9e}
   </section>
 </main>
 
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
 <script type="module">
 import { firebaseConfig } from "./firebase-config.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getFirestore, collection, onSnapshot, doc, setDoc, addDoc, updateDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
+// ملاحظة أمنية: هذه القائمة تتحكم في ما تعرضه الواجهة فقط.
+// الحماية الحقيقية لازم تكون في Firestore Rules (اقرأ الملاحظات المرفقة).
 const ADMIN_EMAILS = [
   "bdallhhshad7@gmail.com",
   "daralforqan@gmail.com"
 ];
 
+/* ---------- الوضع الليلي (مع حماية من تعطّل localStorage) ---------- */
 const themeToggle = document.getElementById("themeToggle");
-const currentTheme = localStorage.getItem("theme") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+let savedTheme = null;
+try { savedTheme = localStorage.getItem("theme"); } catch (e) {}
+const currentTheme = savedTheme || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
 function applyTheme(theme) {
   document.body.classList.toggle("dark-mode", theme === "dark");
   themeToggle.textContent = theme === "dark" ? "☀️ نهاري" : "🌙 ليلي";
@@ -326,19 +346,64 @@ function applyTheme(theme) {
 applyTheme(currentTheme);
 themeToggle.onclick = () => {
   const nextTheme = document.body.classList.contains("dark-mode") ? "light" : "dark";
-  localStorage.setItem("theme", nextTheme);
+  try { localStorage.setItem("theme", nextTheme); } catch (e) {}
   applyTheme(nextTheme);
 };
 
 const app = initializeApp(firebaseConfig), auth = getAuth(app), db = getFirestore(app);
-let storage = null;
-try { storage = getStorage(app); } catch(e) {}
-
 const $ = id => document.getElementById(id);
 let allRows = [], allUsers = [], allMedia = [], allConsults = [];
 let unsubRegs = null, unsubUsers = null, unsubMedia = null, unsubConsults = null;
 
-// التنقل بين تبويبات لوحة التحكم
+/* ---------- أدوات مساعدة ---------- */
+let toastTimer = null;
+function toast(text, type = "ok") {
+  const t = $("toast");
+  t.textContent = text;
+  t.className = "toast show" + (type === "err" ? " err" : "");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove("show"), 3500);
+}
+
+// تطبيع النص العربي للبحث: يتجاهل التشكيل واختلاف الألف والياء والتاء المربوطة
+function norm(s) {
+  return (s || "").toLowerCase()
+    .replace(/[\u064B-\u065F\u0670\u0640]/g, "")
+    .replace(/[أإآٱ]/g, "ا")
+    .replace(/ى/g, "ي")
+    .replace(/ة/g, "ه");
+}
+
+function isHttpUrl(u) {
+  try { const x = new URL(u); return x.protocol === "https:" || x.protocol === "http:"; }
+  catch (e) { return false; }
+}
+
+// حماية ملفات CSV من حقن المعادلات عند فتحها في Excel
+function csvCell(val) {
+  let s = String(val ?? "");
+  if (/^[=+\-@\t\r]/.test(s)) s = "'" + s;
+  return `"${s.replace(/"/g, '""')}"`;
+}
+
+function formatWaPhone(phone) {
+  let clean = (phone || "").replace(/\D/g, "");
+  if (clean.startsWith("01") && clean.length === 11) clean = "2" + clean;
+  return clean;
+}
+
+function emptyRow(tbody, cols, text) {
+  tbody.replaceChildren();
+  const tr = document.createElement("tr");
+  const td = document.createElement("td");
+  td.colSpan = cols;
+  td.style.cssText = "text-align:center;padding:24px";
+  td.textContent = text;
+  tr.append(td);
+  tbody.append(tr);
+}
+
+/* ---------- التبويبات ---------- */
 document.querySelectorAll(".tab-btn").forEach(btn => {
   btn.onclick = () => {
     document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
@@ -348,11 +413,11 @@ document.querySelectorAll(".tab-btn").forEach(btn => {
   };
 });
 
-// تحديث التصنيفات حسب نوع الملف المرفوع
 const CATEGORIES = {
   image: ["الحلقات القرآنية", "حفلات التكريم والإجازات", "المسابقات والأنشطة"],
   pdf: ["متون التجويد", "متون القراءات", "علوم القرآن والتفسير", "آداب وحلقات"]
 };
+
 function updateCategoryOptions() {
   const type = $("mediaType").value;
   const sel = $("mediaCategory");
@@ -363,46 +428,57 @@ function updateCategoryOptions() {
     opt.textContent = c;
     sel.append(opt);
   });
+
+  const isImage = type === "image";
+  $("imageUploadBox").classList.toggle("hidden", !isImage);
+  $("pdfLinkBox").classList.toggle("hidden", isImage);
 }
 $("mediaType").onchange = updateCategoryOptions;
 updateCategoryOptions();
 
+/* ---------- الدخول والخروج ---------- */
 $("loginForm").onsubmit = async e => {
   e.preventDefault();
   $("loginMsg").className = "msg";
   $("loginBtn").disabled = true;
+  $("loginBtn").textContent = "لحظة من فضلك...";
   try {
     await signInWithEmailAndPassword(auth, $("email").value.trim(), $("password").value);
   } catch (err) {
     $("loginMsg").className = "msg err";
-    $("loginMsg").textContent = "البريد الإلكتروني أو كلمة المرور غير صحيحة.";
+    $("loginMsg").textContent = err.code === "auth/too-many-requests"
+      ? "محاولات كثيرة. انتظر قليلًا ثم حاول مرة أخرى."
+      : "البريد الإلكتروني أو كلمة المرور غير صحيحة.";
   }
   $("loginBtn").disabled = false;
+  $("loginBtn").textContent = "دخول";
 };
 
 $("logoutBtn").onclick = () => signOut(auth);
 $("logoutDenied").onclick = () => signOut(auth);
 
-function formatWaPhone(phone) {
-  let clean = (phone || "").replace(/\D/g, "");
-  if (clean.startsWith("01") && clean.length === 11) clean = "2" + clean;
-  return clean;
-}
+/* ---------- ضغط الصور (مع ضمان البقاء تحت حد Firestore ~1MB) ---------- */
+const MAX_IMG_CHARS = 850000;
 
-// ضغط الصور تلقائياً لرفعها بسرعة فائقة
 function compressImage(file, maxWidth = 1100, quality = 0.8) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = e => {
       const img = new Image();
       img.onload = () => {
-        const scale = Math.min(1, maxWidth / img.width);
-        const canvas = document.createElement("canvas");
-        canvas.width = Math.round(img.width * scale);
-        canvas.height = Math.round(img.height * scale);
-        const ctx = canvas.getContext("2d");
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        resolve(canvas.toDataURL("image/jpeg", quality));
+        let width = maxWidth, q = quality;
+        for (let i = 0; i < 6; i++) {
+          const scale = Math.min(1, width / img.width);
+          const canvas = document.createElement("canvas");
+          canvas.width = Math.round(img.width * scale);
+          canvas.height = Math.round(img.height * scale);
+          canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
+          const data = canvas.toDataURL("image/jpeg", q);
+          if (data.length <= MAX_IMG_CHARS) return resolve(data);
+          width = Math.round(width * 0.8);
+          q = Math.max(0.5, q - 0.1);
+        }
+        reject(new Error("too-large"));
       };
       img.onerror = reject;
       img.src = e.target.result;
@@ -412,16 +488,7 @@ function compressImage(file, maxWidth = 1100, quality = 0.8) {
   });
 }
 
-function fileToDataUrl(file) {
-  return new Promise((resolve, reject) => {
-    const r = new FileReader();
-    r.onload = () => resolve(r.result);
-    r.onerror = reject;
-    r.readAsDataURL(file);
-  });
-}
-
-// رفع صور المعرض أو ملفات الـ PDF للمكتبة
+/* ---------- نموذج إضافة المحتوى ---------- */
 $("mediaForm").onsubmit = async e => {
   e.preventDefault();
   const type = $("mediaType").value;
@@ -431,33 +498,31 @@ $("mediaForm").onsubmit = async e => {
   const file = $("mediaFile").files[0];
   let finalUrl = $("mediaUrl").value.trim();
 
-  if (!file && !finalUrl) {
+  if (type === "image" && !file) {
     $("mediaMsg").className = "msg err";
-    $("mediaMsg").textContent = "يرجى اختيار ملف من جهازك أو وضع رابط مباشر.";
+    $("mediaMsg").textContent = "يرجى اختيار الصورة من جهازك أولاً.";
+    return;
+  }
+
+  if (type === "pdf" && !finalUrl) {
+    $("mediaMsg").className = "msg err";
+    $("mediaMsg").textContent = "يرجى لصق رابط الملف من Google Drive.";
+    return;
+  }
+
+  if (type === "pdf" && !isHttpUrl(finalUrl)) {
+    $("mediaMsg").className = "msg err";
+    $("mediaMsg").textContent = "الرابط غير صحيح. يجب أن يبدأ بـ https://";
     return;
   }
 
   $("mediaSubmitBtn").disabled = true;
   $("mediaMsg").className = "msg ok";
-  $("mediaMsg").textContent = "جاري معالجة ورفع الملف...";
+  $("mediaMsg").textContent = "جاري الحفظ والنشر...";
 
   try {
-    if (file) {
-      if (type === "image") {
-        // ضغط الصورة وحفظها مباشرة لضمان عملها الفوري في المعرض
-        finalUrl = await compressImage(file);
-      } else {
-        // ملف PDF: إذا كان صغيراً نحفظه مباشرة أو نرفعه لـ Firebase Storage
-        if (file.size <= 720 * 1024) {
-          finalUrl = await fileToDataUrl(file);
-        } else if (storage) {
-          const fileRef = sRef(storage, `library/${Date.now()}_${file.name}`);
-          await uploadBytes(fileRef, file);
-          finalUrl = await getDownloadURL(fileRef);
-        } else {
-          throw new Error("PDF_TOO_LARGE");
-        }
-      }
+    if (type === "image") {
+      finalUrl = await compressImage(file);
     }
 
     await addDoc(collection(db, "media"), {
@@ -472,19 +537,22 @@ $("mediaForm").onsubmit = async e => {
     $("mediaMsg").className = "msg ok";
     $("mediaMsg").textContent = type === "image"
       ? "✅ تم رفع الصورة وإضافتها إلى معرض الصور بنجاح!"
-      : "✅ تم رفع الكتاب وإضافته إلى مكتبة المتون بنجاح!";
+      : "✅ تم إضافة الكتاب إلى مكتبة المتون بنجاح!";
     $("mediaForm").reset();
     updateCategoryOptions();
   } catch (err) {
     $("mediaMsg").className = "msg err";
-    $("mediaMsg").textContent = "تعذر رفع الملف الكبير. إذا لم تكن خدمة Storage مفعلة، يمكنك رفع ملف PDF أقل من 700 كيلوبايت أو وضع رابط Google Drive للملف في خانة الرابط.";
+    $("mediaMsg").textContent = err && err.message === "too-large"
+      ? "الصورة كبيرة جدًا حتى بعد الضغط. اختر صورة أصغر."
+      : "حدث خطأ أثناء الحفظ. تأكد من تحديث قواعد Firestore Rules.";
   }
   $("mediaSubmitBtn").disabled = false;
 };
 
-// 1. جدول طلبات التسجيل
+/* ---------- جدول الطلبات ---------- */
 function renderTable() {
-  const search = $("searchInput").value.trim().toLowerCase();
+  const search = $("searchInput").value.trim();
+  const searchN = norm(search);
   const progFilter = $("filterProgram").value;
   const statusFilter = $("filterStatus").value;
 
@@ -495,19 +563,19 @@ function renderTable() {
 
   const filtered = allRows.filter(r => {
     const st = r.status || "جديد";
-    const matchSearch = !search || (r.fullName || "").toLowerCase().includes(search) || (r.phone || "").includes(search);
+    const matchSearch = !search || norm(r.fullName).includes(searchN) || (r.phone || "").includes(search);
     const matchProg = progFilter === "all" || r.program === progFilter;
     const matchStatus = statusFilter === "all" || st === statusFilter;
     return matchSearch && matchProg && matchStatus;
   });
 
   const tbody = $("tableBody");
-  tbody.replaceChildren();
 
   if (!filtered.length) {
-    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:24px">لا توجد طلبات مطابقة للبحث.</td></tr>`;
+    emptyRow(tbody, 7, "لا توجد طلبات مطابقة للبحث.");
     return;
   }
+  tbody.replaceChildren();
 
   filtered.forEach(r => {
     const tr = document.createElement("tr");
@@ -528,6 +596,7 @@ function renderTable() {
     waLink.className = "wa-btn";
     waLink.href = `https://wa.me/${waPhone}?text=${waMsg}`;
     waLink.target = "_blank";
+    waLink.rel = "noopener";
     waLink.textContent = "💬 مراسلة";
     tdPhone.append(phoneSpan, waLink);
 
@@ -544,6 +613,7 @@ function renderTable() {
     const tdStatus = document.createElement("td");
     const select = document.createElement("select");
     select.className = "status-select";
+    select.setAttribute("aria-label", "حالة الطلب");
     ["جديد", "تم التواصل", "مقبول"].forEach(optVal => {
       const opt = document.createElement("option");
       opt.value = optVal;
@@ -552,7 +622,13 @@ function renderTable() {
       select.append(opt);
     });
     select.onchange = async () => {
-      await updateDoc(doc(db, "registrations", r.id), { status: select.value }).catch(()=>{});
+      try {
+        await updateDoc(doc(db, "registrations", r.id), { status: select.value });
+        toast("تم تحديث الحالة");
+      } catch (err) {
+        toast("تعذر تحديث الحالة", "err");
+        select.value = status;
+      }
     };
     tdStatus.append(select);
 
@@ -562,7 +638,8 @@ function renderTable() {
     delBtn.textContent = "حذف";
     delBtn.onclick = async () => {
       if (!confirm(`هل أنت متأكد من حذف طلب "${r.fullName}"؟`)) return;
-      await deleteDoc(doc(db, "registrations", r.id)).catch(()=>{});
+      try { await deleteDoc(doc(db, "registrations", r.id)); toast("تم حذف الطلب"); }
+      catch (err) { toast("تعذر حذف الطلب", "err"); }
     };
     tdAction.append(delBtn);
 
@@ -571,14 +648,19 @@ function renderTable() {
   });
 }
 
-// 2. جدول استشارات التلاوة والحفظ
+/* ---------- جدول الاستشارات ---------- */
 function renderConsults() {
   const tbody = $("consultTableBody");
-  tbody.replaceChildren();
+
+  const pending = allConsults.filter(c => !c.reply).length;
+  $("consultsBadge").textContent = pending;
+  $("consultsBadge").classList.toggle("hidden", pending === 0);
+
   if (!allConsults.length) {
-    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:24px">لا توجد استشارات أو تلاوات مرسلة حالياً.</td></tr>`;
+    emptyRow(tbody, 5, "لا توجد استشارات أو تلاوات مرسلة حالياً.");
     return;
   }
+  tbody.replaceChildren();
 
   allConsults.forEach(c => {
     const tr = document.createElement("tr");
@@ -595,6 +677,7 @@ function renderConsults() {
       wa.className = "wa-btn";
       wa.href = `https://wa.me/${formatWaPhone(c.phone)}?text=${encodeURIComponent(`السلام عليكم، بخصوص استشارتك في دار الفرقان (${c.topic}): `)}`;
       wa.target = "_blank";
+      wa.rel = "noopener";
       wa.textContent = "💬 واتساب";
       tdStudent.append(wa);
     }
@@ -611,6 +694,7 @@ function renderConsults() {
     if (c.audioData) {
       const aud = document.createElement("audio");
       aud.controls = true;
+      aud.preload = "none";
       aud.src = c.audioData;
       aud.style.maxWidth = "210px";
       tdAudio.append(aud);
@@ -621,7 +705,9 @@ function renderConsults() {
     const tdReply = document.createElement("td");
     const replyInput = document.createElement("textarea");
     replyInput.rows = 2;
+    replyInput.maxLength = 3000;
     replyInput.placeholder = "اكتب توجيه الشيخ للطالب هنا...";
+    replyInput.setAttribute("aria-label", "رد الشيخ");
     replyInput.value = c.reply || "";
     const saveReplyBtn = document.createElement("button");
     saveReplyBtn.className = "primary";
@@ -629,11 +715,17 @@ function renderConsults() {
     saveReplyBtn.style.padding = "6px 12px";
     saveReplyBtn.textContent = "💾 حفظ وإرسال الرد";
     saveReplyBtn.onclick = async () => {
-      await updateDoc(doc(db, "consultations", c.id), {
-        reply: replyInput.value.trim(),
-        status: "تم الرد"
-      });
-      alert("تم حفظ توجيه الشيخ وظهر في حساب الطالب.");
+      saveReplyBtn.disabled = true;
+      try {
+        await updateDoc(doc(db, "consultations", c.id), {
+          reply: replyInput.value.trim(),
+          status: "تم الرد"
+        });
+        toast("تم حفظ توجيه الشيخ وظهر في حساب الطالب");
+      } catch (err) {
+        toast("تعذر حفظ الرد. حاول مرة أخرى.", "err");
+      }
+      saveReplyBtn.disabled = false;
     };
     tdReply.append(replyInput, saveReplyBtn);
 
@@ -643,7 +735,8 @@ function renderConsults() {
     delBtn.textContent = "حذف";
     delBtn.onclick = async () => {
       if (!confirm("حذف هذه الاستشارة؟")) return;
-      await deleteDoc(doc(db, "consultations", c.id));
+      try { await deleteDoc(doc(db, "consultations", c.id)); toast("تم حذف الاستشارة"); }
+      catch (err) { toast("تعذر حذف الاستشارة", "err"); }
     };
     tdAct.append(delBtn);
 
@@ -652,14 +745,14 @@ function renderConsults() {
   });
 }
 
-// 3. جدول محتويات المكتبة والمعرض
+/* ---------- جدول المكتبة والمعرض ---------- */
 function renderMedia() {
   const tbody = $("mediaTableBody");
-  tbody.replaceChildren();
   if (!allMedia.length) {
-    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:24px">لم يتم رفع صور أو ملفات PDF بعد.</td></tr>`;
+    emptyRow(tbody, 6, "لم يتم إضافة صور أو كتب بعد.");
     return;
   }
+  tbody.replaceChildren();
 
   allMedia.forEach(m => {
     const tr = document.createElement("tr");
@@ -682,17 +775,22 @@ function renderMedia() {
     if (m.type === "image") {
       const img = document.createElement("img");
       img.src = m.url;
+      img.alt = m.title || "";
+      img.loading = "lazy";
       img.style.width = "64px";
       img.style.height = "46px";
       img.style.objectFit = "cover";
       img.style.borderRadius = "6px";
       tdPrev.append(img);
-    } else {
+    } else if (isHttpUrl(m.url)) {
       const a = document.createElement("a");
       a.href = m.url;
       a.target = "_blank";
-      a.textContent = "فتح ملف PDF";
+      a.rel = "noopener";
+      a.textContent = "فتح رابط Drive";
       tdPrev.append(a);
+    } else {
+      tdPrev.textContent = "رابط غير صالح";
     }
 
     const tdDate = document.createElement("td");
@@ -708,10 +806,19 @@ function renderMedia() {
       const newTitle = prompt("تعديل العنوان:", m.title || "");
       if (newTitle === null) return;
       const newDesc = prompt("تعديل الوصف:", m.description || "");
-      await updateDoc(doc(db, "media", m.id), {
+      const updates = {
         title: newTitle.trim() || m.title,
         description: newDesc !== null ? newDesc.trim() : m.description
-      });
+      };
+      if (m.type === "pdf") {
+        const newUrl = prompt("تعديل رابط Google Drive:", m.url || "");
+        if (newUrl && newUrl.trim()) {
+          if (!isHttpUrl(newUrl.trim())) return toast("الرابط غير صحيح. يجب أن يبدأ بـ https://", "err");
+          updates.url = newUrl.trim();
+        }
+      }
+      try { await updateDoc(doc(db, "media", m.id), updates); toast("تم حفظ التعديل"); }
+      catch (err) { toast("تعذر حفظ التعديل", "err"); }
     };
 
     const delBtn = document.createElement("button");
@@ -719,7 +826,8 @@ function renderMedia() {
     delBtn.textContent = "حذف";
     delBtn.onclick = async () => {
       if (!confirm(`هل أنت متأكد من حذف "${m.title}"؟`)) return;
-      await deleteDoc(doc(db, "media", m.id));
+      try { await deleteDoc(doc(db, "media", m.id)); toast("تم الحذف"); }
+      catch (err) { toast("تعذر الحذف", "err"); }
     };
     tdAct.append(editBtn, delBtn);
 
@@ -728,10 +836,10 @@ function renderMedia() {
   });
 }
 
-// 4. جدول سجل الحسابات مع رقم التليفون وإمكانية الحذف
+/* ---------- سجل الحسابات ---------- */
 function renderUsers() {
-  const q = ($("userSearchInput").value || "").trim().toLowerCase();
-  // دمج أرقام الهواتف من طلبات التسجيل في حال كان الحساب قديماً
+  const qRaw = ($("userSearchInput").value || "").trim();
+  const q = norm(qRaw);
   const phoneByUid = {};
   const nameByUid = {};
   allRows.forEach(r => {
@@ -740,7 +848,6 @@ function renderUsers() {
   });
 
   const mergedUsers = [...allUsers];
-  // إضافة أي حساب له طلب تسجيل سابق ولم يدخل بعد التحديث الجديد
   allRows.forEach(r => {
     if (r.uid && !mergedUsers.some(u => u.id === r.uid)) {
       mergedUsers.push({
@@ -759,15 +866,15 @@ function renderUsers() {
   const filtered = mergedUsers.filter(u => {
     const ph = u.phone || phoneByUid[u.id] || "";
     const nm = u.name || nameByUid[u.id] || "";
-    return !q || nm.toLowerCase().includes(q) || (u.email || "").toLowerCase().includes(q) || ph.includes(q);
+    return !qRaw || norm(nm).includes(q) || (u.email || "").toLowerCase().includes(qRaw.toLowerCase()) || ph.includes(qRaw);
   });
 
   const tbody = $("usersTableBody");
-  tbody.replaceChildren();
   if (!filtered.length) {
-    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:24px">لا توجد حسابات مطابقة.</td></tr>`;
+    emptyRow(tbody, 5, "لا توجد حسابات مطابقة.");
     return;
   }
+  tbody.replaceChildren();
 
   filtered.forEach(u => {
     const tr = document.createElement("tr");
@@ -791,6 +898,7 @@ function renderUsers() {
       waLink.className = "wa-btn";
       waLink.href = `https://wa.me/${formatWaPhone(phone)}`;
       waLink.target = "_blank";
+      waLink.rel = "noopener";
       waLink.textContent = "💬 واتساب";
       tdPhone.append(phDiv, waLink);
     } else {
@@ -806,16 +914,18 @@ function renderUsers() {
     delBtn.textContent = "🗑️ حذف الحساب";
     delBtn.onclick = async () => {
       if (!confirm(`هل أنت متأكد من حذف حساب "${name}" (${u.email || phone}) نهائياً ومنعه من الدخول؟`)) return;
+      delBtn.disabled = true;
       try {
         await setDoc(doc(db, "blocked_users", u.id), { blockedAt: serverTimestamp(), email: u.email || "" });
         await deleteDoc(doc(db, "users", u.id));
-        // حذف طلباته المرتبطة أيضاً
         const userRegs = allRows.filter(r => r.uid === u.id);
         for (const reg of userRegs) {
           await deleteDoc(doc(db, "registrations", reg.id));
         }
+        toast("تم حذف الحساب ومنعه من الدخول");
       } catch (err) {
-        alert("تعذر حذف الحساب. تأكد من تحديث قواعد Firestore Rules.");
+        toast("تعذر حذف الحساب. تأكد من تحديث قواعد Firestore Rules.", "err");
+        delBtn.disabled = false;
       }
     };
     tdAct.append(delBtn);
@@ -830,27 +940,34 @@ $("filterProgram").onchange = renderTable;
 $("filterStatus").onchange = renderTable;
 $("userSearchInput").oninput = renderUsers;
 
+/* ---------- تصدير CSV ---------- */
 $("exportBtn").onclick = () => {
-  if (!allRows.length) return alert("لا توجد بيانات لتحميلها.");
+  if (!allRows.length) return toast("لا توجد بيانات لتحميلها.", "err");
   const headers = ["الاسم الكامل", "رقم الهاتف", "البرنامج", "الحالة", "التاريخ", "الملاحظات"];
-  const csvRows = [headers.join(",")];
+  const csvRows = [headers.map(csvCell).join(",")];
   allRows.forEach(r => {
     const dateStr = r.createdAt ? r.createdAt.toDate().toLocaleDateString("ar-EG") : "";
     const row = [r.fullName || "", r.phone || "", r.program || "", r.status || "جديد", dateStr, (r.notes || "").replace(/\n/g, " ")]
-      .map(val => `"${String(val).replace(/"/g, '""')}"`);
+      .map(csvCell);
     csvRows.push(row.join(","));
   });
   const blob = new Blob(["\uFEFF" + csvRows.join("\n")], { type: "text/csv;charset=utf-8;" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = `طلبات-دار-الفرقان-${new Date().toLocaleDateString("ar-EG")}.csv`;
+  a.download = `طلبات-دار-الفرقان-${new Date().toLocaleDateString("ar-EG").replace(/\//g, "-")}.csv`;
   a.click();
   URL.revokeObjectURL(url);
 };
 
+/* ---------- حالة الدخول وتحميل البيانات ---------- */
+function loadError(tbodyId, cols) {
+  return () => emptyRow($(tbodyId), cols, "تعذر تحميل البيانات. تأكد من صلاحيات الحساب وقواعد Firestore.");
+}
+
 onAuthStateChanged(auth, user => {
   [unsubRegs, unsubUsers, unsubMedia, unsubConsults].forEach(u => u && u());
+  unsubRegs = unsubUsers = unsubMedia = unsubConsults = null;
   $("loginView").classList.add("hidden");
   $("deniedView").classList.add("hidden");
   $("adminView").classList.add("hidden");
@@ -876,22 +993,22 @@ onAuthStateChanged(auth, user => {
     allRows = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
     renderTable();
     renderUsers();
-  });
+  }, loadError("tableBody", 7));
 
   unsubUsers = onSnapshot(collection(db, "users"), snap => {
     allUsers = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
     renderUsers();
-  });
+  }, loadError("usersTableBody", 5));
 
   unsubMedia = onSnapshot(collection(db, "media"), snap => {
     allMedia = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
     renderMedia();
-  });
+  }, loadError("mediaTableBody", 6));
 
   unsubConsults = onSnapshot(collection(db, "consultations"), snap => {
     allConsults = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
     renderConsults();
-  });
+  }, loadError("consultTableBody", 5));
 });
 </script>
 </body>
