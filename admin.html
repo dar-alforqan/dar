@@ -178,12 +178,10 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/fireba
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getFirestore, collection, onSnapshot, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// ==========================================
-// ضع هنا البريد الإلكتروني الخاص بالأدمن (الإدارة)
-// ==========================================
+// قائمة البريد الإلكتروني المعتمد للإدارة
 const ADMIN_EMAILS = [
+  "bdallhhshad7@gmail.com",
   "daralforqan@gmail.com"
-  // يمكنك إضافة بريدك الشخصي هنا في سطر جديد بين علامتي تنصيص
 ];
 
 // إدارة الوضع الليلي
@@ -242,7 +240,6 @@ function renderTable() {
   const progFilter = $("filterProgram").value;
   const statusFilter = $("filterStatus").value;
 
-  // تحديث الإحصائيات الكلية
   $("statTotal").textContent = allRows.length;
   $("statNew").textContent = allRows.filter(r => (r.status || "جديد") === "جديد").length;
   $("statContacted").textContent = allRows.filter(r => r.status === "تم التواصل").length;
@@ -271,12 +268,10 @@ function renderTable() {
     const waPhone = formatWaPhone(r.phone);
     const waMsg = encodeURIComponent(`السلام عليكم أ/ ${r.fullName}، نتواصل معكم من إدارة دار الفرقان بخصوص طلب التسجيل في برنامج (${r.program}).`);
 
-    // 1. الاسم
     const tdName = document.createElement("td");
     tdName.style.fontWeight = "700";
     tdName.textContent = r.fullName || "";
 
-    // 2. الهاتف + زر واتساب
     const tdPhone = document.createElement("td");
     const phoneSpan = document.createElement("div");
     phoneSpan.dir = "ltr";
@@ -288,20 +283,16 @@ function renderTable() {
     waLink.textContent = "💬 مراسلة";
     tdPhone.append(phoneSpan, waLink);
 
-    // 3. البرنامج
     const tdProg = document.createElement("td");
     tdProg.textContent = r.program || "";
 
-    // 4. الملاحظات
     const tdNotes = document.createElement("td");
     tdNotes.style.maxWidth = "240px";
     tdNotes.textContent = r.notes || "—";
 
-    // 5. التاريخ
     const tdDate = document.createElement("td");
     tdDate.textContent = dateStr;
 
-    // 6. الحالة
     const tdStatus = document.createElement("td");
     const select = document.createElement("select");
     select.className = "status-select";
@@ -316,12 +307,11 @@ function renderTable() {
       try {
         await updateDoc(doc(db, "registrations", r.id), { status: select.value });
       } catch (e) {
-        alert("تعذر تحديث الحالة. تأكد من صلاحيات Firestore Rules.");
+        alert("تعذر تحديث الحالة. تأكد من تحديث قواعد Firestore Rules.");
       }
     };
     tdStatus.append(select);
 
-    // 7. الحذف
     const tdAction = document.createElement("td");
     const delBtn = document.createElement("button");
     delBtn.className = "del-btn";
@@ -331,7 +321,7 @@ function renderTable() {
       try {
         await deleteDoc(doc(db, "registrations", r.id));
       } catch (e) {
-        alert("تعذر الحذف. تأكد من صلاحيات Firestore Rules.");
+        alert("تعذر الحذف. تأكد من تحديث قواعد Firestore Rules.");
       }
     };
     tdAction.append(delBtn);
@@ -364,7 +354,6 @@ $("exportBtn").onclick = () => {
     csvRows.push(row.join(","));
   });
 
-  // إضافة BOM لدعم الحروف العربية في Excel
   const blob = new Blob(["\uFEFF" + csvRows.join("\n")], { type: "text/csv;charset=utf-8;" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
@@ -404,7 +393,7 @@ onAuthStateChanged(auth, user => {
       .sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
     renderTable();
   }, err => {
-    $("tableBody").innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--err);padding:24px">حدث خطأ في قراءة البيانات. تأكد من تحديث قواعد الحماية (Rules) في Firebase لبريد الأدمن.</td></tr>`;
+    $("tableBody").innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--err);padding:24px">حدث خطأ في قراءة البيانات. تأكد من لصق قواعد الحماية (Rules) الجديدة في Firebase.</td></tr>`;
   });
 });
 </script>
