@@ -2,8 +2,9 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>مكتبة المتون والكتب | دار الفرقان</title>
+<meta name="description" content="مكتبة دار الفرقان: متون التجويد والقراءات وعلوم القرآن، معاينة مباشرة وتحميل بصيغة PDF.">
 <link rel="icon" type="image/png" href="icon.png">
 <link rel="apple-touch-icon" href="icon.png">
 <link rel="manifest" href="manifest.json">
@@ -21,56 +22,79 @@
   --header-bg:var(--wine);
   --header-text:var(--cream);
   --text-muted:#6b5249;
+  --on-wine:var(--cream);
 }
 body.dark-mode{
   --wine:#FAC81B;
-  --cream:#121212;
-  --ink:#f3f3f3;
-  --card-bg:#1e1e1e;
-  --input-bg:#2a2a2a;
-  --line:#333333;
-  --header-bg:#0a0a0a;
-  --header-text:#ffffff;
-  --text-muted:#a0a0a0;
+  --cream:#18090d;
+  --ink:#f3e8df;
+  --card-bg:#2a1016;
+  --input-bg:#200b10;
+  --line:#3d1e25;
+  --header-bg:#200b10;
+  --header-text:#f3e8df;
+  --text-muted:#b9a39a;
+  --on-wine:#200b10;
 }
 *{box-sizing:border-box}
+html{scroll-behavior:smooth}
 body{margin:0;font-family:Tahoma,"Segoe UI",Arial,sans-serif;background:var(--cream);color:var(--ink);line-height:1.7;transition:background .25s ease,color .25s ease}
-header{background:var(--header-bg);color:var(--header-text);padding:18px 20px;border-bottom:5px solid var(--gold);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+body.locked{overflow:hidden}
+header{background:var(--header-bg);color:var(--header-text);padding:18px 20px;padding-top:calc(18px + env(safe-area-inset-top,0));border-bottom:5px solid var(--gold);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
 .brand-box{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit}
 .brand-box img{width:46px;height:46px;border-radius:50%;object-fit:cover;border:2px solid var(--gold)}
-header h1{font-family:"Traditional Arabic","Amiri",Georgia,serif;font-size:1.85rem;margin:0;color:var(--gold)}
+header h1{font-family:"Traditional Arabic","Amiri",Georgia,serif;font-size:1.85rem;margin:0;color:var(--gold);line-height:1.3}
 header p{margin:2px 0 0;opacity:.85;font-size:.9rem}
 .header-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.nav-btn{background:transparent;border:1px solid var(--gold);color:var(--gold);padding:6px 14px;border-radius:20px;cursor:pointer;font:inherit;font-size:.88rem;font-weight:700;text-decoration:none}
+.nav-btn{background:transparent;border:1px solid var(--gold);color:var(--gold);padding:6px 14px;border-radius:20px;cursor:pointer;font:inherit;font-size:.88rem;font-weight:700;text-decoration:none;transition:filter .2s}
+.nav-btn:hover{filter:brightness(1.15)}
 .nav-btn.gold{background:var(--gold);color:#3A181E}
 
-main{max-width:1000px;margin:0 auto;padding:28px 16px 70px}
-.filter-bar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:24px;align-items:center;justify-content:space-between}
+main{max-width:1000px;margin:0 auto;padding:28px 16px calc(70px + env(safe-area-inset-bottom,0))}
+.filter-bar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px;align-items:center;justify-content:space-between}
 .search-input{flex:1;min-width:220px;padding:10px 14px;border:1px solid var(--line);border-radius:20px;font:inherit;background:var(--input-bg);color:var(--ink)}
+.search-input:focus{border-color:var(--gold)}
 .cats{display:flex;gap:8px;flex-wrap:wrap}
-.cat-btn{padding:7px 15px;border:1px solid var(--wine);background:transparent;color:var(--wine);border-radius:20px;cursor:pointer;font:inherit;font-size:.88rem;font-weight:700}
-.cat-btn.active{background:var(--wine);color:var(--cream)}
-body.dark-mode .cat-btn.active{color:#121212}
+.cat-btn{padding:7px 15px;border:1px solid var(--wine);background:transparent;color:var(--wine);border-radius:20px;cursor:pointer;font:inherit;font-size:.88rem;font-weight:700;transition:background .2s}
+.cat-btn:hover{background:rgba(250,200,27,.15)}
+.cat-btn.active{background:var(--wine);color:var(--on-wine)}
+.count{margin:0 4px 18px;font-size:.88rem;color:var(--text-muted);min-height:1.5em}
 
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:18px}
-.book-card{background:var(--card-bg);border:1px solid var(--line);border-top:4px solid var(--gold);border-radius:12px;padding:20px;display:flex;flex-direction:column;justify-content:space-between;gap:14px}
+.book-card{background:var(--card-bg);border:1px solid var(--line);border-top:4px solid var(--gold);border-radius:12px;padding:20px;display:flex;flex-direction:column;justify-content:space-between;gap:14px;transition:transform .2s ease,box-shadow .2s ease,background .25s ease}
+.book-card:hover{box-shadow:0 8px 20px rgba(0,0,0,.1);transform:translateY(-3px)}
 .badge{display:inline-block;background:rgba(250,200,27,.2);color:var(--wine);padding:3px 10px;border-radius:12px;font-size:.8rem;font-weight:700;margin-bottom:6px}
-.book-card h3{font-family:"Traditional Arabic","Amiri",Georgia,serif;font-size:1.45rem;margin:0 0 6px;color:var(--wine)}
+.book-card h3{font-family:"Traditional Arabic","Amiri",Georgia,serif;font-size:1.45rem;margin:0 0 6px;color:var(--wine);line-height:1.5}
 .book-card p{margin:0;font-size:.92rem;color:var(--text-muted)}
 .actions{display:flex;gap:8px;margin-top:6px}
-.btn{flex:1;text-align:center;padding:9px 12px;border-radius:8px;font:inherit;font-size:.9rem;font-weight:700;text-decoration:none;cursor:pointer;border:0}
+.btn{flex:1;text-align:center;padding:10px 12px;border-radius:8px;font:inherit;font-size:.9rem;font-weight:700;text-decoration:none;cursor:pointer;border:0;transition:filter .2s}
+.btn:hover{filter:brightness(1.08)}
 .btn-preview{background:transparent;border:1px solid var(--wine);color:var(--wine)}
 .btn-download{background:var(--gold);color:#3A181E}
+.msg{grid-column:1/-1;text-align:center;padding:40px 10px;color:var(--text-muted)}
 
-/* نافذة المعاينة */
+/* هيكل تحميل بدل رسالة نصية */
+.skel{height:190px;border-radius:12px;border:1px solid var(--line);border-top:4px solid var(--gold);background:linear-gradient(90deg,var(--card-bg) 25%,rgba(250,200,27,.12) 50%,var(--card-bg) 75%);background-size:200% 100%;animation:sh 1.4s infinite}
+@keyframes sh{to{background-position:-200% 0}}
+
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:100;display:none;align-items:center;justify-content:center;padding:16px}
 .modal.open{display:flex}
-.modal-box{background:var(--card-bg);width:100%;max-width:900px;height:85vh;border-radius:12px;display:flex;flex-direction:column;overflow:hidden;border:2px solid var(--gold)}
-.modal-head{background:var(--header-bg);color:var(--gold);padding:12px 16px;display:flex;justify-content:space-between;align-items:center}
-.modal-head strong{font-size:1.05rem}
-.close-btn{background:#a4161a;color:#fff;border:0;padding:6px 14px;border-radius:6px;cursor:pointer;font:inherit;font-weight:700}
+.modal-box{background:var(--card-bg);width:100%;max-width:900px;height:85vh;height:85dvh;border-radius:12px;display:flex;flex-direction:column;overflow:hidden;border:2px solid var(--gold)}
+.modal-head{background:var(--header-bg);color:var(--gold);padding:12px 16px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.modal-head strong{font-size:1.05rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.close-btn{background:#a4161a;color:#fff;border:0;padding:6px 14px;border-radius:6px;cursor:pointer;font:inherit;font-weight:700;flex:none}
 .modal-body{flex:1;background:#333}
 .modal-body iframe{width:100%;height:100%;border:0}
+
+a:focus-visible,button:focus-visible,.search-input:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+@media(max-width:600px){
+  header h1{font-size:1.5rem}
+  .modal{padding:0}
+  .modal-box{height:100%;height:100dvh;max-width:none;border-radius:0;border-width:0}
+  .modal-head{padding-top:calc(12px + env(safe-area-inset-top,0))}
+}
+@media(hover:none){.book-card:hover{transform:none;box-shadow:none}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
@@ -87,28 +111,29 @@ body.dark-mode .cat-btn.active{color:#121212}
     <a href="index.html" class="nav-btn">الرئيسية</a>
     <a href="gallery.html" class="nav-btn">🖼️ المعرض</a>
     <a href="account.html" class="nav-btn gold">حسابي</a>
-    <button id="themeToggle" class="nav-btn" type="button">🌙 ليلي</button>
+    <button id="themeToggle" class="nav-btn" type="button" aria-label="تبديل الوضع">🌙 ليلي</button>
   </div>
 </header>
 
 <main>
   <div class="filter-bar">
-    <input id="searchInput" class="search-input" type="search" placeholder="ابحث عن اسم المتن أو الكتاب...">
+    <input id="searchInput" class="search-input" type="search" placeholder="ابحث عن اسم المتن أو الكتاب..." aria-label="بحث في المكتبة">
     <div class="cats" id="catBtns">
-      <button class="cat-btn active" data-cat="all">الكل</button>
-      <button class="cat-btn" data-cat="متون التجويد">متون التجويد</button>
-      <button class="cat-btn" data-cat="متون القراءات">متون القراءات</button>
-      <button class="cat-btn" data-cat="علوم القرآن والتفسير">علوم القرآن</button>
-      <button class="cat-btn" data-cat="آداب وحلقات">آداب وحلقات</button>
+      <button class="cat-btn active" data-cat="all" aria-pressed="true">الكل</button>
+      <button class="cat-btn" data-cat="متون التجويد" aria-pressed="false">متون التجويد</button>
+      <button class="cat-btn" data-cat="متون القراءات" aria-pressed="false">متون القراءات</button>
+      <button class="cat-btn" data-cat="علوم القرآن والتفسير" aria-pressed="false">علوم القرآن</button>
+      <button class="cat-btn" data-cat="آداب وحلقات" aria-pressed="false">آداب وحلقات</button>
     </div>
   </div>
+  <div class="count" id="count" aria-live="polite"></div>
 
-  <div id="booksGrid" class="grid">
-    <p style="grid-column:1/-1;text-align:center;padding:40px">جاري تحميل المكتبة...</p>
+  <div id="booksGrid" class="grid" aria-busy="true">
+    <div class="skel"></div><div class="skel"></div><div class="skel"></div>
   </div>
 </main>
 
-<div id="previewModal" class="modal" role="dialog" aria-modal="true">
+<div id="previewModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="previewTitle">
   <div class="modal-box">
     <div class="modal-head">
       <strong id="previewTitle">معاينة الكتاب</strong>
@@ -125,8 +150,11 @@ import { firebaseConfig } from "./firebase-config.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, collection, query, where, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+/* ---------- الوضع الليلي (مع حماية من تعطّل localStorage) ---------- */
 const themeToggle = document.getElementById("themeToggle");
-const currentTheme = localStorage.getItem("theme") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+let saved = null;
+try { saved = localStorage.getItem("theme"); } catch (e) {}
+const currentTheme = saved || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
 function applyTheme(t) {
   document.body.classList.toggle("dark-mode", t === "dark");
   themeToggle.textContent = t === "dark" ? "☀️ نهاري" : "🌙 ليلي";
@@ -134,14 +162,16 @@ function applyTheme(t) {
 applyTheme(currentTheme);
 themeToggle.onclick = () => {
   const next = document.body.classList.contains("dark-mode") ? "light" : "dark";
-  localStorage.setItem("theme", next);
+  try { localStorage.setItem("theme", next); } catch (e) {}
   applyTheme(next);
 };
 
+/* ---------- البيانات ---------- */
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const grid = document.getElementById("booksGrid");
 const searchInput = document.getElementById("searchInput");
+const countEl = document.getElementById("count");
 let allBooks = [];
 let activeCat = "all";
 
@@ -159,20 +189,40 @@ function getDownloadUrl(url) {
   return url;
 }
 
+/* تطبيع النص العربي: يتجاهل التشكيل والتطويل واختلاف الألف والياء والتاء المربوطة */
+function norm(s) {
+  return (s || "").toLowerCase()
+    .replace(/[\u064B-\u065F\u0670\u0640]/g, "")
+    .replace(/[أإآٱ]/g, "ا")
+    .replace(/ى/g, "ي")
+    .replace(/ة/g, "ه");
+}
+
+function showMessage(text) {
+  grid.replaceChildren();
+  const p = document.createElement("p");
+  p.className = "msg";
+  p.textContent = text;
+  grid.append(p);
+}
+
 function renderBooks() {
-  const q = searchInput.value.trim().toLowerCase();
+  grid.setAttribute("aria-busy", "false");
+  const q = norm(searchInput.value.trim());
   const filtered = allBooks.filter(b => {
     const matchCat = activeCat === "all" || b.category === activeCat;
-    const matchSearch = !q || (b.title || "").toLowerCase().includes(q) || (b.description || "").toLowerCase().includes(q);
+    const matchSearch = !q || norm(b.title).includes(q) || norm(b.description).includes(q);
     return matchCat && matchSearch;
   });
 
-  grid.replaceChildren();
+  countEl.textContent = allBooks.length ? `عدد النتائج: ${filtered.length}` : "";
+
   if (!filtered.length) {
-    grid.innerHTML = `<p style="grid-column:1/-1;text-align:center;padding:40px">لا توجد متون أو كتب مضافة في هذا القسم حالياً.</p>`;
+    showMessage(q ? "لا توجد نتائج مطابقة لبحثك. جرّب كلمة أخرى." : "لا توجد متون أو كتب مضافة في هذا القسم حالياً.");
     return;
   }
 
+  grid.replaceChildren();
   filtered.forEach(b => {
     const card = document.createElement("div");
     card.className = "book-card";
@@ -196,11 +246,7 @@ function renderBooks() {
     prevBtn.className = "btn btn-preview";
     prevBtn.type = "button";
     prevBtn.textContent = "👁️ معاينة";
-    prevBtn.onclick = () => {
-      document.getElementById("previewTitle").textContent = b.title || "معاينة";
-      document.getElementById("previewFrame").src = getPreviewUrl(b.url);
-      document.getElementById("previewModal").classList.add("open");
-    };
+    prevBtn.onclick = () => openPreview(b);
 
     const dlLink = document.createElement("a");
     dlLink.className = "btn btn-download";
@@ -216,10 +262,39 @@ function renderBooks() {
   });
 }
 
+/* ---------- نافذة المعاينة ---------- */
+const modal = document.getElementById("previewModal");
+const frame = document.getElementById("previewFrame");
+const closeBtn = document.getElementById("closeModal");
+let lastFocus = null;
+
+function openPreview(b) {
+  lastFocus = document.activeElement;
+  document.getElementById("previewTitle").textContent = b.title || "معاينة";
+  frame.src = getPreviewUrl(b.url);
+  modal.classList.add("open");
+  document.body.classList.add("locked");
+  closeBtn.focus();
+}
+function closePreview() {
+  modal.classList.remove("open");
+  document.body.classList.remove("locked");
+  frame.src = "about:blank";
+  if (lastFocus) lastFocus.focus();
+}
+closeBtn.onclick = closePreview;
+modal.addEventListener("click", e => { if (e.target === modal) closePreview(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape" && modal.classList.contains("open")) closePreview(); });
+
+/* ---------- التصنيفات والبحث ---------- */
 document.querySelectorAll(".cat-btn").forEach(btn => {
   btn.onclick = () => {
-    document.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
+    document.querySelectorAll(".cat-btn").forEach(b => {
+      b.classList.remove("active");
+      b.setAttribute("aria-pressed", "false");
+    });
     btn.classList.add("active");
+    btn.setAttribute("aria-pressed", "true");
     activeCat = btn.dataset.cat;
     renderBooks();
   };
@@ -227,18 +302,15 @@ document.querySelectorAll(".cat-btn").forEach(btn => {
 
 searchInput.oninput = renderBooks;
 
-document.getElementById("closeModal").onclick = () => {
-  document.getElementById("previewModal").classList.remove("open");
-  document.getElementById("previewFrame").src = "about:blank";
-};
-
 onSnapshot(query(collection(db, "media"), where("type", "==", "pdf")), snap => {
   allBooks = snap.docs
     .map(d => ({ id: d.id, ...d.data() }))
     .sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
   renderBooks();
 }, () => {
-  grid.innerHTML = `<p style="grid-column:1/-1;text-align:center;padding:40px">حدث خطأ أثناء تحميل المكتبة.</p>`;
+  grid.setAttribute("aria-busy", "false");
+  countEl.textContent = "";
+  showMessage("حدث خطأ أثناء تحميل المكتبة. تأكد من اتصالك بالإنترنت ثم أعد تحميل الصفحة.");
 });
 </script>
 </body>
