@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مكتبة المتون والكتب | دار الفرقان</title>
+<link rel="icon" type="image/png" href="icon.png">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#3A181E">
+
+<style>
+:root{
+  --wine:#3A181E;
+  --cream:#F6E7DD;
+  --gold:#FAC81B;
+  --ink:#2a1015;
+  --card-bg:#ffffff;
+  --input-bg:#fffdfb;
+  --line:#d9c3b5;
+  --header-bg:var(--wine);
+  --header-text:var(--cream);
+  --text-muted:#6b5249;
+}
+body.dark-mode{
+  --wine:#FAC81B;
+  --cream:#121212;
+  --ink:#f3f3f3;
+  --card-bg:#1e1e1e;
+  --input-bg:#2a2a2a;
+  --line:#333333;
+  --header-bg:#0a0a0a;
+  --header-text:#ffffff;
+  --text-muted:#a0a0a0;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Tahoma,"Segoe UI",Arial,sans-serif;background:var(--cream);color:var(--ink);line-height:1.7;transition:background .25s ease,color .25s ease}
+header{background:var(--header-bg);color:var(--header-text);padding:18px 20px;border-bottom:5px solid var(--gold);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.brand-box{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit}
+.brand-box img{width:46px;height:46px;border-radius:50%;object-fit:cover;border:2px solid var(--gold)}
+header h1{font-family:"Traditional Arabic","Amiri",Georgia,serif;font-size:1.85rem;margin:0;color:var(--gold)}
+header p{margin:2px 0 0;opacity:.85;font-size:.9rem}
+.header-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.nav-btn{background:transparent;border:1px solid var(--gold);color:var(--gold);padding:6px 14px;border-radius:20px;cursor:pointer;font:inherit;font-size:.88rem;font-weight:700;text-decoration:none}
+.nav-btn.gold{background:var(--gold);color:#3A181E}
+
+main{max-width:1000px;margin:0 auto;padding:28px 16px 70px}
+.filter-bar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:24px;align-items:center;justify-content:space-between}
+.search-input{flex:1;min-width:220px;padding:10px 14px;border:1px solid var(--line);border-radius:20px;font:inherit;background:var(--input-bg);color:var(--ink)}
+.cats{display:flex;gap:8px;flex-wrap:wrap}
+.cat-btn{padding:7px 15px;border:1px solid var(--wine);background:transparent;color:var(--wine);border-radius:20px;cursor:pointer;font:inherit;font-size:.88rem;font-weight:700}
+.cat-btn.active{background:var(--wine);color:var(--cream)}
+body.dark-mode .cat-btn.active{color:#121212}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:18px}
+.book-card{background:var(--card-bg);border:1px solid var(--line);border-top:4px solid var(--gold);border-radius:12px;padding:20px;display:flex;flex-direction:column;justify-content:space-between;gap:14px}
+.badge{display:inline-block;background:rgba(250,200,27,.2);color:var(--wine);padding:3px 10px;border-radius:12px;font-size:.8rem;font-weight:700;margin-bottom:6px}
+.book-card h3{font-family:"Traditional Arabic","Amiri",Georgia,serif;font-size:1.45rem;margin:0 0 6px;color:var(--wine)}
+.book-card p{margin:0;font-size:.92rem;color:var(--text-muted)}
+.actions{display:flex;gap:8px;margin-top:6px}
+.btn{flex:1;text-align:center;padding:9px 12px;border-radius:8px;font:inherit;font-size:.9rem;font-weight:700;text-decoration:none;cursor:pointer;border:0}
+.btn-preview{background:transparent;border:1px solid var(--wine);color:var(--wine)}
+.btn-download{background:var(--gold);color:#3A181E}
+
+/* نافذة المعاينة */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:100;display:none;align-items:center;justify-content:center;padding:16px}
+.modal.open{display:flex}
+.modal-box{background:var(--card-bg);width:100%;max-width:900px;height:85vh;border-radius:12px;display:flex;flex-direction:column;overflow:hidden;border:2px solid var(--gold)}
+.modal-head{background:var(--header-bg);color:var(--gold);padding:12px 16px;display:flex;justify-content:space-between;align-items:center}
+.modal-head strong{font-size:1.05rem}
+.close-btn{background:#a4161a;color:#fff;border:0;padding:6px 14px;border-radius:6px;cursor:pointer;font:inherit;font-weight:700}
+.modal-body{flex:1;background:#333}
+.modal-body iframe{width:100%;height:100%;border:0}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="brand-box">
+    <img src="icon.png" alt="شعار دار الفرقان">
+    <div>
+      <h1>مكتبة المتون والكتب</h1>
+      <p>دار الفرقان لتحفيظ القرآن الكريم والقراءات</p>
+    </div>
+  </a>
+  <div class="header-actions">
+    <a href="index.html" class="nav-btn">الرئيسية</a>
+    <a href="gallery.html" class="nav-btn">🖼️ المعرض</a>
+    <a href="account.html" class="nav-btn gold">حسابي</a>
+    <button id="themeToggle" class="nav-btn" type="button">🌙 ليلي</button>
+  </div>
+</header>
+
+<main>
+  <div class="filter-bar">
+    <input id="searchInput" class="search-input" type="search" placeholder="ابحث عن اسم المتن أو الكتاب...">
+    <div class="cats" id="catBtns">
+      <button class="cat-btn active" data-cat="all">الكل</button>
+      <button class="cat-btn" data-cat="متون التجويد">متون التجويد</button>
+      <button class="cat-btn" data-cat="متون القراءات">متون القراءات</button>
+      <button class="cat-btn" data-cat="علوم القرآن والتفسير">علوم القرآن</button>
+      <button class="cat-btn" data-cat="آداب وحلقات">آداب وحلقات</button>
+    </div>
+  </div>
+
+  <div id="booksGrid" class="grid">
+    <p style="grid-column:1/-1;text-align:center;padding:40px">جاري تحميل المكتبة...</p>
+  </div>
+</main>
+
+<div id="previewModal" class="modal" role="dialog" aria-modal="true">
+  <div class="modal-box">
+    <div class="modal-head">
+      <strong id="previewTitle">معاينة الكتاب</strong>
+      <button id="closeModal" class="close-btn" type="button">إغلاق ✕</button>
+    </div>
+    <div class="modal-body">
+      <iframe id="previewFrame" src="about:blank" title="معاينة الملف"></iframe>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { firebaseConfig } from "./firebase-config.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, query, where, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const themeToggle = document.getElementById("themeToggle");
+const currentTheme = localStorage.getItem("theme") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+function applyTheme(t) {
+  document.body.classList.toggle("dark-mode", t === "dark");
+  themeToggle.textContent = t === "dark" ? "☀️ نهاري" : "🌙 ليلي";
+}
+applyTheme(currentTheme);
+themeToggle.onclick = () => {
+  const next = document.body.classList.contains("dark-mode") ? "light" : "dark";
+  localStorage.setItem("theme", next);
+  applyTheme(next);
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const grid = document.getElementById("booksGrid");
+const searchInput = document.getElementById("searchInput");
+let allBooks = [];
+let activeCat = "all";
+
+function getPreviewUrl(url) {
+  if (!url) return "";
+  const driveMatch = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+  if (driveMatch) return `https://drive.google.com/file/d/${driveMatch[1]}/preview`;
+  return url;
+}
+
+function getDownloadUrl(url) {
+  if (!url) return "#";
+  const driveMatch = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+  if (driveMatch) return `https://drive.google.com/uc?export=download&id=${driveMatch[1]}`;
+  return url;
+}
+
+function renderBooks() {
+  const q = searchInput.value.trim().toLowerCase();
+  const filtered = allBooks.filter(b => {
+    const matchCat = activeCat === "all" || b.category === activeCat;
+    const matchSearch = !q || (b.title || "").toLowerCase().includes(q) || (b.description || "").toLowerCase().includes(q);
+    return matchCat && matchSearch;
+  });
+
+  grid.replaceChildren();
+  if (!filtered.length) {
+    grid.innerHTML = `<p style="grid-column:1/-1;text-align:center;padding:40px">لا توجد متون أو كتب مضافة في هذا القسم حالياً.</p>`;
+    return;
+  }
+
+  filtered.forEach(b => {
+    const card = document.createElement("div");
+    card.className = "book-card";
+
+    const top = document.createElement("div");
+    const badge = document.createElement("span");
+    badge.className = "badge";
+    badge.textContent = b.category || "متون التجويد";
+
+    const h3 = document.createElement("h3");
+    h3.textContent = b.title || "كتاب بدون عنوان";
+
+    const desc = document.createElement("p");
+    desc.textContent = b.description || "متن علمي مقرر لطلاب دار الفرقان.";
+    top.append(badge, h3, desc);
+
+    const actions = document.createElement("div");
+    actions.className = "actions";
+
+    const prevBtn = document.createElement("button");
+    prevBtn.className = "btn btn-preview";
+    prevBtn.type = "button";
+    prevBtn.textContent = "👁️ معاينة";
+    prevBtn.onclick = () => {
+      document.getElementById("previewTitle").textContent = b.title || "معاينة";
+      document.getElementById("previewFrame").src = getPreviewUrl(b.url);
+      document.getElementById("previewModal").classList.add("open");
+    };
+
+    const dlLink = document.createElement("a");
+    dlLink.className = "btn btn-download";
+    dlLink.href = getDownloadUrl(b.url);
+    dlLink.download = (b.title || "book") + ".pdf";
+    dlLink.target = "_blank";
+    dlLink.rel = "noopener";
+    dlLink.textContent = "📥 تحميل PDF";
+
+    actions.append(prevBtn, dlLink);
+    card.append(top, actions);
+    grid.append(card);
+  });
+}
+
+document.querySelectorAll(".cat-btn").forEach(btn => {
+  btn.onclick = () => {
+    document.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    activeCat = btn.dataset.cat;
+    renderBooks();
+  };
+});
+
+searchInput.oninput = renderBooks;
+
+document.getElementById("closeModal").onclick = () => {
+  document.getElementById("previewModal").classList.remove("open");
+  document.getElementById("previewFrame").src = "about:blank";
+};
+
+onSnapshot(query(collection(db, "media"), where("type", "==", "pdf")), snap => {
+  allBooks = snap.docs
+    .map(d => ({ id: d.id, ...d.data() }))
+    .sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+  renderBooks();
+}, () => {
+  grid.innerHTML = `<p style="grid-column:1/-1;text-align:center;padding:40px">حدث خطأ أثناء تحميل المكتبة.</p>`;
+});
+</script>
+</body>
+</html>
