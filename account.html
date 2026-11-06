@@ -135,17 +135,41 @@ $("logout").onclick = () => signOut(auth);
 $("regForm").onsubmit = async e => {
   e.preventDefault(); clear($("regMsg"));
   const fullName = $("fullName").value.trim(), phone = $("phone").value.trim();
+  const program = $("program").value, notes = $("notes").value.trim();
+
   if (fullName.length < 2 || phone.length < 8) return show($("regMsg"), "err", "اكتب الاسم الكامل ورقم واتساب صحيح.");
   $("regBtn").disabled = true;
+
   try {
+    // 1. حفظ الطلب في Firebase لتسجيله في قائمة طلباتي
     await addDoc(collection(db, "registrations"), {
-      uid: auth.currentUser.uid, fullName, phone,
-      program: $("program").value, notes: $("notes").value.trim(),
+      uid: auth.currentUser.uid,
+      fullName,
+      phone,
+      program,
+      notes,
       createdAt: serverTimestamp()
     });
-    $("regForm").reset(); $("fullName").value = auth.currentUser.displayName || "";
-    show($("regMsg"), "ok", "تم إرسال الطلب.");
-  } catch (err) { show($("regMsg"), "err", "ماقدرناش نرسل الطلب. جرّب تاني."); }
+
+    show($("regMsg"), "ok", "تم إرسال الطلب وجاري فتح واتساب...");
+
+    // 2. تجهيز وفتح محادثة واتساب بالبيانات
+    const adminWhatsAppNumber = "201099262489";
+    const waText = `السلام عليكم ورحمة الله وبركاته\n`
+                 + `*طلب تسجيل جديد - دار الفرقان*\n\n`
+                 + `• *الاسم الكامل:* ${fullName}\n`
+                 + `• *رقم الهاتف:* ${phone}\n`
+                 + `• *البرنامج المطلوب:* ${program}\n`
+                 + `• *ملاحظات:* ${notes || 'لا توجد'}`;
+
+    const waUrl = `https://wa.me/${adminWhatsAppNumber}?text=${encodeURIComponent(waText)}`;
+    window.open(waUrl, "_blank");
+
+    $("regForm").reset();
+    $("fullName").value = auth.currentUser.displayName || "";
+  } catch (err) {
+    show($("regMsg"), "err", "ماقدرناش نرسل الطلب. جرّب تاني.");
+  }
   $("regBtn").disabled = false;
 };
 
