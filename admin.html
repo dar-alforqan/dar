@@ -4,6 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>لوحة التحكم | دار الفرقان</title>
+
+<!-- أيقونة الموقع وإعدادات تطبيق الهاتف PWA -->
+<link rel="icon" type="image/png" href="icon.png">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#3A181E">
+
 <style>
 :root{
   --wine:#3A181E;
@@ -36,6 +43,8 @@ body.dark-mode{
 *{box-sizing:border-box}
 body{margin:0;font-family:Tahoma,"Segoe UI",Arial,sans-serif;background:var(--cream);color:var(--ink);line-height:1.6;transition:background .25s ease,color .25s ease}
 header{background:var(--header-bg);color:var(--header-text);padding:20px;border-bottom:5px solid var(--gold);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.brand-box{display:flex;align-items:center;gap:12px}
+.brand-box img{width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid var(--gold)}
 header h1{font-family:"Traditional Arabic","Amiri",Georgia,serif;font-size:1.8rem;margin:0;color:var(--gold)}
 header p{margin:2px 0 0;font-size:.9rem;opacity:.85}
 .header-actions{display:flex;align-items:center;gap:10px}
@@ -74,9 +83,12 @@ body.dark-mode .msg.err{background:#3b1012;color:#ff9b9e}
 <body>
 
 <header>
-  <div>
-    <h1>لوحة تحكم دار الفرقان</h1>
-    <p>إدارة ومتابعة طلبات التسجيل</p>
+  <div class="brand-box">
+    <img src="icon.png" alt="شعار دار الفرقان">
+    <div>
+      <h1>لوحة تحكم دار الفرقان</h1>
+      <p>إدارة ومتابعة طلبات التسجيل</p>
+    </div>
   </div>
   <div class="header-actions">
     <a href="index.html" class="nav-link">الرئيسية</a>
@@ -85,7 +97,6 @@ body.dark-mode .msg.err{background:#3b1012;color:#ff9b9e}
 </header>
 
 <main>
-  <!-- شاشة تسجيل دخول الأدمن -->
   <section id="loginView" class="card auth-box hidden">
     <h2 style="margin-top:0">تسجيل دخول الإدارة</h2>
     <form id="loginForm">
@@ -98,21 +109,18 @@ body.dark-mode .msg.err{background:#3b1012;color:#ff9b9e}
     </form>
   </section>
 
-  <!-- شاشة عدم الصلاحية -->
   <section id="deniedView" class="card auth-box hidden" style="text-align:center">
     <h2 style="color:var(--err);margin-top:0">غير مصرح لك بالدخول</h2>
     <p>الحساب المسجل حالياً (<strong id="currentUserEmail" dir="ltr"></strong>) ليس ضمن حسابات إدارة الدار.</p>
     <button id="logoutDenied" class="primary" type="button">تسجيل الخروج وتبديل الحساب</button>
   </section>
 
-  <!-- لوحة التحكم الرئيسية -->
   <section id="adminView" class="hidden">
     <div class="top-bar">
       <div>مرحباً بك، <strong id="adminEmailDisplay" dir="ltr"></strong></div>
       <button id="logoutBtn" class="btn-outline" type="button">تسجيل الخروج</button>
     </div>
 
-    <!-- الإحصائيات -->
     <div class="stats">
       <div class="stat-card"><strong id="statTotal">0</strong><span>إجمالي الطلبات</span></div>
       <div class="stat-card"><strong id="statNew">0</strong><span>طلبات جديدة</span></div>
@@ -120,7 +128,6 @@ body.dark-mode .msg.err{background:#3b1012;color:#ff9b9e}
       <div class="stat-card"><strong id="statAccepted">0</strong><span>مقبول / انتظم</span></div>
     </div>
 
-    <!-- أدوات البحث والفلترة -->
     <div class="card toolbar">
       <div>
         <label for="searchInput" style="margin-top:0">بحث بالاسم أو الهاتف</label>
@@ -150,7 +157,6 @@ body.dark-mode .msg.err{background:#3b1012;color:#ff9b9e}
       </div>
     </div>
 
-    <!-- جدول الطلبات -->
     <div class="table-wrap">
       <table>
         <thead>
@@ -178,13 +184,11 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/fireba
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getFirestore, collection, onSnapshot, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// قائمة البريد الإلكتروني المعتمد للإدارة
 const ADMIN_EMAILS = [
   "bdallhhshad7@gmail.com",
   "daralforqan@gmail.com"
 ];
 
-// إدارة الوضع الليلي
 const themeToggle = document.getElementById("themeToggle");
 const currentTheme = localStorage.getItem("theme") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
 
@@ -205,12 +209,14 @@ themeToggle.onclick = () => {
   applyTheme(nextTheme);
 };
 
-// تهيئة Firebase
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("./sw.js").catch(() => {});
+}
+
 const app = initializeApp(firebaseConfig), auth = getAuth(app), db = getFirestore(app);
 const $ = id => document.getElementById(id);
 let allRows = [], unsub = null;
 
-// تسجيل الدخول والخروج
 $("loginForm").onsubmit = async e => {
   e.preventDefault();
   $("loginMsg").className = "msg";
@@ -227,14 +233,12 @@ $("loginForm").onsubmit = async e => {
 $("logoutBtn").onclick = () => signOut(auth);
 $("logoutDenied").onclick = () => signOut(auth);
 
-// تنسيق رقم الهاتف لرابط واتساب دولي
 function formatWaPhone(phone) {
   let clean = (phone || "").replace(/\D/g, "");
   if (clean.startsWith("01") && clean.length === 11) clean = "2" + clean;
   return clean;
 }
 
-// عرض البيانات في الجدول وتحديث الإحصائيات
 function renderTable() {
   const search = $("searchInput").value.trim().toLowerCase();
   const progFilter = $("filterProgram").value;
@@ -335,7 +339,6 @@ $("searchInput").oninput = renderTable;
 $("filterProgram").onchange = renderTable;
 $("filterStatus").onchange = renderTable;
 
-// تصدير إلى ملف CSV (يفتح في Excel)
 $("exportBtn").onclick = () => {
   if (!allRows.length) return alert("لا توجد بيانات لتحميلها.");
   const headers = ["الاسم الكامل", "رقم الهاتف", "البرنامج", "الحالة", "التاريخ", "الملاحظات"];
@@ -363,7 +366,6 @@ $("exportBtn").onclick = () => {
   URL.revokeObjectURL(url);
 };
 
-// مراقبة حالة تسجيل الدخول
 onAuthStateChanged(auth, user => {
   if (unsub) { unsub(); unsub = null; }
   $("loginView").classList.add("hidden");
