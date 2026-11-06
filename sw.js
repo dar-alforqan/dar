@@ -1,7 +1,9 @@
-const CACHE_NAME = "forqan-pwa-v1";
+const CACHE_NAME = "forqan-pwa-v2";
 const ASSETS = [
   "./",
   "./index.html",
+  "./library.html",
+  "./gallery.html",
   "./account.html",
   "./admin.html",
   "./icon.png",
