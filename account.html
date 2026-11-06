@@ -6,7 +6,7 @@
 <title>حسابي | دار الفرقان</title>
 
 <link rel="icon" type="image/png" href="icon.png">
-<link rel="apple-touch-icon" href="icon.png">
+<link rel="apple-touch-icon" href="icon.png">f
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#3A181E">
 <meta name="mobile-web-app-capable" content="yes">
@@ -198,7 +198,8 @@ h2{font-family:"Traditional Arabic","Amiri",Georgia,serif;margin:22px 0 10px;fon
 </main>
 
 <script type="module">
-import { firebaseConfig } from "./firebase-config.js";
+import { firebaseConfig, initAppCheck } from "./firebase-config.js";
+  initAppCheck(app);
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getFirestore, collection, doc, setDoc, getDoc, addDoc, query, where, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
