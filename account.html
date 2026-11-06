@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>حسابي | دار الفرقان</title>
+<style>
+:root{--wine:#3A181E;--cream:#F6E7DD;--gold:#FAC81B;--ink:#2a1015;--line:#d9c3b5;--err:#a4161a}
+*{box-sizing:border-box}
+body{margin:0;font-family:Tahoma,"Segoe UI",Arial,sans-serif;background:var(--cream);color:var(--ink);line-height:1.7}
+header{background:var(--wine);color:var(--cream);padding:28px 20px;border-bottom:5px solid var(--gold)}
+header h1{font-family:"Traditional Arabic","Amiri",Georgia,serif;font-size:2rem;margin:0}
+header p{margin:4px 0 0;opacity:.85}
+main{max-width:520px;margin:0 auto;padding:24px 16px 60px}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:22px}
+.tabs{display:flex;gap:8px;margin-bottom:18px}
+.tabs button{flex:1;padding:10px;border:1px solid var(--wine);background:transparent;color:var(--wine);border-radius:8px;font:inherit;font-weight:700;cursor:pointer}
+.tabs button[aria-selected=true]{background:var(--wine);color:var(--cream)}
+label{display:block;font-weight:500;margin:14px 0 4px}
+input,select,textarea{width:100%;padding:11px;border:1px solid var(--line);border-radius:8px;font:inherit;background:#fffdfb}
+input:focus,select:focus,textarea:focus,button:focus-visible{outline:3px solid var(--gold);outline-offset:1px}
+.primary{width:100%;margin-top:18px;padding:12px;background:var(--gold);color:var(--wine);border:0;border-radius:8px;font:inherit;font-weight:700;font-size:1.05rem;cursor:pointer}
+.primary:disabled{opacity:.6}
+.link{background:none;border:0;color:var(--wine);text-decoration:underline;font:inherit;cursor:pointer;padding:0;margin-top:12px}
+.msg{margin-top:14px;padding:10px;border-radius:8px;display:none}
+.msg.err{display:block;background:#fbe3e3;color:var(--err)}
+.msg.ok{display:block;background:#e5f3e2;color:#1d5a14}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;gap:10px}
+.top strong{font-family:"Traditional Arabic","Amiri",Georgia,serif;font-size:1.4rem}
+h2{font-family:"Traditional Arabic","Amiri",Georgia,serif;margin:28px 0 10px;font-size:1.4rem}
+.item{border-right:4px solid var(--gold);background:#fff;padding:10px 14px;margin-bottom:10px;border-radius:6px}
+.item small{color:#6b5249}
+.hidden{display:none}
+</style>
+</head>
+<body>
+<header><h1>دار الفرقان</h1><p>تحفيظ القرآن · الإجازات · التجويد · القراءات</p></header>
+<main>
+
+<section id="authView" class="card hidden">
+  <div class="tabs" role="tablist">
+    <button id="tabLogin" role="tab" aria-selected="true">تسجيل الدخول</button>
+    <button id="tabSignup" role="tab" aria-selected="false">إنشاء حساب</button>
+  </div>
+  <form id="authForm" novalidate>
+    <div id="nameRow" class="hidden"><label for="name">الاسم</label><input id="name" autocomplete="name"></div>
+    <label for="email">البريد الإلكتروني</label>
+    <input id="email" type="email" autocomplete="email" dir="ltr" required>
+    <label for="password">كلمة المرور</label>
+    <input id="password" type="password" autocomplete="current-password" dir="ltr" minlength="6" required>
+    <button class="primary" id="authBtn" type="submit">دخول</button>
+    <button class="link" id="resetBtn" type="button">نسيت كلمة المرور؟</button>
+    <div id="authMsg" class="msg" role="alert"></div>
+  </form>
+</section>
+
+<section id="appView" class="hidden">
+  <div class="top"><strong id="hello"></strong><button class="link" id="logout">تسجيل الخروج</button></div>
+  <div class="card">
+    <form id="regForm" novalidate>
+      <label for="fullName">الاسم الكامل</label><input id="fullName" required>
+      <label for="phone">رقم الواتساب</label><input id="phone" type="tel" dir="ltr" required>
+      <label for="program">البرنامج المطلوب</label>
+      <select id="program"><option>تحفيظ القرآن</option><option>إجازة</option><option>التجويد</option><option>القراءات</option></select>
+      <label for="notes">ملاحظات (المستوى الحالي، المواعيد المناسبة)</label><textarea id="notes" rows="4" maxlength="1000"></textarea>
+      <button class="primary" id="regBtn" type="submit">إرسال الطلب</button>
+      <div id="regMsg" class="msg" role="alert"></div>
+    </form>
+  </div>
+  <h2>طلباتي</h2>
+  <div id="list"><p>لسه مفيش طلبات.</p></div>
+</section>
+
+</main>
+<script type="module">
+import { firebaseConfig } from "./firebase-config.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, collection, addDoc, query, where, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const app = initializeApp(firebaseConfig), auth = getAuth(app), db = getFirestore(app);
+const $ = id => document.getElementById(id);
+let mode = "login", unsub = null;
+
+const errors = {
+  "auth/invalid-email":"البريد الإلكتروني غير صحيح.",
+  "auth/email-already-in-use":"البريد ده مسجل قبل كده. جرّب تسجيل الدخول.",
+  "auth/weak-password":"كلمة المرور لازم تكون 6 حروف أو أكتر.",
+  "auth/invalid-credential":"البريد أو كلمة المرور غلط.",
+  "auth/user-not-found":"مفيش حساب بالبريد ده.",
+  "auth/wrong-password":"كلمة المرور غلط.",
+  "auth/too-many-requests":"محاولات كتير. استنى شوية وجرّب تاني.",
+  "auth/network-request-failed":"مشكلة في الإنترنت. جرّب تاني."
+};
+const show = (el, type, text) => { el.className = "msg " + type; el.textContent = text; };
+const clear = el => { el.className = "msg"; el.textContent = ""; };
+
+function setMode(m){
+  mode = m; const s = m === "signup";
+  $("tabLogin").setAttribute("aria-selected", !s);
+  $("tabSignup").setAttribute("aria-selected", s);
+  $("nameRow").classList.toggle("hidden", !s);
+  $("authBtn").textContent = s ? "إنشاء الحساب" : "دخول";
+  $("password").autocomplete = s ? "new-password" : "current-password";
+  $("resetBtn").classList.toggle("hidden", s);
+  clear($("authMsg"));
+}
+$("tabLogin").onclick = () => setMode("login");
+$("tabSignup").onclick = () => setMode("signup");
+
+$("authForm").onsubmit = async e => {
+  e.preventDefault(); clear($("authMsg"));
+  const email = $("email").value.trim(), pass = $("password").value;
+  if (!email || pass.length < 6) return show($("authMsg"), "err", "اكتب البريد وكلمة مرور من 6 حروف على الأقل.");
+  $("authBtn").disabled = true;
+  try {
+    if (mode === "signup") {
+      const cred = await createUserWithEmailAndPassword(auth, email, pass);
+      const n = $("name").value.trim();
+      if (n) await updateProfile(cred.user, { displayName: n });
+    } else await signInWithEmailAndPassword(auth, email, pass);
+  } catch (err) { show($("authMsg"), "err", errors[err.code] || "حصل خطأ. جرّب تاني."); }
+  $("authBtn").disabled = false;
+};
+
+$("resetBtn").onclick = async () => {
+  const email = $("email").value.trim();
+  if (!email) return show($("authMsg"), "err", "اكتب بريدك الأول وبعدين اضغط نسيت كلمة المرور.");
+  try { await sendPasswordResetEmail(auth, email); show($("authMsg"), "ok", "بعتنالك رابط تغيير كلمة المرور على البريد."); }
+  catch (err) { show($("authMsg"), "err", errors[err.code] || "حصل خطأ. جرّب تاني."); }
+};
+
+$("logout").onclick = () => signOut(auth);
+
+$("regForm").onsubmit = async e => {
+  e.preventDefault(); clear($("regMsg"));
+  const fullName = $("fullName").value.trim(), phone = $("phone").value.trim();
+  if (fullName.length < 2 || phone.length < 8) return show($("regMsg"), "err", "اكتب الاسم الكامل ورقم واتساب صحيح.");
+  $("regBtn").disabled = true;
+  try {
+    await addDoc(collection(db, "registrations"), {
+      uid: auth.currentUser.uid, fullName, phone,
+      program: $("program").value, notes: $("notes").value.trim(),
+      createdAt: serverTimestamp()
+    });
+    $("regForm").reset(); $("fullName").value = auth.currentUser.displayName || "";
+    show($("regMsg"), "ok", "تم إرسال الطلب.");
+  } catch (err) { show($("regMsg"), "err", "ماقدرناش نرسل الطلب. جرّب تاني."); }
+  $("regBtn").disabled = false;
+};
+
+onAuthStateChanged(auth, user => {
+  if (unsub) { unsub(); unsub = null; }
+  $("authView").classList.toggle("hidden", !!user);
+  $("appView").classList.toggle("hidden", !user);
+  if (!user) return;
+  $("hello").textContent = "أهلاً " + (user.displayName || user.email);
+  $("fullName").value = user.displayName || "";
+  unsub = onSnapshot(query(collection(db, "registrations"), where("uid", "==", user.uid)), snap => {
+    const rows = snap.docs.map(d => d.data()).sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+    const list = $("list"); list.replaceChildren();
+    if (!rows.length) { list.innerHTML = "<p>لسه مفيش طلبات.</p>"; return; }
+    rows.forEach(r => {
+      const div = document.createElement("div"); div.className = "item";
+      const b = document.createElement("strong"); b.textContent = r.program;
+      const s = document.createElement("small");
+      s.textContent = " · " + (r.createdAt ? r.createdAt.toDate().toLocaleDateString("ar-EG") : "جاري الإرسال");
+      const p = document.createElement("p"); p.style.margin = "4px 0 0"; p.textContent = r.notes || "";
+      div.append(b, s, p); list.append(div);
+    });
+  });
+});
+setMode("login");
+</script>
+</body>
+</html>
