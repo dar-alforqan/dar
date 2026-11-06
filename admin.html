@@ -3,9 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>لوحة التحكم | دار الفرقان</title>
+<title>لوحة التحكم الشاملة | دار الفرقان</title>
 
-<!-- أيقونة الموقع وإعدادات تطبيق الهاتف PWA -->
 <link rel="icon" type="image/png" href="icon.png">
 <link rel="apple-touch-icon" href="icon.png">
 <link rel="manifest" href="manifest.json">
@@ -42,56 +41,69 @@ body.dark-mode{
 
 *{box-sizing:border-box}
 body{margin:0;font-family:Tahoma,"Segoe UI",Arial,sans-serif;background:var(--cream);color:var(--ink);line-height:1.6;transition:background .25s ease,color .25s ease}
-header{background:var(--header-bg);color:var(--header-text);padding:20px;border-bottom:5px solid var(--gold);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
-.brand-box{display:flex;align-items:center;gap:12px}
+header{background:var(--header-bg);color:var(--header-text);padding:18px 20px;border-bottom:5px solid var(--gold);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.brand-box{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit}
 .brand-box img{width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid var(--gold)}
 header h1{font-family:"Traditional Arabic","Amiri",Georgia,serif;font-size:1.8rem;margin:0;color:var(--gold)}
-header p{margin:2px 0 0;font-size:.9rem;opacity:.85}
-.header-actions{display:flex;align-items:center;gap:10px}
+header p{margin:2px 0 0;font-size:.88rem;opacity:.85}
+.header-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .theme-btn,.nav-link{background:transparent;border:1px solid var(--gold);color:var(--gold);padding:6px 14px;border-radius:20px;cursor:pointer;font:inherit;font-size:.85rem;font-weight:bold;text-decoration:none}
-main{max-width:1100px;margin:0 auto;padding:24px 16px 60px}
+
+main{max-width:1150px;margin:0 auto;padding:24px 16px 60px}
 .card{background:var(--card-bg);border:1px solid var(--line);border-radius:10px;padding:20px;margin-bottom:20px}
 .auth-box{max-width:440px;margin:40px auto}
 label{display:block;font-weight:600;margin:12px 0 4px;font-size:.92rem}
-input,select{width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;font:inherit;background:var(--input-bg);color:var(--ink)}
-input:focus,select:focus,button:focus-visible{outline:3px solid var(--gold);outline-offset:1px}
+input,select,textarea{width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;font:inherit;background:var(--input-bg);color:var(--ink)}
 .primary{padding:11px 20px;background:var(--gold);color:#3A181E;border:0;border-radius:8px;font:inherit;font-weight:700;cursor:pointer}
-.btn-outline{padding:9px 16px;background:transparent;border:1px solid var(--wine);color:var(--wine);border-radius:8px;font:inherit;font-weight:700;cursor:pointer}
+.primary:disabled{opacity:.6}
+.btn-outline{padding:8px 16px;background:transparent;border:1px solid var(--wine);color:var(--wine);border-radius:8px;font:inherit;font-weight:700;cursor:pointer}
+
+.admin-tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}
+.tab-btn{flex:1;min-width:170px;padding:12px;border:2px solid var(--wine);background:var(--card-bg);color:var(--wine);border-radius:10px;font:inherit;font-weight:700;cursor:pointer;transition:.2s}
+.tab-btn.active{background:var(--wine);color:var(--cream)}
+body.dark-mode .tab-btn.active{color:#121212}
+
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:20px}
 .stat-card{background:var(--card-bg);border:1px solid var(--line);border-top:4px solid var(--gold);border-radius:10px;padding:14px 16px;text-align:center}
 .stat-card strong{display:block;font-size:1.8rem;color:var(--wine);font-family:"Traditional Arabic","Amiri",Georgia,serif;line-height:1.2}
 .stat-card span{font-size:.88rem;color:var(--text-muted)}
+
 .toolbar{display:grid;grid-template-columns:1fr repeat(2,auto) auto;gap:10px;align-items:end;margin-bottom:16px}
 @media(max-width:760px){.toolbar{grid-template-columns:1fr 1fr}}
 @media(max-width:480px){.toolbar{grid-template-columns:1fr}}
+
 .table-wrap{overflow-x:auto;background:var(--card-bg);border:1px solid var(--line);border-radius:10px}
-table{width:100%;border-collapse:collapse;min-width:750px;text-align:right}
-th,td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:middle;font-size:.92rem}
+table{width:100%;border-collapse:collapse;min-width:780px;text-align:right}
+th,td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:middle;font-size:.9rem}
 th{background:var(--header-bg);color:var(--gold);font-weight:700;white-space:nowrap}
 tr:hover td{background:var(--row-hover)}
 .status-select{padding:5px 8px;border-radius:6px;font-weight:700;font-size:.85rem;width:auto;min-width:120px}
-.wa-btn{display:inline-flex;align-items:center;gap:4px;background:#25D366;color:#fff;text-decoration:none;padding:5px 10px;border-radius:6px;font-size:.82rem;font-weight:700;white-space:nowrap}
+.wa-btn{display:inline-flex;align-items:center;gap:4px;background:#25D366;color:#fff;text-decoration:none;padding:5px 10px;border-radius:6px;font-size:.8rem;font-weight:700;white-space:nowrap}
 .del-btn{background:#fbe3e3;color:#a4161a;border:0;padding:6px 10px;border-radius:6px;cursor:pointer;font:inherit;font-size:.82rem;font-weight:700}
 body.dark-mode .del-btn{background:#3b1012;color:#ff9b9e}
 .msg{margin-top:12px;padding:10px;border-radius:8px;display:none}
 .msg.err{display:block;background:#fbe3e3;color:var(--err)}
-body.dark-mode .msg.err{background:#3b1012;color:#ff9b9e}
+.msg.ok{display:block;background:#e5f3e2;color:#1d5a14}
 .top-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.hint{font-size:.82rem;color:var(--text-muted);margin-top:4px;display:block}
 .hidden{display:none !important}
 </style>
 </head>
 <body>
 
 <header>
-  <div class="brand-box">
+  <a href="index.html" class="brand-box">
     <img src="icon.png" alt="شعار دار الفرقان">
     <div>
       <h1>لوحة تحكم دار الفرقان</h1>
-      <p>إدارة ومتابعة طلبات التسجيل</p>
+      <p>الإدارة الشاملة للطلبات، التلاوات، المكتبة، والمعرض، والحسابات</p>
     </div>
-  </div>
+  </a>
   <div class="header-actions">
     <a href="index.html" class="nav-link">الرئيسية</a>
+    <a href="library.html" class="nav-link">📚 المكتبة</a>
+    <a href="gallery.html" class="nav-link">🖼️ المعرض</a>
     <button id="themeToggle" class="theme-btn" type="button">🌙 ليلي</button>
   </div>
 </header>
@@ -121,59 +133,177 @@ body.dark-mode .msg.err{background:#3b1012;color:#ff9b9e}
       <button id="logoutBtn" class="btn-outline" type="button">تسجيل الخروج</button>
     </div>
 
-    <div class="stats">
-      <div class="stat-card"><strong id="statTotal">0</strong><span>إجمالي الطلبات</span></div>
-      <div class="stat-card"><strong id="statNew">0</strong><span>طلبات جديدة</span></div>
-      <div class="stat-card"><strong id="statContacted">0</strong><span>تم التواصل</span></div>
-      <div class="stat-card"><strong id="statAccepted">0</strong><span>مقبول / انتظم</span></div>
+    <div class="admin-tabs">
+      <button class="tab-btn active" data-tab="tabRegs" type="button">📋 طلبات التسجيل</button>
+      <button class="tab-btn" data-tab="tabConsults" type="button">🎙️ استشارات التلاوة والحفظ</button>
+      <button class="tab-btn" data-tab="tabMedia" type="button">📚🖼️ رفع وإدارة المكتبة والمعرض</button>
+      <button class="tab-btn" data-tab="tabUsers" type="button">👥 سجل الحسابات (<span id="usersCountBadge">0</span>)</button>
     </div>
 
-    <div class="card toolbar">
-      <div>
-        <label for="searchInput" style="margin-top:0">بحث بالاسم أو الهاتف</label>
-        <input id="searchInput" type="search" placeholder="اكتب اسم الطالب أو رقمه...">
+    <!-- 1. قسم طلبات التسجيل -->
+    <div id="tabRegs" class="admin-panel">
+      <div class="stats">
+        <div class="stat-card"><strong id="statTotal">0</strong><span>إجمالي الطلبات</span></div>
+        <div class="stat-card"><strong id="statNew">0</strong><span>طلبات جديدة</span></div>
+        <div class="stat-card"><strong id="statContacted">0</strong><span>تم التواصل</span></div>
+        <div class="stat-card"><strong id="statAccepted">0</strong><span>مقبول / انتظم</span></div>
       </div>
-      <div>
-        <label for="filterProgram" style="margin-top:0">البرنامج</label>
-        <select id="filterProgram">
-          <option value="all">كل البرامج</option>
-          <option value="تحفيظ القرآن">تحفيظ القرآن</option>
-          <option value="إجازة">إجازة</option>
-          <option value="التجويد">التجويد</option>
-          <option value="القراءات">القراءات</option>
-        </select>
+
+      <div class="card toolbar">
+        <div>
+          <label for="searchInput" style="margin-top:0">بحث بالاسم أو الهاتف</label>
+          <input id="searchInput" type="search" placeholder="اكتب اسم الطالب أو رقمه...">
+        </div>
+        <div>
+          <label for="filterProgram" style="margin-top:0">البرنامج</label>
+          <select id="filterProgram">
+            <option value="all">كل البرامج</option>
+            <option value="تحفيظ القرآن">تحفيظ القرآن</option>
+            <option value="إجازة">إجازة</option>
+            <option value="التجويد">التجويد</option>
+            <option value="القراءات">القراءات</option>
+          </select>
+        </div>
+        <div>
+          <label for="filterStatus" style="margin-top:0">الحالة</label>
+          <select id="filterStatus">
+            <option value="all">كل الحالات</option>
+            <option value="جديد">جديد</option>
+            <option value="تم التواصل">تم التواصل</option>
+            <option value="مقبول">مقبول</option>
+          </select>
+        </div>
+        <div>
+          <button id="exportBtn" class="primary" type="button" style="width:100%">📥 تحميل Excel</button>
+        </div>
       </div>
-      <div>
-        <label for="filterStatus" style="margin-top:0">الحالة</label>
-        <select id="filterStatus">
-          <option value="all">كل الحالات</option>
-          <option value="جديد">جديد</option>
-          <option value="تم التواصل">تم التواصل</option>
-          <option value="مقبول">مقبول</option>
-        </select>
-      </div>
-      <div>
-        <button id="exportBtn" class="primary" type="button" style="width:100%">📥 تحميل Excel</button>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>الاسم الكامل</th>
+              <th>رقم الواتساب</th>
+              <th>البرنامج</th>
+              <th>الملاحظات</th>
+              <th>التاريخ</th>
+              <th>الحالة</th>
+              <th>إجراء</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <tr><td colspan="7" style="text-align:center;padding:24px">جاري تحميل الطلبات...</td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>الاسم الكامل</th>
-            <th>رقم الواتساب</th>
-            <th>البرنامج</th>
-            <th>الملاحظات</th>
-            <th>التاريخ</th>
-            <th>الحالة</th>
-            <th>إجراء</th>
-          </tr>
-        </thead>
-        <tbody id="tableBody">
-          <tr><td colspan="7" style="text-align:center;padding:24px">جاري تحميل الطلبات...</td></tr>
-        </tbody>
-      </table>
+    <!-- 2. قسم استشارات الحفظ وتصحيح التلاوة -->
+    <div id="tabConsults" class="admin-panel hidden">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>الطالب والهاتف</th>
+              <th>الموضوع والسؤال</th>
+              <th>التسجيل الصوتي</th>
+              <th>رد وتوجيه الشيخ</th>
+              <th>إجراء</th>
+            </tr>
+          </thead>
+          <tbody id="consultTableBody">
+            <tr><td colspan="5" style="text-align:center;padding:24px">جاري تحميل الاستشارات...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 3. قسم رفع وإدارة المكتبة والمعرض -->
+    <div id="tabMedia" class="admin-panel hidden">
+      <div class="card">
+        <h3 style="margin-top:0;color:var(--wine)">➕ إضافة صورة للمعرض أو كتاب PDF للمكتبة</h3>
+        <form id="mediaForm">
+          <div class="form-grid">
+            <div>
+              <label for="mediaType">نوع الإضافة (أين سيظهر؟)</label>
+              <select id="mediaType">
+                <option value="image">🖼️ صورة من الجهاز (تذهب لمعرض الصور للعرض فقط)</option>
+                <option value="pdf">📚 كتاب أو متن على Google Drive (يذهب للمكتبة للتحميل)</option>
+              </select>
+            </div>
+            <div>
+              <label for="mediaCategory">التصنيف الفرعي</label>
+              <select id="mediaCategory"></select>
+            </div>
+            <div>
+              <label for="mediaTitle">العنوان (اسم المتن أو عنوان الصورة)</label>
+              <input id="mediaTitle" placeholder="مثال: متن الجزرية / تكريم حفظة الدار" required>
+            </div>
+          </div>
+
+          <label for="mediaDesc">وصف مختصر (اختياري)</label>
+          <input id="mediaDesc" placeholder="نبذة قصيرة تظهر تحت العنوان...">
+
+          <!-- يظهر عند اختيار صورة -->
+          <div id="imageUploadBox" style="margin-top:8px">
+            <label for="mediaFile">اختر الصورة من هاتفك أو جهازك</label>
+            <input id="mediaFile" type="file" accept="image/*">
+            <span class="hint">يتم ضغط الصورة وضبط جودتها تلقائياً لتعمل في المعرض بسرعة عالية.</span>
+          </div>
+
+          <!-- يظهر عند اختيار ملف PDF -->
+          <div id="pdfLinkBox" class="hidden" style="margin-top:8px">
+            <label for="mediaUrl">رابط الملف على Google Drive</label>
+            <input id="mediaUrl" type="url" dir="ltr" placeholder="https://drive.google.com/file/d/.../view?usp=sharing">
+            <span class="hint">ارفع الملف على Google Drive مهما كان حجمه (حتى 2 جيجا أو أكثر)، واجعل المشاركة "أي شخص لديه الرابط" ثم الصق الرابط هنا.</span>
+          </div>
+
+          <button id="mediaSubmitBtn" class="primary" type="submit" style="margin-top:16px">⬆️ حفظ ونشر في القسم المخصص</button>
+          <div id="mediaMsg" class="msg"></div>
+        </form>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>القسم</th>
+              <th>التصنيف</th>
+              <th>العنوان والوصف</th>
+              <th>معاينة</th>
+              <th>التاريخ</th>
+              <th>تعديل / حذف</th>
+            </tr>
+          </thead>
+          <tbody id="mediaTableBody">
+            <tr><td colspan="6" style="text-align:center;padding:24px">جاري تحميل محتويات المكتبة والمعرض...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 4. قسم سجل الحسابات -->
+    <div id="tabUsers" class="admin-panel hidden">
+      <div class="card" style="margin-bottom:14px">
+        <label for="userSearchInput" style="margin-top:0">بحث في الحسابات بالاسم أو البريد أو رقم التليفون</label>
+        <input id="userSearchInput" type="search" placeholder="ابحث عن أي حساب...">
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>الاسم</th>
+              <th>البريد الإلكتروني</th>
+              <th>رقم التليفون</th>
+              <th>تاريخ التسجيل</th>
+              <th>إدارة الحساب</th>
+            </tr>
+          </thead>
+          <tbody id="usersTableBody">
+            <tr><td colspan="5" style="text-align:center;padding:24px">جاري تحميل سجل الحسابات...</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </section>
 </main>
@@ -182,7 +312,7 @@ body.dark-mode .msg.err{background:#3b1012;color:#ff9b9e}
 import { firebaseConfig } from "./firebase-config.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, collection, onSnapshot, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, collection, onSnapshot, doc, setDoc, addDoc, updateDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const ADMIN_EMAILS = [
   "bdallhhshad7@gmail.com",
@@ -191,31 +321,54 @@ const ADMIN_EMAILS = [
 
 const themeToggle = document.getElementById("themeToggle");
 const currentTheme = localStorage.getItem("theme") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-
 function applyTheme(theme) {
-  if (theme === "dark") {
-    document.body.classList.add("dark-mode");
-    themeToggle.textContent = "☀️ نهاري";
-  } else {
-    document.body.classList.remove("dark-mode");
-    themeToggle.textContent = "🌙 ليلي";
-  }
+  document.body.classList.toggle("dark-mode", theme === "dark");
+  themeToggle.textContent = theme === "dark" ? "☀️ نهاري" : "🌙 ليلي";
 }
 applyTheme(currentTheme);
-
 themeToggle.onclick = () => {
   const nextTheme = document.body.classList.contains("dark-mode") ? "light" : "dark";
   localStorage.setItem("theme", nextTheme);
   applyTheme(nextTheme);
 };
 
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("./sw.js").catch(() => {});
-}
-
 const app = initializeApp(firebaseConfig), auth = getAuth(app), db = getFirestore(app);
 const $ = id => document.getElementById(id);
-let allRows = [], unsub = null;
+let allRows = [], allUsers = [], allMedia = [], allConsults = [];
+let unsubRegs = null, unsubUsers = null, unsubMedia = null, unsubConsults = null;
+
+document.querySelectorAll(".tab-btn").forEach(btn => {
+  btn.onclick = () => {
+    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+    document.querySelectorAll(".admin-panel").forEach(p => p.classList.add("hidden"));
+    btn.classList.add("active");
+    $(btn.dataset.tab).classList.remove("hidden");
+  };
+});
+
+const CATEGORIES = {
+  image: ["الحلقات القرآنية", "حفلات التكريم والإجازات", "المسابقات والأنشطة"],
+  pdf: ["متون التجويد", "متون القراءات", "علوم القرآن والتفسير", "آداب وحلقات"]
+};
+
+function updateCategoryOptions() {
+  const type = $("mediaType").value;
+  const sel = $("mediaCategory");
+  sel.replaceChildren();
+  CATEGORIES[type].forEach(c => {
+    const opt = document.createElement("option");
+    opt.value = c;
+    opt.textContent = c;
+    sel.append(opt);
+  });
+
+  // إظهار خانة رفع الصورة أو خانة رابط جوجل درايف حسب الاختيار
+  const isImage = type === "image";
+  $("imageUploadBox").classList.toggle("hidden", !isImage);
+  $("pdfLinkBox").classList.toggle("hidden", isImage);
+}
+$("mediaType").onchange = updateCategoryOptions;
+updateCategoryOptions();
 
 $("loginForm").onsubmit = async e => {
   e.preventDefault();
@@ -238,6 +391,80 @@ function formatWaPhone(phone) {
   if (clean.startsWith("01") && clean.length === 11) clean = "2" + clean;
   return clean;
 }
+
+function compressImage(file, maxWidth = 1100, quality = 0.8) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = new Image();
+      img.onload = () => {
+        const scale = Math.min(1, maxWidth / img.width);
+        const canvas = document.createElement("canvas");
+        canvas.width = Math.round(img.width * scale);
+        canvas.height = Math.round(img.height * scale);
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        resolve(canvas.toDataURL("image/jpeg", quality));
+      };
+      img.onerror = reject;
+      img.src = e.target.result;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+$("mediaForm").onsubmit = async e => {
+  e.preventDefault();
+  const type = $("mediaType").value;
+  const category = $("mediaCategory").value;
+  const title = $("mediaTitle").value.trim();
+  const description = $("mediaDesc").value.trim();
+  const file = $("mediaFile").files[0];
+  let finalUrl = $("mediaUrl").value.trim();
+
+  if (type === "image" && !file) {
+    $("mediaMsg").className = "msg err";
+    $("mediaMsg").textContent = "يرجى اختيار الصورة من جهازك أولاً.";
+    return;
+  }
+
+  if (type === "pdf" && !finalUrl) {
+    $("mediaMsg").className = "msg err";
+    $("mediaMsg").textContent = "يرجى لصق رابط الملف من Google Drive.";
+    return;
+  }
+
+  $("mediaSubmitBtn").disabled = true;
+  $("mediaMsg").className = "msg ok";
+  $("mediaMsg").textContent = "جاري الحفظ والنشر...";
+
+  try {
+    if (type === "image") {
+      finalUrl = await compressImage(file);
+    }
+
+    await addDoc(collection(db, "media"), {
+      type,
+      category,
+      title,
+      description,
+      url: finalUrl,
+      createdAt: serverTimestamp()
+    });
+
+    $("mediaMsg").className = "msg ok";
+    $("mediaMsg").textContent = type === "image"
+      ? "✅ تم رفع الصورة وإضافتها إلى معرض الصور بنجاح!"
+      : "✅ تم إضافة الكتاب إلى مكتبة المتون بنجاح!";
+    $("mediaForm").reset();
+    updateCategoryOptions();
+  } catch (err) {
+    $("mediaMsg").className = "msg err";
+    $("mediaMsg").textContent = "حدث خطأ أثناء الحفظ. تأكد من تحديث قواعد Firestore Rules.";
+  }
+  $("mediaSubmitBtn").disabled = false;
+};
 
 function renderTable() {
   const search = $("searchInput").value.trim().toLowerCase();
@@ -291,7 +518,7 @@ function renderTable() {
     tdProg.textContent = r.program || "";
 
     const tdNotes = document.createElement("td");
-    tdNotes.style.maxWidth = "240px";
+    tdNotes.style.maxWidth = "220px";
     tdNotes.textContent = r.notes || "—";
 
     const tdDate = document.createElement("td");
@@ -308,11 +535,7 @@ function renderTable() {
       select.append(opt);
     });
     select.onchange = async () => {
-      try {
-        await updateDoc(doc(db, "registrations", r.id), { status: select.value });
-      } catch (e) {
-        alert("تعذر تحديث الحالة. تأكد من تحديث قواعد Firestore Rules.");
-      }
+      await updateDoc(doc(db, "registrations", r.id), { status: select.value }).catch(()=>{});
     };
     tdStatus.append(select);
 
@@ -322,11 +545,7 @@ function renderTable() {
     delBtn.textContent = "حذف";
     delBtn.onclick = async () => {
       if (!confirm(`هل أنت متأكد من حذف طلب "${r.fullName}"؟`)) return;
-      try {
-        await deleteDoc(doc(db, "registrations", r.id));
-      } catch (e) {
-        alert("تعذر الحذف. تأكد من تحديث قواعد Firestore Rules.");
-      }
+      await deleteDoc(doc(db, "registrations", r.id)).catch(()=>{});
     };
     tdAction.append(delBtn);
 
@@ -335,28 +554,274 @@ function renderTable() {
   });
 }
 
+function renderConsults() {
+  const tbody = $("consultTableBody");
+  tbody.replaceChildren();
+  if (!allConsults.length) {
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:24px">لا توجد استشارات أو تلاوات مرسلة حالياً.</td></tr>`;
+    return;
+  }
+
+  allConsults.forEach(c => {
+    const tr = document.createElement("tr");
+
+    const tdStudent = document.createElement("td");
+    const stName = document.createElement("strong");
+    stName.textContent = c.studentName || "طالب";
+    const stPhone = document.createElement("div");
+    stPhone.dir = "ltr";
+    stPhone.textContent = c.phone || "بدون رقم";
+    tdStudent.append(stName, stPhone);
+    if (c.phone) {
+      const wa = document.createElement("a");
+      wa.className = "wa-btn";
+      wa.href = `https://wa.me/${formatWaPhone(c.phone)}?text=${encodeURIComponent(`السلام عليكم، بخصوص استشارتك في دار الفرقان (${c.topic}): `)}`;
+      wa.target = "_blank";
+      wa.textContent = "💬 واتساب";
+      tdStudent.append(wa);
+    }
+
+    const tdTopic = document.createElement("td");
+    const bTopic = document.createElement("strong");
+    bTopic.textContent = c.topic || "";
+    const pNotes = document.createElement("p");
+    pNotes.style.margin = "4px 0 0";
+    pNotes.textContent = c.notes || "";
+    tdTopic.append(bTopic, pNotes);
+
+    const tdAudio = document.createElement("td");
+    if (c.audioData) {
+      const aud = document.createElement("audio");
+      aud.controls = true;
+      aud.src = c.audioData;
+      aud.style.maxWidth = "210px";
+      tdAudio.append(aud);
+    } else {
+      tdAudio.textContent = "سؤال نصي فقط";
+    }
+
+    const tdReply = document.createElement("td");
+    const replyInput = document.createElement("textarea");
+    replyInput.rows = 2;
+    replyInput.placeholder = "اكتب توجيه الشيخ للطالب هنا...";
+    replyInput.value = c.reply || "";
+    const saveReplyBtn = document.createElement("button");
+    saveReplyBtn.className = "primary";
+    saveReplyBtn.style.marginTop = "6px";
+    saveReplyBtn.style.padding = "6px 12px";
+    saveReplyBtn.textContent = "💾 حفظ وإرسال الرد";
+    saveReplyBtn.onclick = async () => {
+      await updateDoc(doc(db, "consultations", c.id), {
+        reply: replyInput.value.trim(),
+        status: "تم الرد"
+      });
+      alert("تم حفظ توجيه الشيخ وظهر في حساب الطالب.");
+    };
+    tdReply.append(replyInput, saveReplyBtn);
+
+    const tdAct = document.createElement("td");
+    const delBtn = document.createElement("button");
+    delBtn.className = "del-btn";
+    delBtn.textContent = "حذف";
+    delBtn.onclick = async () => {
+      if (!confirm("حذف هذه الاستشارة؟")) return;
+      await deleteDoc(doc(db, "consultations", c.id));
+    };
+    tdAct.append(delBtn);
+
+    tr.append(tdStudent, tdTopic, tdAudio, tdReply, tdAct);
+    tbody.append(tr);
+  });
+}
+
+function renderMedia() {
+  const tbody = $("mediaTableBody");
+  tbody.replaceChildren();
+  if (!allMedia.length) {
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:24px">لم يتم إضافة صور أو كتب بعد.</td></tr>`;
+    return;
+  }
+
+  allMedia.forEach(m => {
+    const tr = document.createElement("tr");
+    const tdType = document.createElement("td");
+    tdType.innerHTML = m.type === "image" ? "🖼️ <b>معرض الصور</b>" : "📚 <b>مكتبة المتون</b>";
+
+    const tdCat = document.createElement("td");
+    tdCat.textContent = m.category || "";
+
+    const tdTitle = document.createElement("td");
+    const b = document.createElement("strong");
+    b.textContent = m.title || "";
+    const p = document.createElement("div");
+    p.style.fontSize = ".82rem";
+    p.style.color = "var(--text-muted)";
+    p.textContent = m.description || "";
+    tdTitle.append(b, p);
+
+    const tdPrev = document.createElement("td");
+    if (m.type === "image") {
+      const img = document.createElement("img");
+      img.src = m.url;
+      img.style.width = "64px";
+      img.style.height = "46px";
+      img.style.objectFit = "cover";
+      img.style.borderRadius = "6px";
+      tdPrev.append(img);
+    } else {
+      const a = document.createElement("a");
+      a.href = m.url;
+      a.target = "_blank";
+      a.textContent = "فتح رابط Drive";
+      tdPrev.append(a);
+    }
+
+    const tdDate = document.createElement("td");
+    tdDate.textContent = m.createdAt ? m.createdAt.toDate().toLocaleDateString("ar-EG") : "";
+
+    const tdAct = document.createElement("td");
+    const editBtn = document.createElement("button");
+    editBtn.className = "btn-outline";
+    editBtn.style.padding = "5px 10px";
+    editBtn.style.marginInlineEnd = "6px";
+    editBtn.textContent = "تعديل";
+    editBtn.onclick = async () => {
+      const newTitle = prompt("تعديل العنوان:", m.title || "");
+      if (newTitle === null) return;
+      const newDesc = prompt("تعديل الوصف:", m.description || "");
+      const updates = {
+        title: newTitle.trim() || m.title,
+        description: newDesc !== null ? newDesc.trim() : m.description
+      };
+      if (m.type === "pdf") {
+        const newUrl = prompt("تعديل رابط Google Drive:", m.url || "");
+        if (newUrl && newUrl.trim()) updates.url = newUrl.trim();
+      }
+      await updateDoc(doc(db, "media", m.id), updates);
+    };
+
+    const delBtn = document.createElement("button");
+    delBtn.className = "del-btn";
+    delBtn.textContent = "حذف";
+    delBtn.onclick = async () => {
+      if (!confirm(`هل أنت متأكد من حذف "${m.title}"؟`)) return;
+      await deleteDoc(doc(db, "media", m.id));
+    };
+    tdAct.append(editBtn, delBtn);
+
+    tr.append(tdType, tdCat, tdTitle, tdPrev, tdDate, tdAct);
+    tbody.append(tr);
+  });
+}
+
+function renderUsers() {
+  const q = ($("userSearchInput").value || "").trim().toLowerCase();
+  const phoneByUid = {};
+  const nameByUid = {};
+  allRows.forEach(r => {
+    if (r.uid && r.phone && !phoneByUid[r.uid]) phoneByUid[r.uid] = r.phone;
+    if (r.uid && r.fullName && !nameByUid[r.uid]) nameByUid[r.uid] = r.fullName;
+  });
+
+  const mergedUsers = [...allUsers];
+  allRows.forEach(r => {
+    if (r.uid && !mergedUsers.some(u => u.id === r.uid)) {
+      mergedUsers.push({
+        id: r.uid,
+        uid: r.uid,
+        name: r.fullName || "طالب مسجل",
+        email: "حساب مسجل بالطلبات",
+        phone: r.phone || "",
+        createdAt: r.createdAt
+      });
+    }
+  });
+
+  $("usersCountBadge").textContent = mergedUsers.length;
+
+  const filtered = mergedUsers.filter(u => {
+    const ph = u.phone || phoneByUid[u.id] || "";
+    const nm = u.name || nameByUid[u.id] || "";
+    return !q || nm.toLowerCase().includes(q) || (u.email || "").toLowerCase().includes(q) || ph.includes(q);
+  });
+
+  const tbody = $("usersTableBody");
+  tbody.replaceChildren();
+  if (!filtered.length) {
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:24px">لا توجد حسابات مطابقة.</td></tr>`;
+    return;
+  }
+
+  filtered.forEach(u => {
+    const tr = document.createElement("tr");
+    const phone = u.phone || phoneByUid[u.id] || "";
+    const name = u.name || nameByUid[u.id] || "بدون اسم";
+
+    const tdName = document.createElement("td");
+    tdName.style.fontWeight = "700";
+    tdName.textContent = name;
+
+    const tdEmail = document.createElement("td");
+    tdEmail.dir = "ltr";
+    tdEmail.textContent = u.email || "—";
+
+    const tdPhone = document.createElement("td");
+    if (phone) {
+      const phDiv = document.createElement("div");
+      phDiv.dir = "ltr";
+      phDiv.textContent = phone;
+      const waLink = document.createElement("a");
+      waLink.className = "wa-btn";
+      waLink.href = `https://wa.me/${formatWaPhone(phone)}`;
+      waLink.target = "_blank";
+      waLink.textContent = "💬 واتساب";
+      tdPhone.append(phDiv, waLink);
+    } else {
+      tdPhone.textContent = "غير مسجل";
+    }
+
+    const tdDate = document.createElement("td");
+    tdDate.textContent = u.createdAt ? u.createdAt.toDate().toLocaleDateString("ar-EG") : "غير محدد";
+
+    const tdAct = document.createElement("td");
+    const delBtn = document.createElement("button");
+    delBtn.className = "del-btn";
+    delBtn.textContent = "🗑️ حذف الحساب";
+    delBtn.onclick = async () => {
+      if (!confirm(`هل أنت متأكد من حذف حساب "${name}" (${u.email || phone}) نهائياً ومنعه من الدخول؟`)) return;
+      try {
+        await setDoc(doc(db, "blocked_users", u.id), { blockedAt: serverTimestamp(), email: u.email || "" });
+        await deleteDoc(doc(db, "users", u.id));
+        const userRegs = allRows.filter(r => r.uid === u.id);
+        for (const reg of userRegs) {
+          await deleteDoc(doc(db, "registrations", reg.id));
+        }
+      } catch (err) {
+        alert("تعذر حذف الحساب. تأكد من تحديث قواعد Firestore Rules.");
+      }
+    };
+    tdAct.append(delBtn);
+
+    tr.append(tdName, tdEmail, tdPhone, tdDate, tdAct);
+    tbody.append(tr);
+  });
+}
+
 $("searchInput").oninput = renderTable;
 $("filterProgram").onchange = renderTable;
 $("filterStatus").onchange = renderTable;
+$("userSearchInput").oninput = renderUsers;
 
 $("exportBtn").onclick = () => {
   if (!allRows.length) return alert("لا توجد بيانات لتحميلها.");
   const headers = ["الاسم الكامل", "رقم الهاتف", "البرنامج", "الحالة", "التاريخ", "الملاحظات"];
   const csvRows = [headers.join(",")];
-
   allRows.forEach(r => {
     const dateStr = r.createdAt ? r.createdAt.toDate().toLocaleDateString("ar-EG") : "";
-    const row = [
-      r.fullName || "",
-      r.phone || "",
-      r.program || "",
-      r.status || "جديد",
-      dateStr,
-      (r.notes || "").replace(/\n/g, " ")
-    ].map(val => `"${String(val).replace(/"/g, '""')}"`);
+    const row = [r.fullName || "", r.phone || "", r.program || "", r.status || "جديد", dateStr, (r.notes || "").replace(/\n/g, " ")]
+      .map(val => `"${String(val).replace(/"/g, '""')}"`);
     csvRows.push(row.join(","));
   });
-
   const blob = new Blob(["\uFEFF" + csvRows.join("\n")], { type: "text/csv;charset=utf-8;" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
@@ -367,7 +832,7 @@ $("exportBtn").onclick = () => {
 };
 
 onAuthStateChanged(auth, user => {
-  if (unsub) { unsub(); unsub = null; }
+  [unsubRegs, unsubUsers, unsubMedia, unsubConsults].forEach(u => u && u());
   $("loginView").classList.add("hidden");
   $("deniedView").classList.add("hidden");
   $("adminView").classList.add("hidden");
@@ -389,13 +854,25 @@ onAuthStateChanged(auth, user => {
   $("adminEmailDisplay").textContent = user.email;
   $("adminView").classList.remove("hidden");
 
-  unsub = onSnapshot(collection(db, "registrations"), snap => {
-    allRows = snap.docs
-      .map(d => ({ id: d.id, ...d.data() }))
-      .sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+  unsubRegs = onSnapshot(collection(db, "registrations"), snap => {
+    allRows = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
     renderTable();
-  }, err => {
-    $("tableBody").innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--err);padding:24px">حدث خطأ في قراءة البيانات. تأكد من لصق قواعد الحماية (Rules) الجديدة في Firebase.</td></tr>`;
+    renderUsers();
+  });
+
+  unsubUsers = onSnapshot(collection(db, "users"), snap => {
+    allUsers = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+    renderUsers();
+  });
+
+  unsubMedia = onSnapshot(collection(db, "media"), snap => {
+    allMedia = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+    renderMedia();
+  });
+
+  unsubConsults = onSnapshot(collection(db, "consultations"), snap => {
+    allConsults = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+    renderConsults();
   });
 });
 </script>
