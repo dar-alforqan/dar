@@ -322,7 +322,8 @@ body.dark-mode .msg.ok{background:#0e2e13;color:#85e085}
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
 <script type="module">
-import { firebaseConfig } from "./firebase-config.js";
+import { firebaseConfig, initAppCheck } from "./firebase-config.js";
+  initAppCheck(app);
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getFirestore, collection, onSnapshot, doc, setDoc, addDoc, updateDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
