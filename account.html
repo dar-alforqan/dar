@@ -4,6 +4,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>حسابي | دار الفرقان</title>
+
+<!-- أيقونة الموقع وإعدادات تطبيق الهاتف PWA -->
+<link rel="icon" type="image/png" href="icon.png">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#3A181E">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+
 <style>
 :root{
   --wine:#3A181E;
@@ -33,9 +42,11 @@ body.dark-mode{
 
 *{box-sizing:border-box}
 body{margin:0;font-family:Tahoma,"Segoe UI",Arial,sans-serif;background:var(--cream);color:var(--ink);line-height:1.7;transition:background .25s ease,color .25s ease}
-header{background:var(--header-bg);color:var(--header-text);padding:24px 20px;border-bottom:5px solid var(--gold);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;transition:background .25s ease}
-header h1{font-family:"Traditional Arabic","Amiri",Georgia,serif;font-size:2rem;margin:0}
-header p{margin:4px 0 0;opacity:.85}
+header{background:var(--header-bg);color:var(--header-text);padding:20px;border-bottom:5px solid var(--gold);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;transition:background .25s ease}
+.brand-box{display:flex;align-items:center;gap:12px}
+.brand-box img{width:46px;height:46px;border-radius:50%;object-fit:cover;border:2px solid var(--gold)}
+header h1{font-family:"Traditional Arabic","Amiri",Georgia,serif;font-size:1.9rem;margin:0}
+header p{margin:2px 0 0;opacity:.85;font-size:.9rem}
 .header-actions{display:flex;align-items:center;gap:8px}
 .theme-btn,.home-link{background:transparent;border:1px solid var(--gold);color:var(--gold);padding:6px 14px;border-radius:20px;cursor:pointer;font:inherit;font-size:.9rem;font-weight:bold;text-decoration:none}
 main{max-width:520px;margin:0 auto;padding:24px 16px 80px}
@@ -98,9 +109,12 @@ h2{font-family:"Traditional Arabic","Amiri",Georgia,serif;margin:28px 0 10px;fon
 </head>
 <body>
 <header>
-  <div>
-    <h1>دار الفرقان</h1>
-    <p>تحفيظ القرآن · الإجازات · التجويد · القراءات</p>
+  <div class="brand-box">
+    <img src="icon.png" alt="شعار دار الفرقان">
+    <div>
+      <h1>دار الفرقان</h1>
+      <p>تحفيظ القرآن · الإجازات · التجويد · القراءات</p>
+    </div>
   </div>
   <div class="header-actions">
     <a href="index.html" class="home-link">الرئيسية</a>
@@ -177,6 +191,10 @@ themeToggle.onclick = () => {
   localStorage.setItem("theme", nextTheme);
   applyTheme(nextTheme);
 };
+
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("./sw.js").catch(() => {});
+}
 
 // تهيئة Firebase والواجهة
 const app = initializeApp(firebaseConfig), auth = getAuth(app), db = getFirestore(app);
