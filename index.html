@@ -88,7 +88,7 @@ footer{
   background:var(--footer-bg);
   color:#F6E7DD;
   text-align:center;
-  padding:22px 0;
+  padding:22px 0 32px;
   font-size:.9rem;
   transition:background .25s ease;
 }
@@ -105,8 +105,42 @@ footer{
   text-decoration:underline;
 }
 
-a:focus-visible,.cta:focus-visible,.theme-btn:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
-@media(max-width:520px){nav .links a.hide{display:none}.cta.line{margin:10px 0 0}}
+/* زر الواتساب العائم */
+.wa-float{
+  position:fixed;
+  bottom:20px;
+  left:20px;
+  z-index:99;
+  background:#25D366;
+  color:#ffffff;
+  width:56px;
+  height:56px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 4px 14px rgba(0,0,0,.28);
+  text-decoration:none;
+  transition:transform .2s ease,box-shadow .2s ease,background .2s ease;
+}
+.wa-float:hover{
+  transform:translateY(-3px) scale(1.05);
+  box-shadow:0 6px 18px rgba(37,211,102,.45);
+  background:#20b858;
+}
+.wa-float svg{
+  width:30px;
+  height:30px;
+  fill:currentColor;
+}
+
+a:focus-visible,.cta:focus-visible,.theme-btn:focus-visible,.wa-float:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+@media(max-width:520px){
+  nav .links a.hide{display:none}
+  .cta.line{margin:10px 0 0}
+  .wa-float{width:50px;height:50px;bottom:16px;left:16px}
+  .wa-float svg{width:26px;height:26px}
+}
 </style>
 </head>
 <body>
@@ -158,7 +192,7 @@ a:focus-visible,.cta:focus-visible,.theme-btn:focus-visible{outline:3px solid va
   <h2>تواصل معنا</h2>
   <p class="lead">يسعدنا تواصلك في أي وقت.</p>
   <div class="contact">
-    <a href="https://wa.me/201063664961"><b>واتساب</b><span>01063664961</span></a>
+    <a href="https://wa.me/201099262489"><b>واتساب</b><span>01099262489</span></a>
     <a href="mailto:daralforqan@gmail.com"><b>البريد الإلكتروني</b><span>daralforqan@gmail.com</span></a>
     <a href="https://www.facebook.com/share/1DohP2HDM9/"><b>صفحتنا على فيسبوك</b>تابعنا للجديد</a>
     <div><b>العنوان</b>عزبة خميس، مركز كفر الشيخ</div>
@@ -173,6 +207,11 @@ a:focus-visible,.cta:focus-visible,.theme-btn:focus-visible{outline:3px solid va
     </div>
   </div>
 </footer>
+
+<!-- زر الواتساب العائم -->
+<a href="https://wa.me/201099262489?text=%D8%A7%D9%84%D8%B3%D9%84%D8%A7%D9%85%20%D8%B9%D9%84%D9%8A%D9%83%D9%85%D8%8C%20%D8%B9%D9%86%D8%AF%D9%8A%20%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%A8%D8%AE%D8%B5%D9%88%D8%B5%20%D8%AF%D8%A7%D8%B1%20%D8%A7%D9%84%D9%81%D8%B1%D9%82%D8%A7%D9%86" class="wa-float" target="_blank" rel="noopener" aria-label="تواصل معنا عبر واتساب" title="تواصل معنا عبر واتساب">
+  <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16.004 3.2c-7.068 0-12.8 5.732-12.8 12.8 0 2.256.588 4.46 1.706 6.404L3.2 28.8l6.564-1.682a12.74 12.74 0 0 0 6.24 1.626h.006c7.066 0 12.79-5.732 12.79-12.8 0-3.42-1.332-6.636-3.75-9.054A12.716 12.716 0 0 0 16.004 3.2zm0 23.386h-.004a10.61 10.61 0 0 1-5.408-1.48l-.388-.23-4.028 1.032 1.074-3.926-.252-.402a10.584 10.584 0 0 1-1.638-5.66c0-5.862 4.77-10.632 10.638-10.632 2.84 0 5.51 1.108 7.518 3.118a10.566 10.566 0 0 1 3.114 7.52c0 5.864-4.768 10.66-10.626 10.66zm5.834-7.972c-.32-.16-1.892-.934-2.186-1.04-.292-.108-.506-.16-.72.16-.212.32-.826 1.04-1.012 1.254-.186.212-.374.24-.694.08-.32-.16-1.35-.498-2.572-1.586-.95-.848-1.592-1.896-1.778-2.216-.186-.32-.02-.492.14-.652.144-.144.32-.374.48-.56.16-.186.212-.32.32-.534.106-.212.054-.4-.026-.56-.08-.16-.72-1.734-.986-2.374-.26-.624-.526-.538-.72-.548l-.614-.01c-.212 0-.56.08-.852.4-.294.32-1.12 1.094-1.12 2.668s1.146 3.094 1.306 3.308c.16.212 2.256 3.444 5.466 4.83.764.33 1.36.526 1.824.674.766.244 1.464.21 2.016.128.614-.092 1.892-.774 2.16-1.52.266-.746.266-1.386.186-1.52-.08-.134-.292-.214-.612-.374z"/></svg>
+</a>
 
 <script>
   const themeToggle = document.getElementById("themeToggle");
