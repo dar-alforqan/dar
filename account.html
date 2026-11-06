@@ -33,11 +33,12 @@ body.dark-mode{
 
 *{box-sizing:border-box}
 body{margin:0;font-family:Tahoma,"Segoe UI",Arial,sans-serif;background:var(--cream);color:var(--ink);line-height:1.7;transition:background .25s ease,color .25s ease}
-header{background:var(--header-bg);color:var(--header-text);padding:24px 20px;border-bottom:5px solid var(--gold);display:flex;justify-content:space-between;align-items:center;transition:background .25s ease}
+header{background:var(--header-bg);color:var(--header-text);padding:24px 20px;border-bottom:5px solid var(--gold);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;transition:background .25s ease}
 header h1{font-family:"Traditional Arabic","Amiri",Georgia,serif;font-size:2rem;margin:0}
 header p{margin:4px 0 0;opacity:.85}
-.theme-btn{background:transparent;border:1px solid var(--gold);color:var(--gold);padding:6px 14px;border-radius:20px;cursor:pointer;font:inherit;font-size:.9rem;font-weight:bold}
-main{max-width:520px;margin:0 auto;padding:24px 16px 60px}
+.header-actions{display:flex;align-items:center;gap:8px}
+.theme-btn,.home-link{background:transparent;border:1px solid var(--gold);color:var(--gold);padding:6px 14px;border-radius:20px;cursor:pointer;font:inherit;font-size:.9rem;font-weight:bold;text-decoration:none}
+main{max-width:520px;margin:0 auto;padding:24px 16px 80px}
 .card{background:var(--card-bg);border:1px solid var(--line);border-radius:10px;padding:22px;transition:background .25s ease,border-color .25s ease}
 .tabs{display:flex;gap:8px;margin-bottom:18px}
 .tabs button{flex:1;padding:10px;border:1px solid var(--wine);background:transparent;color:var(--wine);border-radius:8px;font:inherit;font-weight:700;cursor:pointer}
@@ -45,7 +46,7 @@ main{max-width:520px;margin:0 auto;padding:24px 16px 60px}
 body.dark-mode .tabs button[aria-selected=true]{color:#141414}
 label{display:block;font-weight:500;margin:14px 0 4px}
 input,select,textarea{width:100%;padding:11px;border:1px solid var(--line);border-radius:8px;font:inherit;background:var(--input-bg);color:var(--ink)}
-input:focus,select:focus,textarea:focus,button:focus-visible{outline:3px solid var(--gold);outline-offset:1px}
+input:focus,select:focus,textarea:focus,button:focus-visible,.wa-float:focus-visible{outline:3px solid var(--gold);outline-offset:1px}
 .primary{width:100%;margin-top:18px;padding:12px;background:var(--gold);color:#3A181E;border:0;border-radius:8px;font:inherit;font-weight:700;font-size:1.05rem;cursor:pointer}
 .primary:disabled{opacity:.6}
 .link{background:none;border:0;color:var(--wine);text-decoration:underline;font:inherit;cursor:pointer;padding:0;margin-top:12px}
@@ -60,6 +61,39 @@ h2{font-family:"Traditional Arabic","Amiri",Georgia,serif;margin:28px 0 10px;fon
 .item{border-right:4px solid var(--gold);background:var(--card-bg);border-top:1px solid var(--line);border-bottom:1px solid var(--line);border-left:1px solid var(--line);padding:10px 14px;margin-bottom:10px;border-radius:6px;transition:background .25s ease,border-color .25s ease}
 .item small{color:var(--text-muted)}
 .hidden{display:none}
+
+/* زر الواتساب العائم */
+.wa-float{
+  position:fixed;
+  bottom:20px;
+  left:20px;
+  z-index:99;
+  background:#25D366;
+  color:#ffffff;
+  width:56px;
+  height:56px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 4px 14px rgba(0,0,0,.28);
+  text-decoration:none;
+  transition:transform .2s ease,box-shadow .2s ease,background .2s ease;
+}
+.wa-float:hover{
+  transform:translateY(-3px) scale(1.05);
+  box-shadow:0 6px 18px rgba(37,211,102,.45);
+  background:#20b858;
+}
+.wa-float svg{
+  width:30px;
+  height:30px;
+  fill:currentColor;
+}
+@media(max-width:520px){
+  .wa-float{width:50px;height:50px;bottom:16px;left:16px}
+  .wa-float svg{width:26px;height:26px}
+}
 </style>
 </head>
 <body>
@@ -68,7 +102,10 @@ h2{font-family:"Traditional Arabic","Amiri",Georgia,serif;margin:28px 0 10px;fon
     <h1>دار الفرقان</h1>
     <p>تحفيظ القرآن · الإجازات · التجويد · القراءات</p>
   </div>
-  <button id="themeToggle" class="theme-btn" type="button" aria-label="تبديل الوضع">🌙 ليلي</button>
+  <div class="header-actions">
+    <a href="index.html" class="home-link">الرئيسية</a>
+    <button id="themeToggle" class="theme-btn" type="button" aria-label="تبديل الوضع">🌙 ليلي</button>
+  </div>
 </header>
 <main>
 
@@ -107,6 +144,12 @@ h2{font-family:"Traditional Arabic","Amiri",Georgia,serif;margin:28px 0 10px;fon
 </section>
 
 </main>
+
+<!-- زر الواتساب العائم -->
+<a href="https://wa.me/201099262489?text=%D8%A7%D9%84%D8%B3%D9%84%D8%A7%D9%85%20%D8%B9%D9%84%D9%8A%D9%83%D9%85%D8%8C%20%D8%B9%D9%86%D8%AF%D9%8A%20%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%A8%D8%AE%D8%B5%D9%88%D8%B5%20%D8%A7%D9%84%D8%AA%D8%B3%D8%AC%D9%8A%D9%84%20%D9%81%D9%8A%20%D8%AF%D8%A7%D8%B1%20%D8%A7%D9%84%D9%81%D8%B1%D9%82%D8%A7%D9%86" class="wa-float" target="_blank" rel="noopener" aria-label="تواصل معنا عبر واتساب" title="تواصل معنا عبر واتساب">
+  <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16.004 3.2c-7.068 0-12.8 5.732-12.8 12.8 0 2.256.588 4.46 1.706 6.404L3.2 28.8l6.564-1.682a12.74 12.74 0 0 0 6.24 1.626h.006c7.066 0 12.79-5.732 12.79-12.8 0-3.42-1.332-6.636-3.75-9.054A12.716 12.716 0 0 0 16.004 3.2zm0 23.386h-.004a10.61 10.61 0 0 1-5.408-1.48l-.388-.23-4.028 1.032 1.074-3.926-.252-.402a10.584 10.584 0 0 1-1.638-5.66c0-5.862 4.77-10.632 10.638-10.632 2.84 0 5.51 1.108 7.518 3.118a10.566 10.566 0 0 1 3.114 7.52c0 5.864-4.768 10.66-10.626 10.66zm5.834-7.972c-.32-.16-1.892-.934-2.186-1.04-.292-.108-.506-.16-.72.16-.212.32-.826 1.04-1.012 1.254-.186.212-.374.24-.694.08-.32-.16-1.35-.498-2.572-1.586-.95-.848-1.592-1.896-1.778-2.216-.186-.32-.02-.492.14-.652.144-.144.32-.374.48-.56.16-.186.212-.32.32-.534.106-.212.054-.4-.026-.56-.08-.16-.72-1.734-.986-2.374-.26-.624-.526-.538-.72-.548l-.614-.01c-.212 0-.56.08-.852.4-.294.32-1.12 1.094-1.12 2.668s1.146 3.094 1.306 3.308c.16.212 2.256 3.444 5.466 4.83.764.33 1.36.526 1.824.674.766.244 1.464.21 2.016.128.614-.092 1.892-.774 2.16-1.52.266-.746.266-1.386.186-1.52-.08-.134-.292-.214-.612-.374z"/></svg>
+</a>
+
 <script type="module">
 import { firebaseConfig } from "./firebase-config.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
