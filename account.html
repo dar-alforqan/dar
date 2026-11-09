@@ -46,7 +46,7 @@ body.dark-mode{
 
 *{box-sizing:border-box}
 body{margin:0;font-family:Tahoma,"Segoe UI",Arial,sans-serif;background:var(--cream);color:var(--ink);line-height:1.7;transition:background .25s ease,color .25s ease}
-.fa-solid,.fa-regular,.fa-brands{margin-inline-end:5px}
+.fa-solid,.fa-regular,.fa-brands{margin-inline-end:6px}
 .pw-btn .fa-solid{margin-inline-end:0}
 header{background:var(--header-bg);color:var(--header-text);padding:18px 20px;padding-top:calc(18px + env(safe-area-inset-top,0));border-bottom:5px solid var(--gold);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
 .brand-box{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit}
@@ -82,6 +82,7 @@ body.dark-mode .msg.ok{background:#0e2e13;color:#85e085}
 .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;gap:10px;flex-wrap:wrap}
 .top strong{font-family:"Traditional Arabic","Amiri",Georgia,serif;font-size:1.45rem}
 h2{font-family:"Traditional Arabic","Amiri",Georgia,serif;margin:22px 0 10px;font-size:1.5rem;color:var(--wine)}
+h2 i{font-size:.85em}
 .item{border-right:4px solid var(--gold);background:var(--card-bg);border-top:1px solid var(--line);border-bottom:1px solid var(--line);border-left:1px solid var(--line);padding:12px 14px;margin-bottom:10px;border-radius:8px}
 .item small{color:var(--text-muted)}
 .pill{display:inline-block;background:rgba(250,200,27,.22);color:var(--wine);border-radius:12px;padding:0 10px;font-size:.8rem;font-weight:700;margin-inline-start:6px}
@@ -108,18 +109,18 @@ h2{font-family:"Traditional Arabic","Amiri",Georgia,serif;margin:22px 0 10px;fon
     </div>
   </a>
   <div class="header-actions">
-    <a href="index.html" class="home-link"><i class="fa-solid fa-house"></i> الرئيسية</a>
-    <a href="library.html" class="home-link"><i class="fa-solid fa-book-open"></i> المكتبة</a>
-    <a href="gallery.html" class="home-link"><i class="fa-solid fa-images"></i> المعرض</a>
-    <button id="themeToggle" class="theme-btn" type="button" aria-label="تبديل الوضع"><i class="fa-solid fa-moon"></i> ليلي</button>
+    <a href="index.html" class="home-link"><i class="fa-solid fa-house"></i>الرئيسية</a>
+    <a href="library.html" class="home-link"><i class="fa-solid fa-book-open"></i>المكتبة</a>
+    <a href="gallery.html" class="home-link"><i class="fa-solid fa-images"></i>المعرض</a>
+    <button id="themeToggle" class="theme-btn" type="button" aria-label="تبديل الوضع"><i class="fa-solid fa-moon"></i>ليلي</button>
   </div>
 </header>
 <main>
 
 <section id="authView" class="card hidden">
   <div class="tabs" role="tablist">
-    <button id="tabLogin" role="tab" aria-selected="true" type="button">تسجيل الدخول</button>
-    <button id="tabSignup" role="tab" aria-selected="false" type="button">إنشاء حساب</button>
+    <button id="tabLogin" role="tab" aria-selected="true" type="button"><i class="fa-solid fa-right-to-bracket"></i>تسجيل الدخول</button>
+    <button id="tabSignup" role="tab" aria-selected="false" type="button"><i class="fa-solid fa-user-plus"></i>إنشاء حساب</button>
   </div>
   <form id="authForm" novalidate>
     <div id="signupExtra" class="hidden">
@@ -135,8 +136,8 @@ h2{font-family:"Traditional Arabic","Amiri",Georgia,serif;margin:22px 0 10px;fon
       <input id="password" type="password" autocomplete="current-password" dir="ltr" minlength="6" required>
       <button class="pw-btn" id="pwToggle" type="button" aria-label="إظهار كلمة المرور"><i class="fa-solid fa-eye"></i></button>
     </div>
-    <button class="primary" id="authBtn" type="submit">دخول</button>
-    <button class="link" id="resetBtn" type="button">نسيت كلمة المرور؟</button>
+    <button class="primary" id="authBtn" type="submit"><i class="fa-solid fa-right-to-bracket"></i>دخول</button>
+    <button class="link" id="resetBtn" type="button"><i class="fa-solid fa-key"></i>نسيت كلمة المرور؟</button>
     <div id="authMsg" class="msg" role="alert"></div>
   </form>
 </section>
@@ -144,34 +145,34 @@ h2{font-family:"Traditional Arabic","Amiri",Georgia,serif;margin:22px 0 10px;fon
 <section id="appView" class="hidden">
   <div class="top">
     <strong id="hello"></strong>
-    <button class="link" id="logout" type="button"><i class="fa-solid fa-right-from-bracket"></i> تسجيل الخروج</button>
+    <button class="link" id="logout" type="button"><i class="fa-solid fa-right-from-bracket"></i>تسجيل الخروج</button>
   </div>
 
   <div class="tabs">
-    <button id="secRegBtn" type="button" aria-selected="true"><i class="fa-solid fa-pen-to-square"></i> التسجيل في البرامج</button>
-    <button id="secConsultBtn" type="button" aria-selected="false"><i class="fa-solid fa-microphone-lines"></i> استشارات الحفظ وتصحيح التلاوة</button>
+    <button id="secRegBtn" type="button" aria-selected="true"><i class="fa-solid fa-pen-to-square"></i>التسجيل في البرامج</button>
+    <button id="secConsultBtn" type="button" aria-selected="false"><i class="fa-solid fa-microphone-lines"></i>استشارات الحفظ وتصحيح التلاوة</button>
   </div>
 
   <div id="regSection">
     <div class="card">
-      <h2 style="margin-top:0">تقديم طلب التحاق ببرنامج</h2>
+      <h2 style="margin-top:0"><i class="fa-solid fa-file-pen"></i>تقديم طلب التحاق ببرنامج</h2>
       <form id="regForm" novalidate>
         <label for="fullName">الاسم الكامل</label><input id="fullName" required autocomplete="name">
         <label for="phone">رقم الواتساب</label><input id="phone" type="tel" dir="ltr" required autocomplete="tel">
         <label for="program">البرنامج المطلوب</label>
         <select id="program"><option>تحفيظ القرآن</option><option>إجازة</option><option>التجويد</option><option>القراءات</option></select>
         <label for="notes">ملاحظات (المستوى الحالي، المواعيد المناسبة)</label><textarea id="notes" rows="3" maxlength="1000"></textarea>
-        <button class="primary" id="regBtn" type="submit">إرسال الطلب</button>
+        <button class="primary" id="regBtn" type="submit"><i class="fa-solid fa-paper-plane"></i>إرسال الطلب</button>
         <div id="regMsg" class="msg" role="alert"></div>
       </form>
     </div>
-    <h2>طلباتي السابقة</h2>
+    <h2><i class="fa-solid fa-clock-rotate-left"></i>طلباتي السابقة</h2>
     <div id="list"><p>لسه مفيش طلبات.</p></div>
   </div>
 
   <div id="consultSection" class="hidden">
     <div class="card">
-      <h2 style="margin-top:0">نافذة استشارات الحفظ وتصحيح التلاوة</h2>
+      <h2 style="margin-top:0"><i class="fa-solid fa-microphone-lines"></i>نافذة استشارات الحفظ وتصحيح التلاوة</h2>
       <p style="margin:0 0 12px;font-size:.92rem;color:var(--text-muted)">سجّل مقطعاً صوتياً قصيراً لتلاوتك (حتى 45 ثانية) أو اكتب سؤالك في الحفظ والتجويد ليقوم الشيخ المختص بسماعها وتوجيهك.</p>
       <form id="consultForm" novalidate>
         <label for="consultTopic">السورة / موضوع الاستشارة</label>
@@ -182,18 +183,18 @@ h2{font-family:"Traditional Arabic","Amiri",Georgia,serif;margin:22px 0 10px;fon
           <button type="button" id="recordBtn" class="rec-btn"><i class="fa-solid fa-microphone"></i> اضغط لبدء تسجيل التلاوة</button>
           <span id="recTimer" aria-live="polite" style="display:block;margin-top:6px;font-size:.85rem;color:var(--text-muted)"></span>
           <audio id="audioPreview" controls class="hidden" style="width:100%;margin-top:10px"></audio>
-          <button type="button" id="clearAudioBtn" class="link hidden" style="color:var(--err);font-size:.85rem"><i class="fa-solid fa-trash-can"></i> مسح التسجيل الصوتي</button>
+          <button type="button" id="clearAudioBtn" class="link hidden" style="color:var(--err);font-size:.85rem"><i class="fa-solid fa-trash-can"></i>مسح التسجيل الصوتي</button>
         </div>
 
         <label for="consultNotes">تفاصيل الاستشارة أو السؤال</label>
         <textarea id="consultNotes" rows="3" maxlength="2000" placeholder="اكتب سؤالك أو الآيات التي تود الاستفسار عن حكمها..." required></textarea>
 
-        <button class="primary" id="consultBtn" type="submit">إرسال للشيخ المختص</button>
+        <button class="primary" id="consultBtn" type="submit"><i class="fa-solid fa-paper-plane"></i>إرسال للشيخ المختص</button>
         <div id="consultMsg" class="msg" role="alert"></div>
       </form>
     </div>
 
-    <h2>استشاراتي وتوجيهات المشايخ</h2>
+    <h2><i class="fa-solid fa-comments"></i>استشاراتي وتوجيهات المشايخ</h2>
     <div id="consultList"><p>لا توجد استشارات مرسلة بعد.</p></div>
   </div>
 </section>
@@ -214,8 +215,8 @@ const currentTheme = savedTheme || (window.matchMedia("(prefers-color-scheme: da
 function applyTheme(t) {
   document.body.classList.toggle("dark-mode", t === "dark");
   themeToggle.innerHTML = t === "dark"
-    ? '<i class="fa-solid fa-sun"></i> نهاري'
-    : '<i class="fa-solid fa-moon"></i> ليلي';
+    ? '<i class="fa-solid fa-sun"></i>نهاري'
+    : '<i class="fa-solid fa-moon"></i>ليلي';
 }
 applyTheme(currentTheme);
 themeToggle.onclick = () => {
@@ -244,10 +245,16 @@ const errors = {
 const show = (el, type, text) => { el.className = "msg " + type; el.textContent = text; };
 const clear = el => { el.className = "msg"; el.textContent = ""; };
 
-/* تعطيل الزر مع نص "جاري الإرسال..." أثناء التنفيذ */
+/* تعطيل الزر مع أيقونة تحميل ونص "جاري الإرسال..." (يحفظ أيقونة الزر الأصلية ويرجعها) */
 function busy(btn, on, text) {
-  if (on) { btn.dataset.label = btn.textContent; btn.textContent = text; btn.disabled = true; }
-  else { btn.textContent = btn.dataset.label || btn.textContent; btn.disabled = false; }
+  if (on) {
+    btn.dataset.label = btn.innerHTML;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>' + text;
+    btn.disabled = true;
+  } else {
+    btn.innerHTML = btn.dataset.label || btn.innerHTML;
+    btn.disabled = false;
+  }
 }
 
 /* إظهار/إخفاء كلمة المرور */
@@ -265,7 +272,9 @@ function setMode(m){
   $("tabLogin").setAttribute("aria-selected", !s);
   $("tabSignup").setAttribute("aria-selected", s);
   $("signupExtra").classList.toggle("hidden", !s);
-  $("authBtn").textContent = s ? "إنشاء الحساب" : "دخول";
+  $("authBtn").innerHTML = s
+    ? '<i class="fa-solid fa-user-plus"></i>إنشاء الحساب'
+    : '<i class="fa-solid fa-right-to-bracket"></i>دخول';
   $("password").autocomplete = s ? "new-password" : "current-password";
   $("resetBtn").classList.toggle("hidden", s);
   clear($("authMsg"));
@@ -358,7 +367,7 @@ $("regForm").onsubmit = async e => {
     // بعض المتصفحات (خصوصًا الآيفون) تمنع فتح النافذة بعد عملية غير متزامنة، فنضيف رابطًا يدويًا احتياطيًا
     const a = document.createElement("a");
     a.href = waUrl; a.target = "_blank"; a.rel = "noopener";
-    a.innerHTML = '<i class="fa-brands fa-whatsapp"></i> اضغط هنا لإرسال تفاصيل الطلب على واتساب';
+    a.innerHTML = '<i class="fa-brands fa-whatsapp"></i>اضغط هنا لإرسال تفاصيل الطلب على واتساب';
     $("regMsg").append(a);
     window.open(waUrl, "_blank");
     $("notes").value = "";
@@ -563,13 +572,13 @@ onAuthStateChanged(auth, async user => {
       replyDiv.className = "reply-box";
       if (c.reply) {
         const label = document.createElement("strong");
-        label.innerHTML = '<i class="fa-solid fa-circle-check"></i> توجيه الشيخ:';
+        label.innerHTML = '<i class="fa-solid fa-circle-check"></i>توجيه الشيخ:';
         const span = document.createElement("span");
         span.style.whiteSpace = "pre-wrap";
         span.textContent = c.reply;
         replyDiv.append(label, document.createElement("br"), span);
       } else {
-        replyDiv.innerHTML = '<i class="fa-solid fa-clock"></i> بانتظار سماع الشيخ والرد...';
+        replyDiv.innerHTML = '<i class="fa-solid fa-clock"></i>بانتظار سماع الشيخ والرد...';
       }
       div.append(replyDiv);
       cList.append(div);
