@@ -9,6 +9,7 @@
 <link rel="apple-touch-icon" href="icon.png">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#3A181E">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 <style>
 :root{
@@ -37,6 +38,7 @@ body.dark-mode{
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0;font-family:Tahoma,"Segoe UI",Arial,sans-serif;background:var(--cream);color:var(--ink);line-height:1.7;transition:background .25s ease,color .25s ease;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+.fa-solid,.fa-regular,.fa-brands{margin-inline-end:5px}
 body.locked{overflow:hidden}
 header{background:var(--header-bg);color:var(--header-text);padding:18px 20px;padding-top:calc(18px + env(safe-area-inset-top,0));border-bottom:5px solid var(--gold);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
 .brand-box{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit}
@@ -105,10 +107,10 @@ a:focus-visible,button:focus-visible,.photo-card:focus-visible{outline:3px solid
     </div>
   </a>
   <div class="header-actions">
-    <a href="index.html" class="nav-btn">الرئيسية</a>
-    <a href="library.html" class="nav-btn">📚 المكتبة</a>
-    <a href="account.html" class="nav-btn gold">حسابي</a>
-    <button id="themeToggle" class="nav-btn" type="button" aria-label="تبديل الوضع">🌙 ليلي</button>
+    <a href="index.html" class="nav-btn"><i class="fa-solid fa-house"></i> الرئيسية</a>
+    <a href="library.html" class="nav-btn"><i class="fa-solid fa-book-open"></i> المكتبة</a>
+    <a href="account.html" class="nav-btn gold"><i class="fa-solid fa-user"></i> حسابي</a>
+    <button id="themeToggle" class="nav-btn" type="button" aria-label="تبديل الوضع"><i class="fa-solid fa-moon"></i> ليلي</button>
   </div>
 </header>
 
@@ -127,7 +129,7 @@ a:focus-visible,button:focus-visible,.photo-card:focus-visible{outline:3px solid
 </main>
 
 <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-label="عرض الصورة">
-  <button id="closeLightbox" class="lightbox-close" type="button">إغلاق ✕</button>
+  <button id="closeLightbox" class="lightbox-close" type="button"><i class="fa-solid fa-xmark"></i> إغلاق</button>
   <div class="lb-count" id="lbCount"></div>
   <button id="lbPrev" class="lb-nav lb-prev" type="button" aria-label="الصورة السابقة">›</button>
   <button id="lbNext" class="lb-nav lb-next" type="button" aria-label="الصورة التالية">‹</button>
@@ -153,7 +155,9 @@ try { saved = localStorage.getItem("theme"); } catch (e) {}
 const currentTheme = saved || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
 function applyTheme(t) {
   document.body.classList.toggle("dark-mode", t === "dark");
-  themeToggle.textContent = t === "dark" ? "☀️ نهاري" : "🌙 ليلي";
+  themeToggle.innerHTML = t === "dark"
+    ? '<i class="fa-solid fa-sun"></i> نهاري'
+    : '<i class="fa-solid fa-moon"></i> ليلي';
 }
 applyTheme(currentTheme);
 themeToggle.onclick = () => {
