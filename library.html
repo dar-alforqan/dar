@@ -147,7 +147,6 @@ a:focus-visible,button:focus-visible,.search-input:focus-visible{outline:3px sol
 
 <script type="module">
 import { firebaseConfig, initAppCheck } from "./firebase-config.js";
-  initAppCheck(app);
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, collection, query, where, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -169,6 +168,7 @@ themeToggle.onclick = () => {
 
 /* ---------- البيانات ---------- */
 const app = initializeApp(firebaseConfig);
+initAppCheck(app);
 const db = getFirestore(app);
 const grid = document.getElementById("booksGrid");
 const searchInput = document.getElementById("searchInput");
