@@ -11,6 +11,9 @@
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#3A181E">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&display=swap">
 
 <style>
 :root{
@@ -45,12 +48,12 @@ body.dark-mode{
 }
 
 *{box-sizing:border-box}
-body{margin:0;font-family:Tahoma,"Segoe UI",Arial,sans-serif;background:var(--cream);color:var(--ink);line-height:1.6;transition:background .25s ease,color .25s ease}
+body{margin:0;font-family:"Cairo",Tahoma,"Segoe UI",Arial,sans-serif;background:var(--cream);color:var(--ink);line-height:1.6;transition:background .25s ease,color .25s ease}
 .fa-solid,.fa-regular,.fa-brands{margin-inline-end:6px}
 header{background:var(--header-bg);color:var(--header-text);padding:18px 20px;padding-top:calc(18px + env(safe-area-inset-top,0));border-bottom:5px solid var(--gold);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
 .brand-box{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit}
 .brand-box img{width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid var(--gold)}
-header h1{font-family:"Traditional Arabic","Amiri",Georgia,serif;font-size:1.8rem;margin:0;color:var(--gold);line-height:1.3}
+header h1{font-family:"Amiri","Traditional Arabic",Georgia,serif;font-size:1.8rem;margin:0;color:var(--gold);line-height:1.3}
 header p{margin:2px 0 0;font-size:.88rem;opacity:.85}
 .header-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .theme-btn,.nav-link{background:transparent;border:1px solid var(--gold);color:var(--gold);padding:6px 14px;border-radius:20px;cursor:pointer;font:inherit;font-size:.85rem;font-weight:bold;text-decoration:none;transition:filter .2s}
@@ -75,7 +78,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:20px}
 .stat-card{background:var(--card-bg);border:1px solid var(--line);border-top:4px solid var(--gold);border-radius:10px;padding:14px 16px;text-align:center}
 .stat-card i{display:inline-grid;place-items:center;width:38px;height:38px;margin:0 0 6px;border-radius:10px;background:rgba(250,200,27,.18);color:var(--wine);font-size:1rem}
-.stat-card strong{display:block;font-size:1.8rem;color:var(--wine);font-family:"Traditional Arabic","Amiri",Georgia,serif;line-height:1.2}
+.stat-card strong{display:block;font-size:1.8rem;color:var(--wine);font-family:"Amiri","Traditional Arabic",Georgia,serif;line-height:1.2}
 .stat-card span{font-size:.88rem;color:var(--text-muted)}
 
 .toolbar{display:grid;grid-template-columns:1fr repeat(2,auto) auto;gap:10px;align-items:end;margin-bottom:16px}
@@ -151,7 +154,10 @@ body.dark-mode .msg.ok{background:#0e2e13;color:#85e085}
   <section id="adminView" class="hidden">
     <div class="top-bar">
       <div><i class="fa-solid fa-user-shield"></i>مرحباً بك، <strong id="adminEmailDisplay" dir="ltr"></strong></div>
-      <button id="logoutBtn" class="btn-outline" type="button"><i class="fa-solid fa-right-from-bracket"></i>تسجيل الخروج</button>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button id="notifyBtn" class="btn-outline hidden" type="button"><i class="fa-solid fa-bell"></i>تفعيل تنبيهات المتصفح</button>
+        <button id="logoutBtn" class="btn-outline" type="button"><i class="fa-solid fa-right-from-bracket"></i>تسجيل الخروج</button>
+      </div>
     </div>
 
     <div class="admin-tabs">
@@ -194,7 +200,7 @@ body.dark-mode .msg.ok{background:#0e2e13;color:#85e085}
           </select>
         </div>
         <div>
-          <button id="exportBtn" class="primary" type="button" style="width:100%"><i class="fa-solid fa-file-export"></i>تحميل Excel</button>
+          <button id="exportBtn" class="primary" type="button" style="width:100%"><i class="fa-solid fa-file-export"></i>تحميل CSV</button>
         </div>
       </div>
 
@@ -300,7 +306,7 @@ body.dark-mode .msg.ok{background:#0e2e13;color:#85e085}
 
     <div id="tabUsers" class="admin-panel hidden">
       <div class="card" style="margin-bottom:14px">
-        <label for="userSearchInput" style="margin-top:0">بحث في الحسابات بالاسم أو البريد أو رقم التليفون</label>
+        <label for="userSearchInput" style="margin-top:0">بحث في الحسابات بالاسم أو البريد أو رقم الهاتف</label>
         <input id="userSearchInput" type="search" placeholder="ابحث عن أي حساب...">
       </div>
       <div class="table-wrap">
@@ -309,7 +315,7 @@ body.dark-mode .msg.ok{background:#0e2e13;color:#85e085}
             <tr>
               <th>الاسم</th>
               <th>البريد الإلكتروني</th>
-              <th>رقم التليفون</th>
+              <th>رقم الهاتف</th>
               <th>تاريخ التسجيل</th>
               <th>إدارة الحساب</th>
             </tr>
@@ -330,6 +336,7 @@ import { firebaseConfig, initAppCheck } from "./firebase-config.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getFirestore, collection, onSnapshot, doc, setDoc, addDoc, updateDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getStorage, ref as storageRef, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
 // ملاحظة أمنية: هذه القائمة تتحكم في ما تعرضه الواجهة فقط.
 // الحماية الحقيقية لازم تكون في Firestore Rules (اقرأ الملاحظات المرفقة).
@@ -359,9 +366,67 @@ themeToggle.onclick = () => {
 const app = initializeApp(firebaseConfig);
 initAppCheck(app);
 const auth = getAuth(app), db = getFirestore(app);
+// Firebase Storage للصور (لو غير مفعّل نرجع للحفظ داخل Firestore تلقائيًا)
+let storage = null;
+try { storage = getStorage(app); } catch (e) {}
+
+async function removeStorageFile(path) {
+  if (!storage || !path) return;
+  try { await deleteObject(storageRef(storage, path)); }
+  catch (e) { console.warn("Storage delete failed:", e); }
+}
 const $ = id => document.getElementById(id);
 let allRows = [], allUsers = [], allMedia = [], allConsults = [];
 let unsubRegs = null, unsubUsers = null, unsubMedia = null, unsubConsults = null;
+
+/* ---------- تنبيهات الطلبات والاستشارات الجديدة ---------- */
+const BASE_TITLE = document.title;
+let regsReady = false, consultsReady = false, unseen = 0;
+
+function beep() {
+  try {
+    const AC = window.AudioContext || window.webkitAudioContext;
+    const ctx = new AC();
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.frequency.value = 880;
+    g.gain.setValueAtTime(0.0001, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.2, ctx.currentTime + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.4);
+    o.start(); o.stop(ctx.currentTime + 0.4);
+    setTimeout(() => ctx.close(), 600);
+  } catch (e) {}
+}
+function clearUnseen() { unseen = 0; document.title = BASE_TITLE; }
+window.addEventListener("focus", clearUnseen);
+document.addEventListener("visibilitychange", () => { if (!document.hidden) clearUnseen(); });
+
+function notifyNew(title, body) {
+  toast(title + (body ? ": " + body : ""));
+  beep();
+  if (document.hidden) {
+    unseen++;
+    document.title = `(${unseen}) ${BASE_TITLE}`;
+    try {
+      if ("Notification" in window && Notification.permission === "granted") {
+        new Notification(title, { body, icon: "icon.png", dir: "rtl", lang: "ar" });
+      }
+    } catch (e) {}
+  }
+}
+
+const notifyBtn = $("notifyBtn");
+function refreshNotifyBtn() {
+  notifyBtn.classList.toggle("hidden", !("Notification" in window) || Notification.permission !== "default");
+}
+notifyBtn.onclick = async () => {
+  try {
+    const p = await Notification.requestPermission();
+    toast(p === "granted" ? "تم تفعيل التنبيهات" : "لم يتم السماح بالتنبيهات", p === "granted" ? "ok" : "err");
+  } catch (e) {}
+  refreshNotifyBtn();
+};
+refreshNotifyBtn();
 
 /* ---------- أدوات مساعدة ---------- */
 let toastTimer = null;
@@ -497,6 +562,38 @@ function compressImage(file, maxWidth = 1100, quality = 0.8) {
   });
 }
 
+function loadImage(file) {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => { URL.revokeObjectURL(url); resolve(img); };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error("bad-image")); };
+    img.src = url;
+  });
+}
+
+// الأفضل: ضغط الصورة بجودة أعلى ورفعها إلى Storage وحفظ الرابط فقط. لو فشل نرجع null.
+async function uploadImage(file) {
+  if (!storage) return null;
+  try {
+    const img = await loadImage(file);
+    const scale = Math.min(1, 1600 / img.width);
+    const canvas = document.createElement("canvas");
+    canvas.width = Math.round(img.width * scale);
+    canvas.height = Math.round(img.height * scale);
+    canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
+    const blob = await new Promise(r => canvas.toBlob(r, "image/jpeg", 0.82));
+    if (!blob) return null;
+    const path = `media/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.jpg`;
+    const r = storageRef(storage, path);
+    await uploadBytes(r, blob, { contentType: "image/jpeg" });
+    return { url: await getDownloadURL(r), path };
+  } catch (err) {
+    console.warn("Storage upload failed, falling back to Firestore:", err);
+    return null;
+  }
+}
+
 /* ---------- نموذج إضافة المحتوى ---------- */
 $("mediaForm").onsubmit = async e => {
   e.preventDefault();
@@ -529,9 +626,13 @@ $("mediaForm").onsubmit = async e => {
   $("mediaMsg").className = "msg ok";
   $("mediaMsg").textContent = "جاري الحفظ والنشر...";
 
+  let storagePath = "";
+  let inStorage = false;
   try {
     if (type === "image") {
-      finalUrl = await compressImage(file);
+      const up = await uploadImage(file);
+      if (up) { finalUrl = up.url; storagePath = up.path; inStorage = true; }
+      else { finalUrl = await compressImage(file); }   // احتياطي: الحفظ داخل Firestore
     }
 
     await addDoc(collection(db, "media"), {
@@ -540,16 +641,18 @@ $("mediaForm").onsubmit = async e => {
       title,
       description,
       url: finalUrl,
+      ...(storagePath ? { storagePath } : {}),
       createdAt: serverTimestamp()
     });
 
     $("mediaMsg").className = "msg ok";
     $("mediaMsg").textContent = type === "image"
-      ? "تم رفع الصورة وإضافتها إلى معرض الصور بنجاح!"
+      ? "تم رفع الصورة وإضافتها إلى معرض الصور بنجاح!" + (inStorage ? "" : " (حُفظت داخل قاعدة البيانات لأن Firebase Storage غير مفعّل)")
       : "تم إضافة الكتاب إلى مكتبة المتون بنجاح!";
     $("mediaForm").reset();
     updateCategoryOptions();
   } catch (err) {
+    if (storagePath) removeStorageFile(storagePath);
     $("mediaMsg").className = "msg err";
     $("mediaMsg").textContent = err && err.message === "too-large"
       ? "الصورة كبيرة جدًا حتى بعد الضغط. اختر صورة أصغر."
@@ -700,11 +803,12 @@ function renderConsults() {
     tdTopic.append(bTopic, pNotes);
 
     const tdAudio = document.createElement("td");
-    if (c.audioData) {
+    const audioSrc = c.audioUrl || c.audioData;
+    if (audioSrc) {
       const aud = document.createElement("audio");
       aud.controls = true;
       aud.preload = "none";
-      aud.src = c.audioData;
+      aud.src = audioSrc;
       aud.style.maxWidth = "210px";
       tdAudio.append(aud);
     } else {
@@ -744,7 +848,7 @@ function renderConsults() {
     delBtn.innerHTML = '<i class="fa-solid fa-trash-can"></i>حذف';
     delBtn.onclick = async () => {
       if (!confirm("حذف هذه الاستشارة؟")) return;
-      try { await deleteDoc(doc(db, "consultations", c.id)); toast("تم حذف الاستشارة"); }
+      try { await deleteDoc(doc(db, "consultations", c.id)); await removeStorageFile(c.audioPath); toast("تم حذف الاستشارة"); }
       catch (err) { toast("تعذر حذف الاستشارة", "err"); }
     };
     tdAct.append(delBtn);
@@ -837,7 +941,7 @@ function renderMedia() {
     delBtn.innerHTML = '<i class="fa-solid fa-trash-can"></i>حذف';
     delBtn.onclick = async () => {
       if (!confirm(`هل أنت متأكد من حذف "${m.title}"؟`)) return;
-      try { await deleteDoc(doc(db, "media", m.id)); toast("تم الحذف"); }
+      try { await deleteDoc(doc(db, "media", m.id)); await removeStorageFile(m.storagePath); toast("تم الحذف"); }
       catch (err) { toast("تعذر الحذف", "err"); }
     };
     tdAct.append(editBtn, delBtn);
@@ -979,6 +1083,7 @@ function loadError(tbodyId, cols) {
 onAuthStateChanged(auth, user => {
   [unsubRegs, unsubUsers, unsubMedia, unsubConsults].forEach(u => u && u());
   unsubRegs = unsubUsers = unsubMedia = unsubConsults = null;
+  regsReady = consultsReady = false;
   $("loginView").classList.add("hidden");
   $("deniedView").classList.add("hidden");
   $("adminView").classList.add("hidden");
@@ -1001,6 +1106,13 @@ onAuthStateChanged(auth, user => {
   $("adminView").classList.remove("hidden");
 
   unsubRegs = onSnapshot(collection(db, "registrations"), snap => {
+    snap.docChanges().forEach(ch => {
+      if (ch.type === "added" && regsReady) {
+        const d = ch.doc.data();
+        notifyNew("طلب تسجيل جديد", `${d.fullName || ""} — ${d.program || ""}`);
+      }
+    });
+    regsReady = true;
     allRows = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
     renderTable();
     renderUsers();
@@ -1017,6 +1129,13 @@ onAuthStateChanged(auth, user => {
   }, loadError("mediaTableBody", 6));
 
   unsubConsults = onSnapshot(collection(db, "consultations"), snap => {
+    snap.docChanges().forEach(ch => {
+      if (ch.type === "added" && consultsReady) {
+        const d = ch.doc.data();
+        notifyNew("استشارة / تلاوة جديدة", `${d.studentName || "طالب"} — ${d.topic || ""}`);
+      }
+    });
+    consultsReady = true;
     allConsults = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
     renderConsults();
   }, loadError("consultTableBody", 5));
