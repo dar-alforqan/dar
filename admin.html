@@ -50,6 +50,7 @@ body.dark-mode{
 *{box-sizing:border-box}
 body{margin:0;font-family:"Cairo",Tahoma,"Segoe UI",Arial,sans-serif;background:var(--cream);color:var(--ink);line-height:1.6;transition:background .25s ease,color .25s ease}
 .fa-solid,.fa-regular,.fa-brands{margin-inline-end:6px}
+.pw-btn .fa-solid{margin-inline-end:0}
 header{background:var(--header-bg);color:var(--header-text);padding:18px 20px;padding-top:calc(18px + env(safe-area-inset-top,0));border-bottom:5px solid var(--gold);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
 .brand-box{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit}
 .brand-box img{width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid var(--gold)}
@@ -66,6 +67,10 @@ label{display:block;font-weight:600;margin:12px 0 4px;font-size:.92rem}
 input,select,textarea{width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;font:inherit;background:var(--input-bg);color:var(--ink)}
 input:focus,select:focus,textarea:focus,button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offset:1px}
 input:focus,select:focus,textarea:focus{border-color:var(--gold)}
+.pw{position:relative}
+.pw input{padding-right:46px}
+.pw-btn{position:absolute;right:4px;top:50%;transform:translateY(-50%);background:none;border:0;cursor:pointer;font-size:1.1rem;padding:6px 10px;color:var(--ink)}
+.link{background:none;border:0;color:var(--wine);text-decoration:underline;font:inherit;cursor:pointer;padding:0;margin-top:12px;font-size:.9rem}
 .primary{padding:11px 20px;background:var(--gold);color:#3A181E;border:0;border-radius:8px;font:inherit;font-weight:700;cursor:pointer;transition:filter .2s}
 .primary:hover{filter:brightness(1.06)}
 .primary:disabled{opacity:.6;cursor:wait}
@@ -139,8 +144,12 @@ body.dark-mode .msg.ok{background:#0e2e13;color:#85e085}
       <label for="email">البريد الإلكتروني للمسؤول</label>
       <input id="email" type="email" dir="ltr" autocomplete="username" required>
       <label for="password">كلمة المرور</label>
-      <input id="password" type="password" dir="ltr" autocomplete="current-password" required>
+      <div class="pw">
+        <input id="password" type="password" dir="ltr" autocomplete="current-password" required>
+        <button class="pw-btn" id="pwToggle" type="button" aria-label="إظهار كلمة المرور"><i class="fa-solid fa-eye"></i></button>
+      </div>
       <button class="primary" style="width:100%;margin-top:16px" type="submit" id="loginBtn"><i class="fa-solid fa-right-to-bracket"></i>دخول</button>
+      <button class="link" id="resetBtn" type="button">نسيت كلمة المرور؟</button>
       <div id="loginMsg" class="msg" role="alert"></div>
     </form>
   </section>
@@ -334,7 +343,7 @@ body.dark-mode .msg.ok{background:#0e2e13;color:#85e085}
 <script type="module">
 import { firebaseConfig, initAppCheck } from "./firebase-config.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getFirestore, collection, onSnapshot, doc, setDoc, addDoc, updateDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getStorage, ref as storageRef, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
@@ -366,6 +375,7 @@ themeToggle.onclick = () => {
 const app = initializeApp(firebaseConfig);
 initAppCheck(app);
 const auth = getAuth(app), db = getFirestore(app);
+auth.languageCode = "ar";
 // Firebase Storage للصور (لو غير مفعّل نرجع للحفظ داخل Firestore تلقائيًا)
 let storage = null;
 try { storage = getStorage(app); } catch (e) {}
@@ -510,22 +520,72 @@ $("mediaType").onchange = updateCategoryOptions;
 updateCategoryOptions();
 
 /* ---------- الدخول والخروج ---------- */
+$("pwToggle").onclick = () => {
+  const hidden = $("password").type === "password";
+  $("password").type = hidden ? "text" : "password";
+  $("pwToggle").innerHTML = hidden
+    ? '<i class="fa-solid fa-eye-slash"></i>'
+    : '<i class="fa-solid fa-eye"></i>';
+  $("pwToggle").setAttribute("aria-label", hidden ? "إخفاء كلمة المرور" : "إظهار كلمة المرور");
+};
+
 const LOGIN_BTN_HTML = '<i class="fa-solid fa-right-to-bracket"></i>دخول';
 $("loginForm").onsubmit = async e => {
   e.preventDefault();
   $("loginMsg").className = "msg";
+  const email = $("email").value.trim();
+  const pass = $("password").value;
+  const isAdminEmail = ADMIN_EMAILS.map(a => a.toLowerCase()).includes(email.toLowerCase());
+
   $("loginBtn").disabled = true;
   $("loginBtn").innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>لحظة من فضلك...';
   try {
-    await signInWithEmailAndPassword(auth, $("email").value.trim(), $("password").value);
+    await signInWithEmailAndPassword(auth, email, pass);
   } catch (err) {
+    // إذا كان البريد ضمن قائمة الإدارة ولم يُنشأ بعد في Firebase Auth، ننشئه تلقائياً بكلمة المرور المكتوبة
+    if (isAdminEmail && (err.code === "auth/user-not-found" || err.code === "auth/invalid-credential")) {
+      try {
+        await createUserWithEmailAndPassword(auth, email, pass);
+        $("loginBtn").disabled = false;
+        $("loginBtn").innerHTML = LOGIN_BTN_HTML;
+        return;
+      } catch (createErr) {
+        err = createErr;
+      }
+    }
+
     $("loginMsg").className = "msg err";
-    $("loginMsg").textContent = err.code === "auth/too-many-requests"
-      ? "محاولات كثيرة. انتظر قليلًا ثم حاول مرة أخرى."
-      : "البريد الإلكتروني أو كلمة المرور غير صحيحة.";
+    if (err.code === "auth/too-many-requests") {
+      $("loginMsg").textContent = "محاولات كثيرة. انتظر قليلًا ثم حاول مرة أخرى.";
+    } else if (err.code === "auth/email-already-in-use" || err.code === "auth/wrong-password" || err.code === "auth/invalid-credential") {
+      $("loginMsg").textContent = "هذا الحساب مسجل بكلمة مرور قديمة مختلفة. اضغط «نسيت كلمة المرور؟» بالأسفل وفحص مجلد الرسائل غير المرغوب فيها (Spam)، أو غيّرها من Firebase Console.";
+    } else if (err.code === "auth/network-request-failed") {
+      $("loginMsg").textContent = "مشكلة في الاتصال بالإنترنت. حاول مرة أخرى.";
+    } else {
+      $("loginMsg").textContent = "تعذر تسجيل الدخول (" + (err.code || "خطأ") + ").";
+    }
   }
   $("loginBtn").disabled = false;
   $("loginBtn").innerHTML = LOGIN_BTN_HTML;
+};
+
+$("resetBtn").onclick = async () => {
+  const email = $("email").value.trim();
+  if (!email) {
+    $("loginMsg").className = "msg err";
+    $("loginMsg").textContent = "اكتب البريد الإلكتروني أولاً ثم اضغط نسيت كلمة المرور.";
+    return;
+  }
+  try {
+    await sendPasswordResetEmail(auth, email);
+    $("loginMsg").className = "msg ok";
+    $("loginMsg").textContent = "تم إرسال رابط إعادة التعيين إلى بريدك. (مهم جداً: ابحث في مجلد الرسائل غير المرغوب فيها Spam / غير هام).";
+  } catch (err) {
+    $("loginMsg").className = "msg err";
+    $("loginMsg").textContent = err.code === "auth/user-not-found"
+      ? "هذا البريد غير مسجل بعد. اكتب كلمة المرور واضغط «دخول» ليتم إنشاؤه."
+      : "تعذر إرسال الرسالة (" + (err.code || "خطأ") + ").";
+  }
 };
 
 $("logoutBtn").onclick = () => signOut(auth);
