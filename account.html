@@ -13,6 +13,9 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="robots" content="noindex">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&display=swap">
 
 <style>
 :root{
@@ -45,13 +48,13 @@ body.dark-mode{
 }
 
 *{box-sizing:border-box}
-body{margin:0;font-family:Tahoma,"Segoe UI",Arial,sans-serif;background:var(--cream);color:var(--ink);line-height:1.7;transition:background .25s ease,color .25s ease}
+body{margin:0;font-family:"Cairo",Tahoma,"Segoe UI",Arial,sans-serif;background:var(--cream);color:var(--ink);line-height:1.7;transition:background .25s ease,color .25s ease}
 .fa-solid,.fa-regular,.fa-brands{margin-inline-end:6px}
 .pw-btn .fa-solid{margin-inline-end:0}
 header{background:var(--header-bg);color:var(--header-text);padding:18px 20px;padding-top:calc(18px + env(safe-area-inset-top,0));border-bottom:5px solid var(--gold);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
 .brand-box{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit}
 .brand-box img{width:46px;height:46px;border-radius:50%;object-fit:cover;border:2px solid var(--gold)}
-header h1{font-family:"Traditional Arabic","Amiri",Georgia,serif;font-size:1.85rem;margin:0;color:var(--gold);line-height:1.3}
+header h1{font-family:"Amiri","Traditional Arabic",Georgia,serif;font-size:1.85rem;margin:0;color:var(--gold);line-height:1.3}
 header p{margin:2px 0 0;opacity:.85;font-size:.9rem}
 .header-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .theme-btn,.home-link{background:transparent;border:1px solid var(--gold);color:var(--gold);padding:6px 14px;border-radius:20px;cursor:pointer;font:inherit;font-size:.88rem;font-weight:bold;text-decoration:none;transition:filter .2s}
@@ -80,8 +83,8 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
 body.dark-mode .msg.err{background:#3b1012;color:#ff9b9e}
 body.dark-mode .msg.ok{background:#0e2e13;color:#85e085}
 .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;gap:10px;flex-wrap:wrap}
-.top strong{font-family:"Traditional Arabic","Amiri",Georgia,serif;font-size:1.45rem}
-h2{font-family:"Traditional Arabic","Amiri",Georgia,serif;margin:22px 0 10px;font-size:1.5rem;color:var(--wine)}
+.top strong{font-family:"Amiri","Traditional Arabic",Georgia,serif;font-size:1.45rem}
+h2{font-family:"Amiri","Traditional Arabic",Georgia,serif;margin:22px 0 10px;font-size:1.5rem;color:var(--wine)}
 h2 i{font-size:.85em}
 .item{border-right:4px solid var(--gold);background:var(--card-bg);border-top:1px solid var(--line);border-bottom:1px solid var(--line);border-left:1px solid var(--line);padding:12px 14px;margin-bottom:10px;border-radius:8px}
 .item small{color:var(--text-muted)}
@@ -167,7 +170,7 @@ h2 i{font-size:.85em}
       </form>
     </div>
     <h2><i class="fa-solid fa-clock-rotate-left"></i>طلباتي السابقة</h2>
-    <div id="list"><p>لسه مفيش طلبات.</p></div>
+    <div id="list"><p>لا توجد طلبات سابقة بعد.</p></div>
   </div>
 
   <div id="consultSection" class="hidden">
@@ -206,6 +209,7 @@ import { firebaseConfig, initAppCheck } from "./firebase-config.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getFirestore, collection, doc, setDoc, getDoc, addDoc, query, where, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
 /* ---------- الوضع الليلي (مع حماية من تعطّل localStorage) ---------- */
 const themeToggle = document.getElementById("themeToggle");
@@ -228,19 +232,22 @@ themeToggle.onclick = () => {
 const app = initializeApp(firebaseConfig);
 initAppCheck(app);
 const auth = getAuth(app), db = getFirestore(app);
+// Firebase Storage لحفظ التسجيلات الصوتية (لو غير مفعّل نرجع للحفظ داخل Firestore تلقائيًا)
+let storage = null;
+try { storage = getStorage(app); } catch (e) {}
 const $ = id => document.getElementById(id);
 let mode = "login", unsubReg = null, unsubConsult = null, unsubBlock = null;
 let currentUserPhone = "";
 
 const errors = {
   "auth/invalid-email":"البريد الإلكتروني غير صحيح.",
-  "auth/email-already-in-use":"البريد ده مسجل قبل كده. جرّب تسجيل الدخول.",
-  "auth/weak-password":"كلمة المرور لازم تكون 6 حروف أو أكتر.",
-  "auth/invalid-credential":"البريد أو كلمة المرور غلط.",
-  "auth/user-not-found":"مفيش حساب بالبريد ده.",
-  "auth/wrong-password":"كلمة المرور غلط.",
-  "auth/too-many-requests":"محاولات كتير. استنى شوية وجرّب تاني.",
-  "auth/network-request-failed":"مشكلة في الاتصال بالإنترنت. جرّب تاني."
+  "auth/email-already-in-use":"هذا البريد مسجّل مسبقًا. جرّب تسجيل الدخول.",
+  "auth/weak-password":"يجب ألا تقل كلمة المرور عن 6 أحرف.",
+  "auth/invalid-credential":"البريد الإلكتروني أو كلمة المرور غير صحيحة.",
+  "auth/user-not-found":"لا يوجد حساب بهذا البريد.",
+  "auth/wrong-password":"كلمة المرور غير صحيحة.",
+  "auth/too-many-requests":"محاولات كثيرة. انتظر قليلًا ثم حاول مرة أخرى.",
+  "auth/network-request-failed":"مشكلة في الاتصال بالإنترنت. حاول مرة أخرى."
 };
 const show = (el, type, text) => { el.className = "msg " + type; el.textContent = text; };
 const clear = el => { el.className = "msg"; el.textContent = ""; };
@@ -299,9 +306,9 @@ window.addEventListener("hashchange", () => {
 $("authForm").onsubmit = async e => {
   e.preventDefault(); clear($("authMsg"));
   const email = $("email").value.trim(), pass = $("password").value;
-  if (!email || pass.length < 6) return show($("authMsg"), "err", "اكتب البريد وكلمة مرور من 6 حروف على الأقل.");
+  if (!email || pass.length < 6) return show($("authMsg"), "err", "اكتب البريد الإلكتروني وكلمة مرور من 6 أحرف على الأقل.");
   if (mode === "signup" && ($("name").value.trim().length < 2 || $("signupPhone").value.trim().length < 8)) {
-    return show($("authMsg"), "err", "اكتب الاسم الكامل ورقم هاتف (واتساب) صحيح.");
+    return show($("authMsg"), "err", "اكتب الاسم الكامل ورقم هاتف (واتساب) صحيحًا.");
   }
   busy($("authBtn"), true, "لحظة من فضلك...");
   try {
@@ -321,16 +328,16 @@ $("authForm").onsubmit = async e => {
       await signInWithEmailAndPassword(auth, email, pass);
     }
   } catch (err) {
-    show($("authMsg"), "err", errors[err.code] || "حصل خطأ. جرّب تاني.");
+    show($("authMsg"), "err", errors[err.code] || "حدث خطأ. حاول مرة أخرى.");
   }
   busy($("authBtn"), false);
 };
 
 $("resetBtn").onclick = async () => {
   const email = $("email").value.trim();
-  if (!email) return show($("authMsg"), "err", "اكتب بريدك الأول وبعدين اضغط نسيت كلمة المرور.");
-  try { await sendPasswordResetEmail(auth, email); show($("authMsg"), "ok", "بعتنالك رابط تغيير كلمة المرور على البريد."); }
-  catch (err) { show($("authMsg"), "err", errors[err.code] || "حصل خطأ. جرّب تاني."); }
+  if (!email) return show($("authMsg"), "err", "اكتب بريدك الإلكتروني أولًا ثم اضغط «نسيت كلمة المرور؟».");
+  try { await sendPasswordResetEmail(auth, email); show($("authMsg"), "ok", "أرسلنا رابط تغيير كلمة المرور إلى بريدك الإلكتروني."); }
+  catch (err) { show($("authMsg"), "err", errors[err.code] || "حدث خطأ. حاول مرة أخرى."); }
 };
 
 $("logout").onclick = () => signOut(auth);
@@ -340,7 +347,7 @@ $("regForm").onsubmit = async e => {
   const fullName = $("fullName").value.trim(), phone = $("phone").value.trim();
   const program = $("program").value, notes = $("notes").value.trim();
 
-  if (fullName.length < 2 || phone.length < 8) return show($("regMsg"), "err", "اكتب الاسم الكامل ورقم واتساب صحيح.");
+  if (fullName.length < 2 || phone.length < 8) return show($("regMsg"), "err", "اكتب الاسم الكامل ورقم واتساب صحيحًا.");
   busy($("regBtn"), true, "جاري الإرسال...");
 
   try {
@@ -378,21 +385,48 @@ $("regForm").onsubmit = async e => {
 };
 
 /* ---------- التسجيل الصوتي ---------- */
-// حد أقصى لحجم التسجيل (Firestore يقبل مستندًا حتى ~1MB)
+// الحد الأقصى لحجم التسجيل لو اضطررنا لحفظه داخل Firestore (المستند الواحد ~1MB)
 const MAX_AUDIO_CHARS = 900000;
 let mediaRecorder = null;
 let audioChunks = [];
-let recordedAudioDataUrl = "";
+let recordedBlob = null;
+let recordedPreviewUrl = "";
 let recInterval = null;
 let recSeconds = 0;
 
 function resetAudioUI() {
-  recordedAudioDataUrl = "";
+  recordedBlob = null;
+  if (recordedPreviewUrl) { URL.revokeObjectURL(recordedPreviewUrl); recordedPreviewUrl = ""; }
   $("audioPreview").removeAttribute("src");
   $("audioPreview").classList.add("hidden");
   $("clearAudioBtn").classList.add("hidden");
   $("recTimer").textContent = "";
   $("recordBtn").innerHTML = '<i class="fa-solid fa-microphone"></i> اضغط لبدء تسجيل التلاوة';
+}
+
+function blobToDataUrl(blob) {
+  return new Promise((resolve, reject) => {
+    const r = new FileReader();
+    r.onloadend = () => resolve(r.result);
+    r.onerror = reject;
+    r.readAsDataURL(blob);
+  });
+}
+
+// الأفضل: رفع التسجيل إلى Firebase Storage وحفظ الرابط فقط. لو فشل نرجع null ونحفظه داخل Firestore.
+async function uploadAudio(blob) {
+  if (!storage) return null;
+  try {
+    const type = (blob.type || "audio/webm").split(";")[0];
+    const ext = type.includes("mp4") ? "m4a" : type.includes("ogg") ? "ogg" : "webm";
+    const path = `consultations/${auth.currentUser.uid}/${Date.now()}.${ext}`;
+    const r = storageRef(storage, path);
+    await uploadBytes(r, blob, { contentType: type });
+    return { url: await getDownloadURL(r), path };
+  } catch (err) {
+    console.warn("Storage upload failed, falling back to Firestore:", err);
+    return null;
+  }
 }
 
 $("recordBtn").onclick = async () => {
@@ -421,20 +455,18 @@ $("recordBtn").onclick = async () => {
       $("recordBtn").classList.remove("recording");
       $("recordBtn").innerHTML = '<i class="fa-solid fa-rotate-right"></i> إعادة تسجيل التلاوة';
       const blob = new Blob(audioChunks, { type: mediaRecorder.mimeType || "audio/webm" });
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        if (reader.result.length > MAX_AUDIO_CHARS) {
-          resetAudioUI();
-          show($("consultMsg"), "err", "حجم التسجيل كبير. سجّل مقطعًا أقصر (أقل من 45 ثانية) وحاول مرة أخرى.");
-          return;
-        }
-        recordedAudioDataUrl = reader.result;
-        $("audioPreview").src = recordedAudioDataUrl;
-        $("audioPreview").classList.remove("hidden");
-        $("clearAudioBtn").classList.remove("hidden");
-        $("recTimer").textContent = `تم تجهيز التسجيل (${recSeconds} ثانية)`;
-      };
-      reader.readAsDataURL(blob);
+      if (!blob.size) {
+        resetAudioUI();
+        show($("consultMsg"), "err", "لم يتم التقاط أي صوت. حاول التسجيل مرة أخرى.");
+        return;
+      }
+      if (recordedPreviewUrl) URL.revokeObjectURL(recordedPreviewUrl);
+      recordedBlob = blob;
+      recordedPreviewUrl = URL.createObjectURL(blob);
+      $("audioPreview").src = recordedPreviewUrl;
+      $("audioPreview").classList.remove("hidden");
+      $("clearAudioBtn").classList.remove("hidden");
+      $("recTimer").textContent = `تم تجهيز التسجيل (${recSeconds} ثانية)`;
     };
 
     mediaRecorder.start();
@@ -464,20 +496,49 @@ $("consultForm").onsubmit = async e => {
 
   busy($("consultBtn"), true, "جاري الإرسال...");
   try {
+    let audioUrl = "", audioPath = "", audioData = "";
+    if (recordedBlob) {
+      const up = await uploadAudio(recordedBlob);
+      if (up) {
+        audioUrl = up.url; audioPath = up.path;
+      } else {
+        audioData = await blobToDataUrl(recordedBlob);
+        if (audioData.length > MAX_AUDIO_CHARS) {
+          show($("consultMsg"), "err", "حجم التسجيل كبير. سجّل مقطعًا أقصر (أقل من 45 ثانية) وحاول مرة أخرى.");
+          busy($("consultBtn"), false);
+          return;
+        }
+      }
+    }
+
+    const studentName = $("fullName").value.trim() || auth.currentUser.displayName || auth.currentUser.email;
+    const studentPhone = currentUserPhone || $("phone").value.trim() || "";
     await addDoc(collection(db, "consultations"), {
       uid: auth.currentUser.uid,
-      studentName: $("fullName").value.trim() || auth.currentUser.displayName || auth.currentUser.email,
-      phone: currentUserPhone || $("phone").value.trim() || "",
+      studentName,
+      phone: studentPhone,
       topic,
       notes,
-      audioData: recordedAudioDataUrl || "",
+      audioUrl,
+      audioPath,
+      audioData,
       reply: "",
       status: "بانتظار رد الشيخ",
       createdAt: serverTimestamp()
     });
+    const hadAudio = !!(audioUrl || audioData);
     $("consultForm").reset();
     resetAudioUI();
-    show($("consultMsg"), "ok", "تم إرسال تلاوتك/استشارتك بنجاح! سيظهر رد الشيخ هنا فور مراجعتها.");
+    show($("consultMsg"), "ok", "تم إرسال تلاوتك/استشارتك بنجاح! سيظهر رد الشيخ هنا فور مراجعتها. ");
+
+    // تنبيه الشيخ على واتساب (رابط احتياطي لأن بعض المتصفحات تمنع فتح النافذة بعد عملية غير متزامنة)
+    const waText = `السلام عليكم ورحمة الله وبركاته\n*استشارة / تلاوة جديدة - دار الفرقان*\n• *الطالب:* ${studentName}\n• *الهاتف:* ${studentPhone || 'غير مسجل'}\n• *الموضوع:* ${topic}\n• *تسجيل صوتي:* ${hadAudio ? 'نعم' : 'لا'}`;
+    const waUrl = `https://wa.me/201099262489?text=${encodeURIComponent(waText)}`;
+    const a = document.createElement("a");
+    a.href = waUrl; a.target = "_blank"; a.rel = "noopener";
+    a.innerHTML = '<i class="fa-brands fa-whatsapp"></i>اضغط هنا لتنبيه الشيخ على واتساب';
+    $("consultMsg").append(a);
+    window.open(waUrl, "_blank");
   } catch (err) {
     show($("consultMsg"), "err", "تعذر إرسال الاستشارة. تأكد من تحديث قواعد Firebase Rules.");
   }
@@ -530,7 +591,7 @@ onAuthStateChanged(auth, async user => {
   unsubReg = onSnapshot(query(collection(db, "registrations"), where("uid", "==", user.uid)), snap => {
     const rows = snap.docs.map(d => d.data()).sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
     const list = $("list"); list.replaceChildren();
-    if (!rows.length) { list.innerHTML = "<p>لسه مفيش طلبات.</p>"; return; }
+    if (!rows.length) { list.innerHTML = "<p>لا توجد طلبات سابقة بعد.</p>"; return; }
     if (rows[0].phone && !currentUserPhone) {
       currentUserPhone = rows[0].phone;
       $("phone").value = rows[0].phone;
@@ -559,11 +620,12 @@ onAuthStateChanged(auth, async user => {
       const p = document.createElement("p"); p.style.margin = "6px 0"; p.textContent = c.notes;
       div.append(b, s, p);
 
-      if (c.audioData) {
+      const audioSrc = c.audioUrl || c.audioData;
+      if (audioSrc) {
         const aud = document.createElement("audio");
         aud.controls = true;
         aud.preload = "none";
-        aud.src = c.audioData;
+        aud.src = audioSrc;
         aud.style.width = "100%";
         div.append(aud);
       }
