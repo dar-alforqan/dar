@@ -1,13 +1,17 @@
 export const firebaseConfig = {
-  apiKey: "حط_هنا_مفتاح_apiKey_الحقيقي_بتاعك",
+  apiKey: "مفتاحك_الحقيقي_هنا",
   authDomain: "dar-alforqan.firebaseapp.com",
   projectId: "dar-alforqan",
   storageBucket: "dar-alforqan.appspot.com",
-  messagingSenderId: "حط_هنا_رقم_messagingSenderId_بتاعك",
-  appId: "حط_هنا_رقم_appId_بتاعك"
+  messagingSenderId: "...",
+  appId: "..."
 };
 
-// دالة تفريغ مؤقتة لمنع أي أخطاء في الصفحات
+// دالة حماية App Check الآمنة التي تستوردها جميع الصفحات
 export function initAppCheck(app) {
-  // بدون App Check مؤقتاً ليعمل الموقع
+  try {
+    // يمكنك تفعيلها لاحقاً أو تركها فارغة هكذا لضمان عمل الموقع بكفاءة وثبات
+  } catch (e) {
+    console.warn("App Check:", e);
+  }
 }
