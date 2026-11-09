@@ -9,6 +9,7 @@
 <link rel="apple-touch-icon" href="icon.png">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#3A181E">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 <style>
 :root{
@@ -40,6 +41,7 @@ body.dark-mode{
 html{scroll-behavior:smooth}
 body{margin:0;font-family:Tahoma,"Segoe UI",Arial,sans-serif;background:var(--cream);color:var(--ink);line-height:1.7;transition:background .25s ease,color .25s ease}
 body.locked{overflow:hidden}
+.fa-solid,.fa-regular,.fa-brands{margin-inline-end:6px}
 header{background:var(--header-bg);color:var(--header-text);padding:18px 20px;padding-top:calc(18px + env(safe-area-inset-top,0));border-bottom:5px solid var(--gold);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
 .brand-box{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit}
 .brand-box img{width:46px;height:46px;border-radius:50%;object-fit:cover;border:2px solid var(--gold)}
@@ -52,7 +54,9 @@ header p{margin:2px 0 0;opacity:.85;font-size:.9rem}
 
 main{max-width:1000px;margin:0 auto;padding:28px 16px calc(70px + env(safe-area-inset-bottom,0))}
 .filter-bar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px;align-items:center;justify-content:space-between}
-.search-input{flex:1;min-width:220px;padding:10px 14px;border:1px solid var(--line);border-radius:20px;font:inherit;background:var(--input-bg);color:var(--ink)}
+.search-wrap{position:relative;flex:1;min-width:220px}
+.search-wrap i{position:absolute;inset-inline-start:14px;top:50%;transform:translateY(-50%);margin:0;color:var(--text-muted);pointer-events:none}
+.search-input{width:100%;padding:10px 14px;padding-inline-start:40px;border:1px solid var(--line);border-radius:20px;font:inherit;background:var(--input-bg);color:var(--ink)}
 .search-input:focus{border-color:var(--gold)}
 .cats{display:flex;gap:8px;flex-wrap:wrap}
 .cat-btn{padding:7px 15px;border:1px solid var(--wine);background:transparent;color:var(--wine);border-radius:20px;cursor:pointer;font:inherit;font-size:.88rem;font-weight:700;transition:background .2s}
@@ -64,6 +68,7 @@ main{max-width:1000px;margin:0 auto;padding:28px 16px calc(70px + env(safe-area-
 .book-card{background:var(--card-bg);border:1px solid var(--line);border-top:4px solid var(--gold);border-radius:12px;padding:20px;display:flex;flex-direction:column;justify-content:space-between;gap:14px;transition:transform .2s ease,box-shadow .2s ease,background .25s ease}
 .book-card:hover{box-shadow:0 8px 20px rgba(0,0,0,.1);transform:translateY(-3px)}
 .badge{display:inline-block;background:rgba(250,200,27,.2);color:var(--wine);padding:3px 10px;border-radius:12px;font-size:.8rem;font-weight:700;margin-bottom:6px}
+.badge i{font-size:.85em}
 .book-card h3{font-family:"Traditional Arabic","Amiri",Georgia,serif;font-size:1.45rem;margin:0 0 6px;color:var(--wine);line-height:1.5}
 .book-card p{margin:0;font-size:.92rem;color:var(--text-muted)}
 .actions{display:flex;gap:8px;margin-top:6px}
@@ -108,22 +113,25 @@ a:focus-visible,button:focus-visible,.search-input:focus-visible{outline:3px sol
     </div>
   </a>
   <div class="header-actions">
-    <a href="index.html" class="nav-btn">الرئيسية</a>
-    <a href="gallery.html" class="nav-btn">🖼️ المعرض</a>
-    <a href="account.html" class="nav-btn gold">حسابي</a>
-    <button id="themeToggle" class="nav-btn" type="button" aria-label="تبديل الوضع">🌙 ليلي</button>
+    <a href="index.html" class="nav-btn"><i class="fa-solid fa-house"></i>الرئيسية</a>
+    <a href="gallery.html" class="nav-btn"><i class="fa-solid fa-images"></i>المعرض</a>
+    <a href="account.html" class="nav-btn gold"><i class="fa-solid fa-user"></i>حسابي</a>
+    <button id="themeToggle" class="nav-btn" type="button" aria-label="تبديل الوضع"><i class="fa-solid fa-moon"></i>ليلي</button>
   </div>
 </header>
 
 <main>
   <div class="filter-bar">
-    <input id="searchInput" class="search-input" type="search" placeholder="ابحث عن اسم المتن أو الكتاب..." aria-label="بحث في المكتبة">
+    <div class="search-wrap">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input id="searchInput" class="search-input" type="search" placeholder="ابحث عن اسم المتن أو الكتاب..." aria-label="بحث في المكتبة">
+    </div>
     <div class="cats" id="catBtns">
-      <button class="cat-btn active" data-cat="all" aria-pressed="true">الكل</button>
-      <button class="cat-btn" data-cat="متون التجويد" aria-pressed="false">متون التجويد</button>
-      <button class="cat-btn" data-cat="متون القراءات" aria-pressed="false">متون القراءات</button>
-      <button class="cat-btn" data-cat="علوم القرآن والتفسير" aria-pressed="false">علوم القرآن</button>
-      <button class="cat-btn" data-cat="آداب وحلقات" aria-pressed="false">آداب وحلقات</button>
+      <button class="cat-btn active" data-cat="all" aria-pressed="true"><i class="fa-solid fa-layer-group"></i>الكل</button>
+      <button class="cat-btn" data-cat="متون التجويد" aria-pressed="false"><i class="fa-solid fa-microphone-lines"></i>متون التجويد</button>
+      <button class="cat-btn" data-cat="متون القراءات" aria-pressed="false"><i class="fa-solid fa-book-quran"></i>متون القراءات</button>
+      <button class="cat-btn" data-cat="علوم القرآن والتفسير" aria-pressed="false"><i class="fa-solid fa-book-open-reader"></i>علوم القرآن</button>
+      <button class="cat-btn" data-cat="آداب وحلقات" aria-pressed="false"><i class="fa-solid fa-users"></i>آداب وحلقات</button>
     </div>
   </div>
   <div class="count" id="count" aria-live="polite"></div>
@@ -137,7 +145,7 @@ a:focus-visible,button:focus-visible,.search-input:focus-visible{outline:3px sol
   <div class="modal-box">
     <div class="modal-head">
       <strong id="previewTitle">معاينة الكتاب</strong>
-      <button id="closeModal" class="close-btn" type="button">إغلاق ✕</button>
+      <button id="closeModal" class="close-btn" type="button"><i class="fa-solid fa-xmark"></i>إغلاق</button>
     </div>
     <div class="modal-body">
       <iframe id="previewFrame" src="about:blank" title="معاينة الملف"></iframe>
@@ -157,7 +165,9 @@ try { saved = localStorage.getItem("theme"); } catch (e) {}
 const currentTheme = saved || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
 function applyTheme(t) {
   document.body.classList.toggle("dark-mode", t === "dark");
-  themeToggle.textContent = t === "dark" ? "☀️ نهاري" : "🌙 ليلي";
+  themeToggle.innerHTML = t === "dark"
+    ? '<i class="fa-solid fa-sun"></i>نهاري'
+    : '<i class="fa-solid fa-moon"></i>ليلي';
 }
 applyTheme(currentTheme);
 themeToggle.onclick = () => {
@@ -175,6 +185,14 @@ const searchInput = document.getElementById("searchInput");
 const countEl = document.getElementById("count");
 let allBooks = [];
 let activeCat = "all";
+
+// أيقونة لكل تصنيف (تظهر في شارة البطاقة)
+const CAT_ICONS = {
+  "متون التجويد": "fa-microphone-lines",
+  "متون القراءات": "fa-book-quran",
+  "علوم القرآن والتفسير": "fa-book-open-reader",
+  "آداب وحلقات": "fa-users"
+};
 
 function getPreviewUrl(url) {
   if (!url) return "";
@@ -231,7 +249,9 @@ function renderBooks() {
     const top = document.createElement("div");
     const badge = document.createElement("span");
     badge.className = "badge";
-    badge.textContent = b.category || "متون التجويد";
+    const badgeIcon = document.createElement("i");
+    badgeIcon.className = "fa-solid " + (CAT_ICONS[b.category] || "fa-book");
+    badge.append(badgeIcon, document.createTextNode(b.category || "متون التجويد"));
 
     const h3 = document.createElement("h3");
     h3.textContent = b.title || "كتاب بدون عنوان";
@@ -246,7 +266,7 @@ function renderBooks() {
     const prevBtn = document.createElement("button");
     prevBtn.className = "btn btn-preview";
     prevBtn.type = "button";
-    prevBtn.textContent = "👁️ معاينة";
+    prevBtn.innerHTML = '<i class="fa-solid fa-eye"></i>معاينة';
     prevBtn.onclick = () => openPreview(b);
 
     const dlLink = document.createElement("a");
@@ -255,7 +275,7 @@ function renderBooks() {
     dlLink.download = (b.title || "book") + ".pdf";
     dlLink.target = "_blank";
     dlLink.rel = "noopener";
-    dlLink.textContent = "📥 تحميل PDF";
+    dlLink.innerHTML = '<i class="fa-solid fa-file-arrow-down"></i>تحميل PDF';
 
     actions.append(prevBtn, dlLink);
     card.append(top, actions);
