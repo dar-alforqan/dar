@@ -10,6 +10,7 @@
 <link rel="apple-touch-icon" href="icon.png">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#3A181E">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 <style>
 :root{
@@ -45,6 +46,7 @@ body.dark-mode{
 
 *{box-sizing:border-box}
 body{margin:0;font-family:Tahoma,"Segoe UI",Arial,sans-serif;background:var(--cream);color:var(--ink);line-height:1.6;transition:background .25s ease,color .25s ease}
+.fa-solid,.fa-regular,.fa-brands{margin-inline-end:5px}
 header{background:var(--header-bg);color:var(--header-text);padding:18px 20px;padding-top:calc(18px + env(safe-area-inset-top,0));border-bottom:5px solid var(--gold);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
 .brand-box{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit}
 .brand-box img{width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid var(--gold)}
@@ -118,10 +120,10 @@ body.dark-mode .msg.ok{background:#0e2e13;color:#85e085}
     </div>
   </a>
   <div class="header-actions">
-    <a href="index.html" class="nav-link">الرئيسية</a>
-    <a href="library.html" class="nav-link">📚 المكتبة</a>
-    <a href="gallery.html" class="nav-link">🖼️ المعرض</a>
-    <button id="themeToggle" class="theme-btn" type="button" aria-label="تبديل الوضع">🌙 ليلي</button>
+    <a href="index.html" class="nav-link"><i class="fa-solid fa-house"></i> الرئيسية</a>
+    <a href="library.html" class="nav-link"><i class="fa-solid fa-book-open"></i> المكتبة</a>
+    <a href="gallery.html" class="nav-link"><i class="fa-solid fa-images"></i> المعرض</a>
+    <button id="themeToggle" class="theme-btn" type="button" aria-label="تبديل الوضع"><i class="fa-solid fa-moon"></i> ليلي</button>
   </div>
 </header>
 
@@ -147,14 +149,14 @@ body.dark-mode .msg.ok{background:#0e2e13;color:#85e085}
   <section id="adminView" class="hidden">
     <div class="top-bar">
       <div>مرحباً بك، <strong id="adminEmailDisplay" dir="ltr"></strong></div>
-      <button id="logoutBtn" class="btn-outline" type="button">تسجيل الخروج</button>
+      <button id="logoutBtn" class="btn-outline" type="button"><i class="fa-solid fa-right-from-bracket"></i> تسجيل الخروج</button>
     </div>
 
     <div class="admin-tabs">
-      <button class="tab-btn active" data-tab="tabRegs" type="button">📋 طلبات التسجيل</button>
-      <button class="tab-btn" data-tab="tabConsults" type="button">🎙️ استشارات التلاوة والحفظ <span id="consultsBadge" class="badge hidden">0</span></button>
-      <button class="tab-btn" data-tab="tabMedia" type="button">📚🖼️ رفع وإدارة المكتبة والمعرض</button>
-      <button class="tab-btn" data-tab="tabUsers" type="button">👥 سجل الحسابات (<span id="usersCountBadge">0</span>)</button>
+      <button class="tab-btn active" data-tab="tabRegs" type="button"><i class="fa-solid fa-clipboard-list"></i> طلبات التسجيل</button>
+      <button class="tab-btn" data-tab="tabConsults" type="button"><i class="fa-solid fa-microphone-lines"></i> استشارات التلاوة والحفظ <span id="consultsBadge" class="badge hidden">0</span></button>
+      <button class="tab-btn" data-tab="tabMedia" type="button"><i class="fa-solid fa-photo-film"></i> رفع وإدارة المكتبة والمعرض</button>
+      <button class="tab-btn" data-tab="tabUsers" type="button"><i class="fa-solid fa-users"></i> سجل الحسابات (<span id="usersCountBadge">0</span>)</button>
     </div>
 
     <div id="tabRegs" class="admin-panel">
@@ -190,7 +192,7 @@ body.dark-mode .msg.ok{background:#0e2e13;color:#85e085}
           </select>
         </div>
         <div>
-          <button id="exportBtn" class="primary" type="button" style="width:100%">📥 تحميل Excel</button>
+          <button id="exportBtn" class="primary" type="button" style="width:100%"><i class="fa-solid fa-file-export"></i> تحميل Excel</button>
         </div>
       </div>
 
@@ -235,14 +237,14 @@ body.dark-mode .msg.ok{background:#0e2e13;color:#85e085}
 
     <div id="tabMedia" class="admin-panel hidden">
       <div class="card">
-        <h3 style="margin-top:0;color:var(--wine)">➕ إضافة صورة للمعرض أو كتاب PDF للمكتبة</h3>
+        <h3 style="margin-top:0;color:var(--wine)"><i class="fa-solid fa-circle-plus"></i> إضافة صورة للمعرض أو كتاب PDF للمكتبة</h3>
         <form id="mediaForm">
           <div class="form-grid">
             <div>
               <label for="mediaType">نوع الإضافة (أين سيظهر؟)</label>
               <select id="mediaType">
-                <option value="image">🖼️ صورة من الجهاز (تذهب لمعرض الصور للعرض فقط)</option>
-                <option value="pdf">📚 كتاب أو متن على Google Drive (يذهب للمكتبة للتحميل)</option>
+                <option value="image">صورة من الجهاز (تذهب لمعرض الصور للعرض فقط)</option>
+                <option value="pdf">كتاب أو متن على Google Drive (يذهب للمكتبة للتحميل)</option>
               </select>
             </div>
             <div>
@@ -270,7 +272,7 @@ body.dark-mode .msg.ok{background:#0e2e13;color:#85e085}
             <span class="hint">ارفع الملف على Google Drive مهما كان حجمه (حتى 2 جيجا أو أكثر)، واجعل المشاركة "أي شخص لديه الرابط" ثم الصق الرابط هنا.</span>
           </div>
 
-          <button id="mediaSubmitBtn" class="primary" type="submit" style="margin-top:16px">⬆️ حفظ ونشر في القسم المخصص</button>
+          <button id="mediaSubmitBtn" class="primary" type="submit" style="margin-top:16px"><i class="fa-solid fa-cloud-arrow-up"></i> حفظ ونشر في القسم المخصص</button>
           <div id="mediaMsg" class="msg" role="status"></div>
         </form>
       </div>
@@ -323,7 +325,6 @@ body.dark-mode .msg.ok{background:#0e2e13;color:#85e085}
 
 <script type="module">
 import { firebaseConfig, initAppCheck } from "./firebase-config.js";
-  initAppCheck(app);
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getFirestore, collection, onSnapshot, doc, setDoc, addDoc, updateDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
@@ -342,7 +343,9 @@ try { savedTheme = localStorage.getItem("theme"); } catch (e) {}
 const currentTheme = savedTheme || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
 function applyTheme(theme) {
   document.body.classList.toggle("dark-mode", theme === "dark");
-  themeToggle.textContent = theme === "dark" ? "☀️ نهاري" : "🌙 ليلي";
+  themeToggle.innerHTML = theme === "dark"
+    ? '<i class="fa-solid fa-sun"></i> نهاري'
+    : '<i class="fa-solid fa-moon"></i> ليلي';
 }
 applyTheme(currentTheme);
 themeToggle.onclick = () => {
@@ -351,7 +354,9 @@ themeToggle.onclick = () => {
   applyTheme(nextTheme);
 };
 
-const app = initializeApp(firebaseConfig), auth = getAuth(app), db = getFirestore(app);
+const app = initializeApp(firebaseConfig);
+initAppCheck(app);
+const auth = getAuth(app), db = getFirestore(app);
 const $ = id => document.getElementById(id);
 let allRows = [], allUsers = [], allMedia = [], allConsults = [];
 let unsubRegs = null, unsubUsers = null, unsubMedia = null, unsubConsults = null;
@@ -537,8 +542,8 @@ $("mediaForm").onsubmit = async e => {
 
     $("mediaMsg").className = "msg ok";
     $("mediaMsg").textContent = type === "image"
-      ? "✅ تم رفع الصورة وإضافتها إلى معرض الصور بنجاح!"
-      : "✅ تم إضافة الكتاب إلى مكتبة المتون بنجاح!";
+      ? "تم رفع الصورة وإضافتها إلى معرض الصور بنجاح!"
+      : "تم إضافة الكتاب إلى مكتبة المتون بنجاح!";
     $("mediaForm").reset();
     updateCategoryOptions();
   } catch (err) {
@@ -598,7 +603,7 @@ function renderTable() {
     waLink.href = `https://wa.me/${waPhone}?text=${waMsg}`;
     waLink.target = "_blank";
     waLink.rel = "noopener";
-    waLink.textContent = "💬 مراسلة";
+    waLink.innerHTML = '<i class="fa-brands fa-whatsapp"></i> مراسلة';
     tdPhone.append(phoneSpan, waLink);
 
     const tdProg = document.createElement("td");
@@ -636,7 +641,7 @@ function renderTable() {
     const tdAction = document.createElement("td");
     const delBtn = document.createElement("button");
     delBtn.className = "del-btn";
-    delBtn.textContent = "حذف";
+    delBtn.innerHTML = '<i class="fa-solid fa-trash-can"></i> حذف';
     delBtn.onclick = async () => {
       if (!confirm(`هل أنت متأكد من حذف طلب "${r.fullName}"؟`)) return;
       try { await deleteDoc(doc(db, "registrations", r.id)); toast("تم حذف الطلب"); }
@@ -679,7 +684,7 @@ function renderConsults() {
       wa.href = `https://wa.me/${formatWaPhone(c.phone)}?text=${encodeURIComponent(`السلام عليكم، بخصوص استشارتك في دار الفرقان (${c.topic}): `)}`;
       wa.target = "_blank";
       wa.rel = "noopener";
-      wa.textContent = "💬 واتساب";
+      wa.innerHTML = '<i class="fa-brands fa-whatsapp"></i> واتساب';
       tdStudent.append(wa);
     }
 
@@ -714,7 +719,7 @@ function renderConsults() {
     saveReplyBtn.className = "primary";
     saveReplyBtn.style.marginTop = "6px";
     saveReplyBtn.style.padding = "6px 12px";
-    saveReplyBtn.textContent = "💾 حفظ وإرسال الرد";
+    saveReplyBtn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> حفظ وإرسال الرد';
     saveReplyBtn.onclick = async () => {
       saveReplyBtn.disabled = true;
       try {
@@ -733,7 +738,7 @@ function renderConsults() {
     const tdAct = document.createElement("td");
     const delBtn = document.createElement("button");
     delBtn.className = "del-btn";
-    delBtn.textContent = "حذف";
+    delBtn.innerHTML = '<i class="fa-solid fa-trash-can"></i> حذف';
     delBtn.onclick = async () => {
       if (!confirm("حذف هذه الاستشارة؟")) return;
       try { await deleteDoc(doc(db, "consultations", c.id)); toast("تم حذف الاستشارة"); }
@@ -758,7 +763,9 @@ function renderMedia() {
   allMedia.forEach(m => {
     const tr = document.createElement("tr");
     const tdType = document.createElement("td");
-    tdType.innerHTML = m.type === "image" ? "🖼️ <b>معرض الصور</b>" : "📚 <b>مكتبة المتون</b>";
+    tdType.innerHTML = m.type === "image"
+      ? '<i class="fa-solid fa-image"></i> <b>معرض الصور</b>'
+      : '<i class="fa-solid fa-book"></i> <b>مكتبة المتون</b>';
 
     const tdCat = document.createElement("td");
     tdCat.textContent = m.category || "";
@@ -788,7 +795,7 @@ function renderMedia() {
       a.href = m.url;
       a.target = "_blank";
       a.rel = "noopener";
-      a.textContent = "فتح رابط Drive";
+      a.innerHTML = '<i class="fa-solid fa-arrow-up-right-from-square"></i> فتح رابط Drive';
       tdPrev.append(a);
     } else {
       tdPrev.textContent = "رابط غير صالح";
@@ -802,7 +809,7 @@ function renderMedia() {
     editBtn.className = "btn-outline";
     editBtn.style.padding = "5px 10px";
     editBtn.style.marginInlineEnd = "6px";
-    editBtn.textContent = "تعديل";
+    editBtn.innerHTML = '<i class="fa-solid fa-pen-to-square"></i> تعديل';
     editBtn.onclick = async () => {
       const newTitle = prompt("تعديل العنوان:", m.title || "");
       if (newTitle === null) return;
@@ -824,7 +831,7 @@ function renderMedia() {
 
     const delBtn = document.createElement("button");
     delBtn.className = "del-btn";
-    delBtn.textContent = "حذف";
+    delBtn.innerHTML = '<i class="fa-solid fa-trash-can"></i> حذف';
     delBtn.onclick = async () => {
       if (!confirm(`هل أنت متأكد من حذف "${m.title}"؟`)) return;
       try { await deleteDoc(doc(db, "media", m.id)); toast("تم الحذف"); }
@@ -900,7 +907,7 @@ function renderUsers() {
       waLink.href = `https://wa.me/${formatWaPhone(phone)}`;
       waLink.target = "_blank";
       waLink.rel = "noopener";
-      waLink.textContent = "💬 واتساب";
+      waLink.innerHTML = '<i class="fa-brands fa-whatsapp"></i> واتساب';
       tdPhone.append(phDiv, waLink);
     } else {
       tdPhone.textContent = "غير مسجل";
@@ -912,7 +919,7 @@ function renderUsers() {
     const tdAct = document.createElement("td");
     const delBtn = document.createElement("button");
     delBtn.className = "del-btn";
-    delBtn.textContent = "🗑️ حذف الحساب";
+    delBtn.innerHTML = '<i class="fa-solid fa-user-xmark"></i> حذف الحساب';
     delBtn.onclick = async () => {
       if (!confirm(`هل أنت متأكد من حذف حساب "${name}" (${u.email || phone}) نهائياً ومنعه من الدخول؟`)) return;
       delBtn.disabled = true;
