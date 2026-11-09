@@ -143,7 +143,6 @@ a:focus-visible,button:focus-visible,.photo-card:focus-visible{outline:3px solid
 
 <script type="module">
 import { firebaseConfig, initAppCheck } from "./firebase-config.js";
-  initAppCheck(app);
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, collection, query, where, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -165,6 +164,7 @@ themeToggle.onclick = () => {
 
 /* ---------- البيانات ---------- */
 const app = initializeApp(firebaseConfig);
+initAppCheck(app);
 const db = getFirestore(app);
 const grid = document.getElementById("galleryGrid");
 const countEl = document.getElementById("count");
