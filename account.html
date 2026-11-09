@@ -6,7 +6,7 @@
 <title>حسابي | دار الفرقان</title>
 
 <link rel="icon" type="image/png" href="icon.png">
-<link rel="apple-touch-icon" href="icon.png">f
+<link rel="apple-touch-icon" href="icon.png">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#3A181E">
 <meta name="mobile-web-app-capable" content="yes">
@@ -121,9 +121,9 @@ h2{font-family:"Traditional Arabic","Amiri",Georgia,serif;margin:22px 0 10px;fon
   <form id="authForm" novalidate>
     <div id="signupExtra" class="hidden">
       <label for="name">الاسم الكامل</label>
-      <input id="name" autocomplete="name">
+      <input id="name" autocomplete="name" maxlength="100">
       <label for="signupPhone">رقم الهاتف (واتساب)</label>
-      <input id="signupPhone" type="tel" dir="ltr" placeholder="010xxxxxxxx" autocomplete="tel">
+      <input id="signupPhone" type="tel" dir="ltr" placeholder="010xxxxxxxx" autocomplete="tel" maxlength="30">
     </div>
     <label for="email">البريد الإلكتروني</label>
     <input id="email" type="email" autocomplete="email" dir="ltr" required>
@@ -153,8 +153,8 @@ h2{font-family:"Traditional Arabic","Amiri",Georgia,serif;margin:22px 0 10px;fon
     <div class="card">
       <h2 style="margin-top:0">تقديم طلب التحاق ببرنامج</h2>
       <form id="regForm" novalidate>
-        <label for="fullName">الاسم الكامل</label><input id="fullName" required autocomplete="name">
-        <label for="phone">رقم الواتساب</label><input id="phone" type="tel" dir="ltr" required autocomplete="tel">
+        <label for="fullName">الاسم الكامل</label><input id="fullName" required autocomplete="name" maxlength="100">
+        <label for="phone">رقم الواتساب</label><input id="phone" type="tel" dir="ltr" required autocomplete="tel" maxlength="30">
         <label for="program">البرنامج المطلوب</label>
         <select id="program"><option>تحفيظ القرآن</option><option>إجازة</option><option>التجويد</option><option>القراءات</option></select>
         <label for="notes">ملاحظات (المستوى الحالي، المواعيد المناسبة)</label><textarea id="notes" rows="3" maxlength="1000"></textarea>
@@ -172,7 +172,7 @@ h2{font-family:"Traditional Arabic","Amiri",Georgia,serif;margin:22px 0 10px;fon
       <p style="margin:0 0 12px;font-size:.92rem;color:var(--text-muted)">سجّل مقطعاً صوتياً قصيراً لتلاوتك (حتى 45 ثانية) أو اكتب سؤالك في الحفظ والتجويد ليقوم الشيخ المختص بسماعها وتوجيهك.</p>
       <form id="consultForm" novalidate>
         <label for="consultTopic">السورة / موضوع الاستشارة</label>
-        <input id="consultTopic" placeholder="مثال: تصحيح تلاوة سورة المزمل / خطة مراجعة 5 أجزاء" required>
+        <input id="consultTopic" placeholder="مثال: تصحيح تلاوة سورة المزمل / خطة مراجعة 5 أجزاء" maxlength="150" required>
 
         <label>تسجيل صوتي للتلاوة (اختياري)</label>
         <div class="recorder-box">
@@ -198,11 +198,17 @@ h2{font-family:"Traditional Arabic","Amiri",Georgia,serif;margin:22px 0 10px;fon
 </main>
 
 <script type="module">
-import { firebaseConfig, initAppCheck } from "./firebase-config.js";
-  initAppCheck(app);
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getFirestore, collection, doc, setDoc, getDoc, addDoc, query, where, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { firebaseConfig, initAppCheck } from "./firebase-config.js";
+
+// تهيئة التطبيق والحماية بالشكل الصحيح أولاً
+const app = initializeApp(firebaseConfig);
+initAppCheck(app);
+
+const auth = getAuth(app);
+const db = getFirestore(app);
 
 /* ---------- الوضع الليلي (مع حماية من تعطّل localStorage) ---------- */
 const themeToggle = document.getElementById("themeToggle");
@@ -220,7 +226,6 @@ themeToggle.onclick = () => {
   applyTheme(next);
 };
 
-const app = initializeApp(firebaseConfig), auth = getAuth(app), db = getFirestore(app);
 const $ = id => document.getElementById(id);
 let mode = "login", unsubReg = null, unsubConsult = null, unsubBlock = null;
 let currentUserPhone = "";
@@ -347,7 +352,6 @@ $("regForm").onsubmit = async e => {
     const waUrl = `https://wa.me/201099262489?text=${encodeURIComponent(waText)}`;
 
     show($("regMsg"), "ok", "تم إرسال الطلب بنجاح. ");
-    // بعض المتصفحات (خصوصًا الآيفون) تمنع فتح النافذة بعد عملية غير متزامنة، فنضيف رابطًا يدويًا احتياطيًا
     const a = document.createElement("a");
     a.href = waUrl; a.target = "_blank"; a.rel = "noopener";
     a.textContent = "اضغط هنا لإرسال تفاصيل الطلب على واتساب";
@@ -361,7 +365,6 @@ $("regForm").onsubmit = async e => {
 };
 
 /* ---------- التسجيل الصوتي ---------- */
-// حد أقصى لحجم التسجيل (Firestore يقبل مستندًا حتى ~1MB)
 const MAX_AUDIO_CHARS = 900000;
 let mediaRecorder = null;
 let audioChunks = [];
@@ -389,7 +392,6 @@ $("recordBtn").onclick = async () => {
   clear($("consultMsg"));
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    // نحدد معدل بت منخفض في كل المتصفحات (بما فيها سفاري) حتى يبقى الحجم صغيرًا
     const options = MediaRecorder.isTypeSupported("audio/webm;codecs=opus")
       ? { mimeType: "audio/webm;codecs=opus", audioBitsPerSecond: 24000 }
       : { audioBitsPerSecond: 24000 };
@@ -533,7 +535,7 @@ onAuthStateChanged(auth, async user => {
   unsubConsult = onSnapshot(query(collection(db, "consultations"), where("uid", "==", user.uid)), snap => {
     const rows = snap.docs.map(d => d.data()).sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
     const cList = $("consultList"); cList.replaceChildren();
-    if (!rows.length) { cList.innerHTML = "<p>لا توجد استشارات مرسلة بعد.</p>"; return; }
+    if (!rows.length) { cList.append(Object.assign(document.createElement("p"), { textContent: "لا توجد استشارات مرسلة بعد." })); return; }
     rows.forEach(c => {
       const div = document.createElement("div"); div.className = "item";
       const b = document.createElement("strong"); b.textContent = c.topic;
@@ -555,7 +557,7 @@ onAuthStateChanged(auth, async user => {
       replyDiv.className = "reply-box";
       if (c.reply) {
         const label = document.createElement("strong");
-        label.textContent = "✅ توجيه الشيخ:";
+        label.textContent = "✔️ توجيه الشيخ:";
         const span = document.createElement("span");
         span.style.whiteSpace = "pre-wrap";
         span.textContent = c.reply;
