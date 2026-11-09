@@ -413,8 +413,6 @@ $("regForm").onsubmit = async e => {
   busy($("regBtn"), false);
 };
 
-/* ---------- التسجيل الصوتي ---------- */
-// الحد الأقصى لحجم التسجيل لو اضطررنا لحفظه داخل Firestore (المستند الواحد ~1MB)
 /* ---------- التسجيل الصوتي والاستشارة ---------- */
 const MAX_AUDIO_CHARS = 900000;
 let mediaRecorder = null;
@@ -538,7 +536,6 @@ $("consultForm").onsubmit = async e => {
     resetAudioUI();
     show($("consultMsg"), "ok", "تم إرسال تلاوتك/استشارتك بنجاح! سيظهر رد الشيخ هنا فور مراجعتها.");
 
-    // إضافة زر واتساب اختياري لتنبيه الشيخ دون إجبار المتصفح على فتح نافذة معطلة
     const waText = `السلام عليكم ورحمة الله وبركاته\n*استشارة / تلاوة جديدة - دار الفرقان*\n• *الطالب:* ${studentName}\n• *الموضوع:* ${topic}`;
     const waUrl = `https://wa.me/201099262489?text=${encodeURIComponent(waText)}`;
     const a = document.createElement("a");
@@ -554,6 +551,108 @@ $("consultForm").onsubmit = async e => {
   busy($("consultBtn"), false);
 };
 
+/* ---------- حالة الدخول والقوائم ---------- */
+onAuthStateChanged(auth, async user => {
+  if (unsubReg) { unsubReg(); unsubReg = null; }
+  if (unsubConsult) { unsubConsult(); unsubConsult = null; }
+  if (unsubBlock) { unsubBlock(); unsubBlock = null; }
+
+  $("authView").classList.toggle("hidden", !!user);
+  $("appView").classList.toggle("hidden", !user);
+  if (!user) return;
+
+  unsubBlock = onSnapshot(doc(db, "blocked_users", user.uid), snap => {
+    if (snap.exists()) {
+      signOut(auth);
+      show($("authMsg"), "err", "تم حذف أو إيقاف هذا الحساب من قِبل إدارة الدار.");
+    }
+  });
+
+  $("hello").textContent = "أهلاً " + (user.displayName || user.email);
+  $("fullName").value = user.displayName || "";
+
+  try {
+    const userRef = doc(db, "users", user.uid);
+    const userSnap = await getDoc(userRef);
+    if (!userSnap.exists()) {
+      await setDoc(userRef, {
+        uid: user.uid,
+        name: user.displayName || "",
+        email: user.email,
+        phone: "",
+        createdAt: serverTimestamp()
+      });
+    } else {
+      const uData = userSnap.data();
+      if (uData.phone) {
+        currentUserPhone = uData.phone;
+        $("phone").value = uData.phone;
+      }
+      if (uData.name && !$("fullName").value) $("fullName").value = uData.name;
+    }
+  } catch (e) {}
+
+  const listError = el => () => { el.replaceChildren(); const p = document.createElement("p"); p.textContent = "تعذر تحميل البيانات. تأكد من الاتصال بالإنترنت ثم أعد تحميل الصفحة."; el.append(p); };
+
+  unsubReg = onSnapshot(query(collection(db, "registrations"), where("uid", "==", user.uid)), snap => {
+    const rows = snap.docs.map(d => d.data()).sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+    const list = $("list"); list.replaceChildren();
+    if (!rows.length) { list.innerHTML = "<p>لا توجد طلبات سابقة بعد.</p>"; return; }
+    if (rows[0].phone && !currentUserPhone) {
+      currentUserPhone = rows[0].phone;
+      $("phone").value = rows[0].phone;
+      setDoc(doc(db, "users", user.uid), { phone: rows[0].phone, name: rows[0].fullName || user.displayName || "" }, { merge: true }).catch(()=>{});
+    }
+    rows.forEach(r => {
+      const div = document.createElement("div"); div.className = "item";
+      const b = document.createElement("strong"); b.textContent = r.program;
+      const pill = document.createElement("span"); pill.className = "pill"; pill.textContent = r.status || "جديد";
+      const s = document.createElement("small");
+      s.textContent = " · " + (r.createdAt ? r.createdAt.toDate().toLocaleDateString("ar-EG") : "جاري الإرسال");
+      const p = document.createElement("p"); p.style.margin = "4px 0 0"; p.textContent = r.notes || "";
+      div.append(b, pill, s, p); list.append(div);
+    });
+  }, listError($("list")));
+
+  unsubConsult = onSnapshot(query(collection(db, "consultations"), where("uid", "==", user.uid)), snap => {
+    const rows = snap.docs.map(d => d.data()).sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+    const cList = $("consultList"); cList.replaceChildren();
+    if (!rows.length) { cList.innerHTML = "<p>لا توجد استشارات مرسلة بعد.</p>"; return; }
+    rows.forEach(c => {
+      const div = document.createElement("div"); div.className = "item";
+      const b = document.createElement("strong"); b.textContent = c.topic;
+      const s = document.createElement("small");
+      s.textContent = " · " + (c.createdAt ? c.createdAt.toDate().toLocaleDateString("ar-EG") : "");
+      const p = document.createElement("p"); p.style.margin = "6px 0"; p.textContent = c.notes;
+      div.append(b, s, p);
+
+      const audioSrc = c.audioUrl || c.audioData;
+      if (audioSrc) {
+        const aud = document.createElement("audio");
+        aud.controls = true;
+        aud.preload = "none";
+        aud.src = audioSrc;
+        aud.style.width = "100%";
+        div.append(aud);
+      }
+
+      const replyDiv = document.createElement("div");
+      replyDiv.className = "reply-box";
+      if (c.reply) {
+        const label = document.createElement("strong");
+        label.innerHTML = '<i class="fa-solid fa-circle-check"></i>توجيه الشيخ:';
+        const span = document.createElement("span");
+        span.style.whiteSpace = "pre-wrap";
+        span.textContent = c.reply;
+        replyDiv.append(label, document.createElement("br"), span);
+      } else {
+        replyDiv.innerHTML = '<i class="fa-solid fa-clock"></i>بانتظار سماع الشيخ والرد...';
+      }
+      div.append(replyDiv);
+      cList.append(div);
+    });
+  }, listError($("consultList")));
+});
 setMode("login");
 </script>
 </body>
