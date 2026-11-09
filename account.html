@@ -205,11 +205,16 @@ h2 i{font-size:.85em}
 </main>
 
 <script type="module">
-import { firebaseConfig, initAppCheck } from "./firebase-config.js";
+import { firebaseConfig } from "./firebase-config.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getFirestore, collection, doc, setDoc, getDoc, addDoc, query, where, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+
+const ADMIN_EMAILS = [
+  "bdallhhshad7@gmail.com",
+  "daralforqan@gmail.com"
+];
 
 /* ---------- الوضع الليلي (مع حماية من تعطّل localStorage) ---------- */
 const themeToggle = document.getElementById("themeToggle");
@@ -230,8 +235,9 @@ themeToggle.onclick = () => {
 };
 
 const app = initializeApp(firebaseConfig);
-initAppCheck(app);
 const auth = getAuth(app), db = getFirestore(app);
+auth.languageCode = "ar";
+
 // Firebase Storage لحفظ التسجيلات الصوتية (لو غير مفعّل نرجع للحفظ داخل Firestore تلقائيًا)
 let storage = null;
 try { storage = getStorage(app); } catch (e) {}
@@ -241,13 +247,14 @@ let currentUserPhone = "";
 
 const errors = {
   "auth/invalid-email":"البريد الإلكتروني غير صحيح.",
-  "auth/email-already-in-use":"هذا البريد مسجّل مسبقًا. جرّب تسجيل الدخول.",
+  "auth/email-already-in-use":"هذا البريد مسجّل مسبقًا بكلمة مرور أخرى. اضغط «نسيت كلمة المرور؟» بالأسفل أو غيّرها من لوحة Firebase.",
   "auth/weak-password":"يجب ألا تقل كلمة المرور عن 6 أحرف.",
-  "auth/invalid-credential":"البريد الإلكتروني أو كلمة المرور غير صحيحة.",
-  "auth/user-not-found":"لا يوجد حساب بهذا البريد.",
+  "auth/invalid-credential":"البريد الإلكتروني أو كلمة المرور غير صحيحة (إذا نسيت كلمة المرور اضغط «نسيت كلمة المرور؟» بالأسفل).",
+  "auth/user-not-found":"لا يوجد حساب مسجّل بهذا البريد بعد. اضغط على تبويب «إنشاء حساب» بالأعلى لتسجيله.",
   "auth/wrong-password":"كلمة المرور غير صحيحة.",
   "auth/too-many-requests":"محاولات كثيرة. انتظر قليلًا ثم حاول مرة أخرى.",
-  "auth/network-request-failed":"مشكلة في الاتصال بالإنترنت. حاول مرة أخرى."
+  "auth/network-request-failed":"مشكلة في الاتصال بالإنترنت. حاول مرة أخرى.",
+  "auth/operation-not-allowed":"تسجيل الدخول بالبريد غير مفعّل في لوحة تحكم Firebase (Authentication > Sign-in method)."
 };
 const show = (el, type, text) => { el.className = "msg " + type; el.textContent = text; };
 const clear = el => { el.className = "msg"; el.textContent = ""; };
@@ -306,6 +313,8 @@ window.addEventListener("hashchange", () => {
 $("authForm").onsubmit = async e => {
   e.preventDefault(); clear($("authMsg"));
   const email = $("email").value.trim(), pass = $("password").value;
+  const isAdminEmail = ADMIN_EMAILS.map(a => a.toLowerCase()).includes(email.toLowerCase());
+
   if (!email || pass.length < 6) return show($("authMsg"), "err", "اكتب البريد الإلكتروني وكلمة مرور من 6 أحرف على الأقل.");
   if (mode === "signup" && ($("name").value.trim().length < 2 || $("signupPhone").value.trim().length < 8)) {
     return show($("authMsg"), "err", "اكتب الاسم الكامل ورقم هاتف (واتساب) صحيحًا.");
@@ -325,19 +334,39 @@ $("authForm").onsubmit = async e => {
         createdAt: serverTimestamp()
       }, { merge: true });
     } else {
-      await signInWithEmailAndPassword(auth, email, pass);
+      try {
+        await signInWithEmailAndPassword(auth, email, pass);
+      } catch (loginErr) {
+        // إذا كان بريد الإدارة غير منشأ بعد، ننشئه تلقائياً بكلمة المرور المدخلة
+        if (isAdminEmail && (loginErr.code === "auth/user-not-found" || loginErr.code === "auth/invalid-credential")) {
+          const cred = await createUserWithEmailAndPassword(auth, email, pass);
+          await setDoc(doc(db, "users", cred.user.uid), {
+            uid: cred.user.uid,
+            name: "إدارة دار الفرقان",
+            email: cred.user.email,
+            phone: "01099262489",
+            createdAt: serverTimestamp()
+          }, { merge: true });
+        } else {
+          throw loginErr;
+        }
+      }
     }
   } catch (err) {
-    show($("authMsg"), "err", errors[err.code] || "حدث خطأ. حاول مرة أخرى.");
+    show($("authMsg"), "err", errors[err.code] || ("حدث خطأ أثناء الدخول (" + (err.code || "غير معروف") + ")."));
   }
   busy($("authBtn"), false);
 };
 
 $("resetBtn").onclick = async () => {
   const email = $("email").value.trim();
-  if (!email) return show($("authMsg"), "err", "اكتب بريدك الإلكتروني أولًا ثم اضغط «نسيت كلمة المرور؟».");
-  try { await sendPasswordResetEmail(auth, email); show($("authMsg"), "ok", "أرسلنا رابط تغيير كلمة المرور إلى بريدك الإلكتروني."); }
-  catch (err) { show($("authMsg"), "err", errors[err.code] || "حدث خطأ. حاول مرة أخرى."); }
+  if (!email) return show($("authMsg"), "err", "اكتب بريدك الإلكتروني في الخانة أولًا ثم اضغط «نسيت كلمة المرور؟».");
+  try {
+    await sendPasswordResetEmail(auth, email);
+    show($("authMsg"), "ok", "تم إرسال رابط إعادة تعيين كلمة المرور إلى (" + email + "). هام جداً: افتح البريد وابحث في مجلد «الرسائل غير المرغوب فيها / Spam» أو ابحث عن كلمة noreply.");
+  } catch (err) {
+    show($("authMsg"), "err", errors[err.code] || ("تعذر إرسال الرسالة (" + (err.code || "خطأ") + ")."));
+  }
 };
 
 $("logout").onclick = () => signOut(auth);
