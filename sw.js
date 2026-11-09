@@ -1,4 +1,4 @@
-const CACHE_NAME = "forqan-pwa-v9";
+const CACHE_NAME = "forqan-pwa-v10";
 
 // ملفات الموقع الأساسية (تُحفظ عند التثبيت)
 const ASSETS = [
@@ -10,13 +10,18 @@ const ASSETS = [
   "./admin.html",
   "./icon.png",
   "./manifest.json",
-  "./firebase-config.js"
+  "./firebase-config.js",
+  "./icon-192.png",
+  "./icon-512.png",
+  "./icon-maskable-512.png"
 ];
 
-// مصادر خارجية نحفظها تلقائيًا بعد أول زيارة: أيقونات Font Awesome وخطوطها + مكتبات Firebase
+// مصادر خارجية نحفظها تلقائيًا بعد أول زيارة: أيقونات Font Awesome + الخطوط + مكتبات Firebase
 const CACHEABLE_HOSTS = [
   "cdnjs.cloudflare.com",
-  "www.gstatic.com"
+  "www.gstatic.com",
+  "fonts.googleapis.com",
+  "fonts.gstatic.com"
 ];
 
 self.addEventListener("install", (e) => {
