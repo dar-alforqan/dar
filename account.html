@@ -12,6 +12,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="robots" content="noindex">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 <style>
 :root{
@@ -45,6 +46,8 @@ body.dark-mode{
 
 *{box-sizing:border-box}
 body{margin:0;font-family:Tahoma,"Segoe UI",Arial,sans-serif;background:var(--cream);color:var(--ink);line-height:1.7;transition:background .25s ease,color .25s ease}
+.fa-solid,.fa-regular,.fa-brands{margin-inline-end:5px}
+.pw-btn .fa-solid{margin-inline-end:0}
 header{background:var(--header-bg);color:var(--header-text);padding:18px 20px;padding-top:calc(18px + env(safe-area-inset-top,0));border-bottom:5px solid var(--gold);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
 .brand-box{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit}
 .brand-box img{width:46px;height:46px;border-radius:50%;object-fit:cover;border:2px solid var(--gold)}
@@ -105,10 +108,10 @@ h2{font-family:"Traditional Arabic","Amiri",Georgia,serif;margin:22px 0 10px;fon
     </div>
   </a>
   <div class="header-actions">
-    <a href="index.html" class="home-link">الرئيسية</a>
-    <a href="library.html" class="home-link">📚 المكتبة</a>
-    <a href="gallery.html" class="home-link">🖼️ المعرض</a>
-    <button id="themeToggle" class="theme-btn" type="button" aria-label="تبديل الوضع">🌙 ليلي</button>
+    <a href="index.html" class="home-link"><i class="fa-solid fa-house"></i> الرئيسية</a>
+    <a href="library.html" class="home-link"><i class="fa-solid fa-book-open"></i> المكتبة</a>
+    <a href="gallery.html" class="home-link"><i class="fa-solid fa-images"></i> المعرض</a>
+    <button id="themeToggle" class="theme-btn" type="button" aria-label="تبديل الوضع"><i class="fa-solid fa-moon"></i> ليلي</button>
   </div>
 </header>
 <main>
@@ -121,16 +124,16 @@ h2{font-family:"Traditional Arabic","Amiri",Georgia,serif;margin:22px 0 10px;fon
   <form id="authForm" novalidate>
     <div id="signupExtra" class="hidden">
       <label for="name">الاسم الكامل</label>
-      <input id="name" autocomplete="name" maxlength="100">
+      <input id="name" autocomplete="name">
       <label for="signupPhone">رقم الهاتف (واتساب)</label>
-      <input id="signupPhone" type="tel" dir="ltr" placeholder="010xxxxxxxx" autocomplete="tel" maxlength="30">
+      <input id="signupPhone" type="tel" dir="ltr" placeholder="010xxxxxxxx" autocomplete="tel">
     </div>
     <label for="email">البريد الإلكتروني</label>
     <input id="email" type="email" autocomplete="email" dir="ltr" required>
     <label for="password">كلمة المرور</label>
     <div class="pw">
       <input id="password" type="password" autocomplete="current-password" dir="ltr" minlength="6" required>
-      <button class="pw-btn" id="pwToggle" type="button" aria-label="إظهار كلمة المرور">👁️</button>
+      <button class="pw-btn" id="pwToggle" type="button" aria-label="إظهار كلمة المرور"><i class="fa-solid fa-eye"></i></button>
     </div>
     <button class="primary" id="authBtn" type="submit">دخول</button>
     <button class="link" id="resetBtn" type="button">نسيت كلمة المرور؟</button>
@@ -141,20 +144,20 @@ h2{font-family:"Traditional Arabic","Amiri",Georgia,serif;margin:22px 0 10px;fon
 <section id="appView" class="hidden">
   <div class="top">
     <strong id="hello"></strong>
-    <button class="link" id="logout" type="button">تسجيل الخروج</button>
+    <button class="link" id="logout" type="button"><i class="fa-solid fa-right-from-bracket"></i> تسجيل الخروج</button>
   </div>
 
   <div class="tabs">
-    <button id="secRegBtn" type="button" aria-selected="true">📝 التسجيل في البرامج</button>
-    <button id="secConsultBtn" type="button" aria-selected="false">🎙️ استشارات الحفظ وتصحيح التلاوة</button>
+    <button id="secRegBtn" type="button" aria-selected="true"><i class="fa-solid fa-pen-to-square"></i> التسجيل في البرامج</button>
+    <button id="secConsultBtn" type="button" aria-selected="false"><i class="fa-solid fa-microphone-lines"></i> استشارات الحفظ وتصحيح التلاوة</button>
   </div>
 
   <div id="regSection">
     <div class="card">
       <h2 style="margin-top:0">تقديم طلب التحاق ببرنامج</h2>
       <form id="regForm" novalidate>
-        <label for="fullName">الاسم الكامل</label><input id="fullName" required autocomplete="name" maxlength="100">
-        <label for="phone">رقم الواتساب</label><input id="phone" type="tel" dir="ltr" required autocomplete="tel" maxlength="30">
+        <label for="fullName">الاسم الكامل</label><input id="fullName" required autocomplete="name">
+        <label for="phone">رقم الواتساب</label><input id="phone" type="tel" dir="ltr" required autocomplete="tel">
         <label for="program">البرنامج المطلوب</label>
         <select id="program"><option>تحفيظ القرآن</option><option>إجازة</option><option>التجويد</option><option>القراءات</option></select>
         <label for="notes">ملاحظات (المستوى الحالي، المواعيد المناسبة)</label><textarea id="notes" rows="3" maxlength="1000"></textarea>
@@ -172,14 +175,14 @@ h2{font-family:"Traditional Arabic","Amiri",Georgia,serif;margin:22px 0 10px;fon
       <p style="margin:0 0 12px;font-size:.92rem;color:var(--text-muted)">سجّل مقطعاً صوتياً قصيراً لتلاوتك (حتى 45 ثانية) أو اكتب سؤالك في الحفظ والتجويد ليقوم الشيخ المختص بسماعها وتوجيهك.</p>
       <form id="consultForm" novalidate>
         <label for="consultTopic">السورة / موضوع الاستشارة</label>
-        <input id="consultTopic" placeholder="مثال: تصحيح تلاوة سورة المزمل / خطة مراجعة 5 أجزاء" maxlength="150" required>
+        <input id="consultTopic" placeholder="مثال: تصحيح تلاوة سورة المزمل / خطة مراجعة 5 أجزاء" required>
 
         <label>تسجيل صوتي للتلاوة (اختياري)</label>
         <div class="recorder-box">
-          <button type="button" id="recordBtn" class="rec-btn">🎙️ اضغط لبدء تسجيل التلاوة</button>
+          <button type="button" id="recordBtn" class="rec-btn"><i class="fa-solid fa-microphone"></i> اضغط لبدء تسجيل التلاوة</button>
           <span id="recTimer" aria-live="polite" style="display:block;margin-top:6px;font-size:.85rem;color:var(--text-muted)"></span>
           <audio id="audioPreview" controls class="hidden" style="width:100%;margin-top:10px"></audio>
-          <button type="button" id="clearAudioBtn" class="link hidden" style="color:var(--err);font-size:.85rem">مسح التسجيل الصوتي</button>
+          <button type="button" id="clearAudioBtn" class="link hidden" style="color:var(--err);font-size:.85rem"><i class="fa-solid fa-trash-can"></i> مسح التسجيل الصوتي</button>
         </div>
 
         <label for="consultNotes">تفاصيل الاستشارة أو السؤال</label>
@@ -198,17 +201,10 @@ h2{font-family:"Traditional Arabic","Amiri",Georgia,serif;margin:22px 0 10px;fon
 </main>
 
 <script type="module">
+import { firebaseConfig, initAppCheck } from "./firebase-config.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getFirestore, collection, doc, setDoc, getDoc, addDoc, query, where, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import { firebaseConfig, initAppCheck } from "./firebase-config.js";
-
-// تهيئة التطبيق والحماية بالشكل الصحيح أولاً
-const app = initializeApp(firebaseConfig);
-initAppCheck(app);
-
-const auth = getAuth(app);
-const db = getFirestore(app);
 
 /* ---------- الوضع الليلي (مع حماية من تعطّل localStorage) ---------- */
 const themeToggle = document.getElementById("themeToggle");
@@ -217,7 +213,9 @@ try { savedTheme = localStorage.getItem("theme"); } catch (e) {}
 const currentTheme = savedTheme || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
 function applyTheme(t) {
   document.body.classList.toggle("dark-mode", t === "dark");
-  themeToggle.textContent = t === "dark" ? "☀️ نهاري" : "🌙 ليلي";
+  themeToggle.innerHTML = t === "dark"
+    ? '<i class="fa-solid fa-sun"></i> نهاري'
+    : '<i class="fa-solid fa-moon"></i> ليلي';
 }
 applyTheme(currentTheme);
 themeToggle.onclick = () => {
@@ -226,6 +224,9 @@ themeToggle.onclick = () => {
   applyTheme(next);
 };
 
+const app = initializeApp(firebaseConfig);
+initAppCheck(app);
+const auth = getAuth(app), db = getFirestore(app);
 const $ = id => document.getElementById(id);
 let mode = "login", unsubReg = null, unsubConsult = null, unsubBlock = null;
 let currentUserPhone = "";
@@ -253,7 +254,9 @@ function busy(btn, on, text) {
 $("pwToggle").onclick = () => {
   const hidden = $("password").type === "password";
   $("password").type = hidden ? "text" : "password";
-  $("pwToggle").textContent = hidden ? "🙈" : "👁️";
+  $("pwToggle").innerHTML = hidden
+    ? '<i class="fa-solid fa-eye-slash"></i>'
+    : '<i class="fa-solid fa-eye"></i>';
   $("pwToggle").setAttribute("aria-label", hidden ? "إخفاء كلمة المرور" : "إظهار كلمة المرور");
 };
 
@@ -352,9 +355,10 @@ $("regForm").onsubmit = async e => {
     const waUrl = `https://wa.me/201099262489?text=${encodeURIComponent(waText)}`;
 
     show($("regMsg"), "ok", "تم إرسال الطلب بنجاح. ");
+    // بعض المتصفحات (خصوصًا الآيفون) تمنع فتح النافذة بعد عملية غير متزامنة، فنضيف رابطًا يدويًا احتياطيًا
     const a = document.createElement("a");
     a.href = waUrl; a.target = "_blank"; a.rel = "noopener";
-    a.textContent = "اضغط هنا لإرسال تفاصيل الطلب على واتساب";
+    a.innerHTML = '<i class="fa-brands fa-whatsapp"></i> اضغط هنا لإرسال تفاصيل الطلب على واتساب';
     $("regMsg").append(a);
     window.open(waUrl, "_blank");
     $("notes").value = "";
@@ -365,6 +369,7 @@ $("regForm").onsubmit = async e => {
 };
 
 /* ---------- التسجيل الصوتي ---------- */
+// حد أقصى لحجم التسجيل (Firestore يقبل مستندًا حتى ~1MB)
 const MAX_AUDIO_CHARS = 900000;
 let mediaRecorder = null;
 let audioChunks = [];
@@ -378,7 +383,7 @@ function resetAudioUI() {
   $("audioPreview").classList.add("hidden");
   $("clearAudioBtn").classList.add("hidden");
   $("recTimer").textContent = "";
-  $("recordBtn").textContent = "🎙️ اضغط لبدء تسجيل التلاوة";
+  $("recordBtn").innerHTML = '<i class="fa-solid fa-microphone"></i> اضغط لبدء تسجيل التلاوة';
 }
 
 $("recordBtn").onclick = async () => {
@@ -392,6 +397,7 @@ $("recordBtn").onclick = async () => {
   clear($("consultMsg"));
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    // نحدد معدل بت منخفض في كل المتصفحات (بما فيها سفاري) حتى يبقى الحجم صغيرًا
     const options = MediaRecorder.isTypeSupported("audio/webm;codecs=opus")
       ? { mimeType: "audio/webm;codecs=opus", audioBitsPerSecond: 24000 }
       : { audioBitsPerSecond: 24000 };
@@ -404,7 +410,7 @@ $("recordBtn").onclick = async () => {
       clearInterval(recInterval);
       stream.getTracks().forEach(t => t.stop());
       $("recordBtn").classList.remove("recording");
-      $("recordBtn").textContent = "🎙️ إعادة تسجيل التلاوة";
+      $("recordBtn").innerHTML = '<i class="fa-solid fa-rotate-right"></i> إعادة تسجيل التلاوة';
       const blob = new Blob(audioChunks, { type: mediaRecorder.mimeType || "audio/webm" });
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -424,7 +430,7 @@ $("recordBtn").onclick = async () => {
 
     mediaRecorder.start();
     $("recordBtn").classList.add("recording");
-    $("recordBtn").textContent = "⏹️ إيقاف التسجيل الآن";
+    $("recordBtn").innerHTML = '<i class="fa-solid fa-stop"></i> إيقاف التسجيل الآن';
     $("recTimer").textContent = "جاري التسجيل: 0 ثانية (الحد الأقصى 45 ثانية)";
     recInterval = setInterval(() => {
       recSeconds++;
@@ -535,7 +541,7 @@ onAuthStateChanged(auth, async user => {
   unsubConsult = onSnapshot(query(collection(db, "consultations"), where("uid", "==", user.uid)), snap => {
     const rows = snap.docs.map(d => d.data()).sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
     const cList = $("consultList"); cList.replaceChildren();
-    if (!rows.length) { cList.append(Object.assign(document.createElement("p"), { textContent: "لا توجد استشارات مرسلة بعد." })); return; }
+    if (!rows.length) { cList.innerHTML = "<p>لا توجد استشارات مرسلة بعد.</p>"; return; }
     rows.forEach(c => {
       const div = document.createElement("div"); div.className = "item";
       const b = document.createElement("strong"); b.textContent = c.topic;
@@ -557,13 +563,13 @@ onAuthStateChanged(auth, async user => {
       replyDiv.className = "reply-box";
       if (c.reply) {
         const label = document.createElement("strong");
-        label.textContent = "✔️ توجيه الشيخ:";
+        label.innerHTML = '<i class="fa-solid fa-circle-check"></i> توجيه الشيخ:';
         const span = document.createElement("span");
         span.style.whiteSpace = "pre-wrap";
         span.textContent = c.reply;
         replyDiv.append(label, document.createElement("br"), span);
       } else {
-        replyDiv.textContent = "⏳ بانتظار سماع الشيخ والرد...";
+        replyDiv.innerHTML = '<i class="fa-solid fa-clock"></i> بانتظار سماع الشيخ والرد...';
       }
       div.append(replyDiv);
       cList.append(div);
