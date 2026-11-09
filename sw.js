@@ -1,4 +1,4 @@
-const CACHE_NAME = "forqan-pwa-v12";
+const CACHE_NAME = "forqan-pwa-v13";
 
 // ملفات الموقع الأساسية (تُحفظ عند التثبيت)
 const ASSETS = [
