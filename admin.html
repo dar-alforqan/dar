@@ -49,6 +49,7 @@ body.dark-mode{
 
 *{box-sizing:border-box}
 body{margin:0;font-family:"Cairo",Tahoma,"Segoe UI",Arial,sans-serif;background:var(--cream);color:var(--ink);line-height:1.6;transition:background .25s ease,color .25s ease}
+body.locked{overflow:hidden}
 .fa-solid,.fa-regular,.fa-brands{margin-inline-end:6px}
 .pw-btn .fa-solid{margin-inline-end:0}
 header{background:var(--header-bg);color:var(--header-text);padding:18px 20px;padding-top:calc(18px + env(safe-area-inset-top,0));border-bottom:5px solid var(--gold);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
@@ -77,7 +78,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
 .btn-outline{padding:8px 16px;background:transparent;border:1px solid var(--wine);color:var(--wine);border-radius:8px;font:inherit;font-weight:700;cursor:pointer}
 
 .admin-tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}
-.tab-btn{flex:1;min-width:170px;padding:12px;border:2px solid var(--wine);background:var(--card-bg);color:var(--wine);border-radius:10px;font:inherit;font-weight:700;cursor:pointer;transition:.2s}
+.tab-btn{flex:1;min-width:160px;padding:12px;border:2px solid var(--wine);background:var(--card-bg);color:var(--wine);border-radius:10px;font:inherit;font-weight:700;cursor:pointer;transition:.2s}
 .tab-btn.active{background:var(--wine);color:var(--on-wine)}
 
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:20px}
@@ -85,6 +86,31 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
 .stat-card i{display:inline-grid;place-items:center;width:38px;height:38px;margin:0 0 6px;border-radius:10px;background:rgba(250,200,27,.18);color:var(--wine);font-size:1rem}
 .stat-card strong{display:block;font-size:1.8rem;color:var(--wine);font-family:"Amiri","Traditional Arabic",Georgia,serif;line-height:1.2}
 .stat-card span{font-size:.88rem;color:var(--text-muted)}
+
+/* لوحة الرسوم البيانية للإدارة (#34) */
+.charts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-bottom:20px}
+.chart-card{background:var(--card-bg);border:1px solid var(--line);border-radius:10px;padding:18px}
+.chart-card h3{margin:0 0 14px;font-family:"Amiri","Traditional Arabic",Georgia,serif;font-size:1.35rem;color:var(--wine)}
+.bar-row{margin-bottom:12px}
+.bar-label{display:flex;justify-content:space-between;font-size:.88rem;font-weight:700;margin-bottom:4px}
+.bar-track{height:12px;background:rgba(128,128,128,.16);border-radius:8px;overflow:hidden}
+.bar-fill{height:100%;background:linear-gradient(90deg,var(--wine),var(--gold));border-radius:8px;transition:width .4s ease}
+.donut-wrap{display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap}
+.donut-legend{display:flex;flex-direction:column;gap:8px;font-size:.88rem}
+.legend-item{display:flex;align-items:center;gap:8px}
+.legend-dot{width:12px;height:12px;border-radius:50%;flex:none}
+.week-chart{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;align-items:end;height:150px;padding-top:16px}
+.week-col{display:flex;flex-direction:column;align-items:center;height:100%;justify-content:flex-end;gap:4px}
+.week-bar{width:100%;max-width:34px;background:var(--gold);border-radius:6px 6px 0 0;min-height:4px;transition:height .4s ease}
+.week-bar.peak{background:var(--wine)}
+.week-val{font-size:.78rem;font-weight:700;color:var(--wine)}
+.week-day{font-size:.78rem;color:var(--text-muted)}
+
+/* مسجل صوت رد الشيخ (#25) */
+.teacher-rec-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:6px}
+.rec-mini-btn{background:#a4161a;color:#fff;border:0;padding:5px 12px;border-radius:16px;font:inherit;font-size:.8rem;font-weight:700;cursor:pointer}
+.rec-mini-btn.recording{background:#1d5a14}
+.rec-mini-clear{background:none;border:0;color:var(--err);font:inherit;font-size:.8rem;text-decoration:underline;cursor:pointer;padding:0}
 
 .toolbar{display:grid;grid-template-columns:1fr repeat(2,auto) auto;gap:10px;align-items:end;margin-bottom:16px}
 @media(max-width:760px){.toolbar{grid-template-columns:1fr 1fr}}
@@ -109,7 +135,18 @@ body.dark-mode .msg.ok{background:#0e2e13;color:#85e085}
 .form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
 .hint{font-size:.82rem;color:var(--text-muted);margin-top:4px;display:block}
 .badge{display:inline-block;min-width:22px;padding:0 7px;border-radius:11px;background:var(--gold);color:#3A181E;font-size:.8rem;line-height:22px}
+.helper-presets{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.preset-btn{background:rgba(250,200,27,.18);border:1px solid var(--wine);color:var(--wine);padding:4px 10px;border-radius:14px;font:inherit;font-size:.8rem;font-weight:700;cursor:pointer}
 .hidden{display:none !important}
+
+/* نافذة تعديل المحتوى (#40) */
+.modal{position:fixed;inset:0;background:rgba(10,3,5,.82);z-index:180;display:none;align-items:center;justify-content:center;padding:16px}
+.modal.open{display:flex}
+.modal-box{background:var(--card-bg);color:var(--ink);width:100%;max-width:650px;max-height:88vh;border-radius:12px;border:2px solid var(--gold);display:flex;flex-direction:column;overflow:hidden}
+.modal-head{background:var(--header-bg);color:var(--gold);padding:14px 18px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.modal-head strong{font-family:"Amiri","Traditional Arabic",Georgia,serif;font-size:1.35rem}
+.modal-close{background:#a4161a;color:#fff;border:0;padding:6px 14px;border-radius:6px;font:inherit;font-size:.86rem;font-weight:700;cursor:pointer}
+.modal-body{padding:18px;overflow-y:auto}
 
 /* إشعار منبثق بدل alert */
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(24px + env(safe-area-inset-bottom,0));z-index:200;max-width:92%;padding:12px 20px;border-radius:10px;font-weight:700;box-shadow:0 6px 18px rgba(0,0,0,.35);display:none;border:1px solid var(--gold);background:var(--header-bg);color:var(--header-text)}
@@ -126,7 +163,7 @@ body.dark-mode .msg.ok{background:#0e2e13;color:#85e085}
     <img src="icon.png" alt="شعار دار الفرقان">
     <div>
       <h1>لوحة تحكم دار الفرقان</h1>
-      <p>الإدارة الشاملة للطلبات، التلاوات، المكتبة، والمعرض، والحسابات</p>
+      <p>الإدارة الشاملة للطلبات، التلاوات، المكتبة، المعرض، التجويد، والحسابات</p>
     </div>
   </a>
   <div class="header-actions">
@@ -172,8 +209,10 @@ body.dark-mode .msg.ok{background:#0e2e13;color:#85e085}
     <div class="admin-tabs">
       <button class="tab-btn active" data-tab="tabRegs" type="button"><i class="fa-solid fa-clipboard-list"></i>طلبات التسجيل</button>
       <button class="tab-btn" data-tab="tabConsults" type="button"><i class="fa-solid fa-microphone-lines"></i>استشارات التلاوة والحفظ <span id="consultsBadge" class="badge hidden">0</span></button>
-      <button class="tab-btn" data-tab="tabMedia" type="button"><i class="fa-solid fa-photo-film"></i>رفع وإدارة المكتبة والمعرض</button>
+      <button class="tab-btn" data-tab="tabMedia" type="button"><i class="fa-solid fa-photo-film"></i>المكتبة والمعرض والمتون</button>
+      <button class="tab-btn" data-tab="tabTajweed" type="button"><i class="fa-solid fa-book-bookmark"></i>دليل التجويد السريع</button>
       <button class="tab-btn" data-tab="tabUsers" type="button"><i class="fa-solid fa-users"></i>سجل الحسابات (<span id="usersCountBadge">0</span>)</button>
+      <button class="tab-btn" data-tab="tabStats" type="button"><i class="fa-solid fa-chart-pie"></i>الإحصائيات والتقارير</button>
     </div>
 
     <div id="tabRegs" class="admin-panel">
@@ -241,7 +280,7 @@ body.dark-mode .msg.ok{background:#0e2e13;color:#85e085}
               <th>الطالب والهاتف</th>
               <th>الموضوع والسؤال</th>
               <th>التسجيل الصوتي</th>
-              <th>رد وتوجيه الشيخ</th>
+              <th>رد وتوجيه الشيخ (نص وصوت)</th>
               <th>إجراء</th>
             </tr>
           </thead>
@@ -254,7 +293,7 @@ body.dark-mode .msg.ok{background:#0e2e13;color:#85e085}
 
     <div id="tabMedia" class="admin-panel hidden">
       <div class="card">
-        <h3 style="margin-top:0;color:var(--wine)"><i class="fa-solid fa-circle-plus"></i>إضافة صورة للمعرض أو كتاب PDF للمكتبة</h3>
+        <h3 style="margin-top:0;color:var(--wine)"><i class="fa-solid fa-circle-plus"></i>إضافة صورة للمعرض أو كتاب PDF أو متن صوتي للمكتبة</h3>
         <form id="mediaForm">
           <div class="form-grid">
             <div>
@@ -262,6 +301,7 @@ body.dark-mode .msg.ok{background:#0e2e13;color:#85e085}
               <select id="mediaType">
                 <option value="image">صورة من الجهاز (تذهب لمعرض الصور للعرض فقط)</option>
                 <option value="pdf">كتاب أو متن على Google Drive (يذهب للمكتبة للتحميل)</option>
+                <option value="audio">متن صوتي للتجويد (يذهب لقسم المتون الصوتية في المكتبة)</option>
               </select>
             </div>
             <div>
@@ -289,6 +329,19 @@ body.dark-mode .msg.ok{background:#0e2e13;color:#85e085}
             <span class="hint">ارفع الملف على Google Drive مهما كان حجمه (حتى 2 جيجا أو أكثر)، واجعل المشاركة "أي شخص لديه الرابط" ثم الصق الرابط هنا.</span>
           </div>
 
+          <div id="audioUploadBox" class="hidden" style="margin-top:8px">
+            <label for="mediaAudioFile">رفع ملف الصوت (MP3 / M4A / WAV) أو وضع رابط مباشر بالأسفل</label>
+            <input id="mediaAudioFile" type="file" accept="audio/*">
+            <label for="mediaAudioUrl">أو رابط الملف الصوتي المباشر (اختياري في حال الرفع من الجهاز)</label>
+            <input id="mediaAudioUrl" type="url" dir="ltr" placeholder="https://...">
+            <label for="mediaText">نص أبيات المتن (اختياري — يظهر للطالب للقراءة أثناء الاستماع، ويمكنك تعديله لاحقاً)</label>
+            <div class="helper-presets">
+              <button type="button" class="preset-btn" data-fill-matn="tuhfa" data-target="mediaText"><i class="fa-solid fa-wand-magic-sparkles"></i>تحميل نص تحفة الأطفال للتعديل</button>
+              <button type="button" class="preset-btn" data-fill-matn="jazariyyah" data-target="mediaText"><i class="fa-solid fa-wand-magic-sparkles"></i>تحميل نص الجزرية للتعديل</button>
+            </div>
+            <textarea id="mediaText" rows="5" style="font-family:'Amiri',serif;font-size:1.15rem;margin-top:6px" placeholder="اكتب أبيات المتن هنا..."></textarea>
+          </div>
+
           <button id="mediaSubmitBtn" class="primary" type="submit" style="margin-top:16px"><i class="fa-solid fa-cloud-arrow-up"></i>حفظ ونشر في القسم المخصص</button>
           <div id="mediaMsg" class="msg" role="status"></div>
         </form>
@@ -308,6 +361,58 @@ body.dark-mode .msg.ok{background:#0e2e13;color:#85e085}
           </thead>
           <tbody id="mediaTableBody">
             <tr><td colspan="6" style="text-align:center;padding:24px">جاري تحميل محتويات المكتبة والمعرض...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- إدارة دليل التجويد السريع (#17) -->
+    <div id="tabTajweed" class="admin-panel hidden">
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+          <h3 id="tajweedFormHeading" style="margin:0;color:var(--wine)"><i class="fa-solid fa-circle-plus"></i>إضافة حكم أو باب جديد في دليل التجويد السريع</h3>
+          <button id="seedTajweedBtn" class="btn-outline" type="button" style="font-size:.85rem"><i class="fa-solid fa-download"></i>استيراد القواعد الأساسية الـ 6 للتعديل</button>
+        </div>
+        <form id="tajweedForm">
+          <input type="hidden" id="tajweedEditId">
+          <div class="form-grid">
+            <div>
+              <label for="tajweedOrder">رقم الترتيب</label>
+              <input id="tajweedOrder" type="number" min="1" value="1" required>
+            </div>
+            <div style="grid-column:span 2">
+              <label for="tajweedTitle">عنوان الباب أو الحكم</label>
+              <input id="tajweedTitle" placeholder="مثال: أحكام النون الساكنة والتنوين" required>
+            </div>
+          </div>
+
+          <label for="tajweedContent">شرح الحكم والقواعد</label>
+          <textarea id="tajweedContent" rows="4" placeholder="اكتب شرح الحكم وحروفه ومقدار الغنة أو المد بوضوح..." required></textarea>
+
+          <label for="tajweedExamples">أمثلة قرآنية توضيحية (اختياري)</label>
+          <input id="tajweedExamples" placeholder="مثال: مَنْ آمَنَ · سَمِيعٌ عَلِيمٌ · مِن بَعْدِ">
+
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px">
+            <button id="tajweedSubmitBtn" class="primary" type="submit" style="margin-top:0"><i class="fa-solid fa-floppy-disk"></i>حفظ ونشر في دليل التجويد</button>
+            <button id="tajweedCancelEditBtn" class="btn-outline hidden" type="button">إلغاء التعديل</button>
+          </div>
+          <div id="tajweedMsg" class="msg" role="status"></div>
+        </form>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:70px">الترتيب</th>
+              <th>عنوان الباب / الحكم</th>
+              <th>الشرح</th>
+              <th>الأمثلة القرآنية</th>
+              <th>تعديل / حذف</th>
+            </tr>
+          </thead>
+          <tbody id="tajweedTableBody">
+            <tr><td colspan="5" style="text-align:center;padding:24px">جاري تحميل أحكام دليل التجويد...</td></tr>
           </tbody>
         </table>
       </div>
@@ -335,8 +440,67 @@ body.dark-mode .msg.ok{background:#0e2e13;color:#85e085}
         </table>
       </div>
     </div>
+
+    <!-- لوحة الإحصائيات والتقارير (#34) -->
+    <div id="tabStats" class="admin-panel hidden">
+      <div class="stats" id="analyticsKpis"></div>
+      <div class="charts-grid">
+        <div class="chart-card">
+          <h3><i class="fa-solid fa-graduation-cap"></i>توزيع الطلاب حسب البرامج التعليمية</h3>
+          <div id="programBars"></div>
+        </div>
+        <div class="chart-card">
+          <h3><i class="fa-solid fa-chart-donut"></i>حالة الطلبات واستشارات التلاوة</h3>
+          <div id="statusDonuts" class="donut-wrap"></div>
+        </div>
+      </div>
+      <div class="chart-card">
+        <h3><i class="fa-solid fa-calendar-week"></i>نشاط إرسال الطلبات والتلاوات خلال أيام الأسبوع</h3>
+        <div id="weeklyActivityChart" class="week-chart"></div>
+      </div>
+    </div>
   </section>
 </main>
+
+<!-- نافذة تعديل عناصر المكتبة والمتون الصوتية والمعرض (#40) -->
+<div id="editMediaModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="editMediaModalTitle">
+  <div class="modal-box">
+    <div class="modal-head">
+      <strong id="editMediaModalTitle"><i class="fa-solid fa-pen-to-square"></i>تعديل المحتوى</strong>
+      <button id="closeEditMediaModal" class="modal-close" type="button"><i class="fa-solid fa-xmark"></i>إغلاق</button>
+    </div>
+    <div class="modal-body">
+      <form id="editMediaForm">
+        <input type="hidden" id="editMediaId">
+        <input type="hidden" id="editMediaType">
+        <label for="editMediaTitle">العنوان</label>
+        <input id="editMediaTitle" required>
+
+        <label for="editMediaCategory">التصنيف الفرعي</label>
+        <select id="editMediaCategory"></select>
+
+        <label for="editMediaDesc">وصف مختصر</label>
+        <input id="editMediaDesc">
+
+        <div id="editMediaUrlBox" class="hidden">
+          <label for="editMediaUrl">الرابط (Google Drive أو رابط الصوت المباشر)</label>
+          <input id="editMediaUrl" type="url" dir="ltr">
+        </div>
+
+        <div id="editMediaTextBox" class="hidden">
+          <label for="editMediaText">نص أبيات المتن (يمكنك تعديل التشكيل أو الأبيات بحرية)</label>
+          <div class="helper-presets">
+            <button type="button" class="preset-btn" data-fill-matn="tuhfa" data-target="editMediaText"><i class="fa-solid fa-wand-magic-sparkles"></i>إدراج نص تحفة الأطفال</button>
+            <button type="button" class="preset-btn" data-fill-matn="jazariyyah" data-target="editMediaText"><i class="fa-solid fa-wand-magic-sparkles"></i>إدراج نص الجزرية</button>
+          </div>
+          <textarea id="editMediaText" rows="9" style="font-family:'Amiri',serif;font-size:1.15rem;margin-top:6px"></textarea>
+        </div>
+
+        <button id="saveEditMediaBtn" class="primary" type="submit" style="width:100%;margin-top:16px"><i class="fa-solid fa-floppy-disk"></i>حفظ التعديلات</button>
+      </form>
+    </div>
+  </div>
+</div>
 
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
@@ -347,14 +511,91 @@ import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWith
 import { getFirestore, collection, onSnapshot, doc, setDoc, addDoc, updateDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getStorage, ref as storageRef, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
-// ملاحظة أمنية: هذه القائمة تتحكم في ما تعرضه الواجهة فقط.
-// الحماية الحقيقية لازم تكون في Firestore Rules (اقرأ الملاحظات المرفقة).
 const ADMIN_EMAILS = [
   "bdallhhshad7@gmail.com",
   "daralforqan@gmail.com"
 ];
 
-/* ---------- الوضع الليلي (مع حماية من تعطّل localStorage) ---------- */
+/* ---------- النصوص الافتراضية للمتون وقواعد التجويد لتسهيل الاستيراد والتعديل ---------- */
+const MATN_PRESETS = {
+  tuhfa: `المقدمة
+يَقُولُ رَاجِي رَحْمَةِ الْغَفُورِ * دَوْمًا سُلَيْمَانُ هُوَ الْجَمْزُورِي
+الْحَمْدُ لِلَّهِ مُصَلِّيًا عَلَى * مُحَمَّدٍ وَآلِهِ وَمَنْ تَلَا
+وَبَعْدُ هَذَا النَّظْمُ لِلْمُرِيدِ * فِي النُّونِ وَالتَّنْوِينِ وَالْمُدُودِ
+سَمَّيْتُهُ بِتُحْفَةِ الْأَطْفَالِ * عَنْ شَيْخِنَا الْمِيهِيِّ ذِي الْكَمَالِ
+أَرْجُو بِهِ أَنْ يَنْفَعَ الطُّلَّابَا * وَالْأَجْرَ وَالْقَبُولَ وَالثَّوَابَا
+
+أحكام النون الساكنة والتنوين
+لِلنُّونِ إِنْ تَسْكُنْ وَلِلتَّنْوِينِ * أَرْبَعُ أَحْكَامٍ فَخُذْ تَبْيِينِي
+فَالْأَوَّلُ الْإِظْهَارُ قَبْلَ أَحْرُفِ * لِلْحَلْقِ سِتٌّ رُتِّبَتْ فَلْتَعْرِفِ
+هَمْزٌ فَهَاءٌ ثُمَّ عَيْنٌ حَاءُ * مُهْمَلَتَانِ ثُمَّ غَيْنٌ خَاءُ
+وَالثَّانِي إِدْغَامٌ بِسِتَّةٍ أَتَتْ * فِي يَرْمَلُونَ عِنْدَهُمْ قَدْ ثَبَتَتْ
+لَكِنَّهَا قِسْمَانِ قِسْمٌ يُدْغَمَا * فِيهِ بِغُنَّةٍ بِيَنْمُو عُلِمَا
+إِلَّا إِذَا كَانَا بِكِلْمَةٍ فَلَا * تُدْغِمْ كَدُنْيَا ثُمَّ صِنْوَانٍ تَلَا
+وَالثَّانِي إِدْغَامٌ بِغَيْرِ غُنَّهْ * فِي اللَّامِ وَالرَّا ثُمَّ كَرِّرَنَّهْ
+وَالثَّالِثُ الْإِقْلَابُ عِنْدَ الْبَاءِ * مِيمًا بِغُنَّةٍ مَعَ الْإِخْفَاءِ
+وَالرَّابِعُ الْإِخْفَاءُ عِنْدَ الْفَاضِلِ * مِنَ الْحُرُوفِ وَاجِبٌ لِلْفَاضِلِ
+فِي خَمْسَةٍ مِنْ بَعْدِ عَشْرٍ رَمْزُهَا * فِي كِلْمِ هَذَا الْبَيْتِ قَدْ ضَمَّنْتُهَا
+صِفْ ذَا ثَنَا كَمْ جَادَ شَخْصٌ قَدْ سَمَا * دُمْ طَيِّبًا زِدْ فِي تُقًى ضَعْ ظَالِمَا`,
+
+  jazariyyah: `المقدمة
+يَقُولُ رَاجِي عَفْوِ رَبٍّ سَامِعِ * مُحَمَّدُ بْنُ الْجَزَرِيِّ الشَّافِعِي
+الْحَمْدُ لِلَّهِ وَصَلَّى اللَّهُ * عَلَى نَبِيِّهِ وَمُصْطَفَاهُ
+مُحَمَّدٍ وَآلِهِ وَصَحْبِهِ * وَمُقْرِئِ الْقُرْآنِ مَعْ مُحِبِّهِ
+وَبَعْدُ إِنَّ هَذِهِ مُقَدِّمَهْ * فِيمَا عَلَى قَارِئِهِ أَنْ يَعْلَمَهْ
+إِذْ وَاجِبٌ عَلَيْهِمُ مُحَتَّمُ * قَبْلَ الشُّرُوعِ أَوَّلًا أَنْ يَعْلَمُوا
+مَخَارِجَ الْحُرُوفِ وَالصِّفَاتِ * لِيَلْفِظُوا بِأَفْصَحِ اللُّغَاتِ
+
+باب مخارج الحروف
+مَخَارِجُ الْحُرُوفِ سَبْعَةَ عَشَرْ * عَلَى الَّذِي يَخْتَارُهُ مَنِ اخْتَبَرْ
+فَأَلِفُ الْجَوْفِ وَأُخْتَاهَا وَهِي * حُرُوفُ مَدٍّ لِلْهَوَاءِ تَنْتَهِي
+ثُمَّ لِأَقْصَى الْحَلْقِ هَمْزٌ هَاءُ * ثُمَّ لِوَسْطِهِ فَعَيْنٌ حَاءُ
+أَدْنَاهُ غَيْنٌ خَاؤُهَا وَالْقَافُ * أَقْصَى اللِّسَانِ فَوْقُ ثُمَّ الْكَافُ
+أَسْفَلُ وَالْوَسْطُ فَجِيمُ الشِّينُ يَا * وَالضَّادُ مِنْ حَافَتِهِ إِذْ وَلِيَا
+الْأَضْرَاسَ مِنْ أَيْسَرَ أَوْ يُمْنَاهَا * وَاللَّامُ أَدْنَاهَا لِمُنْتَهَاهَا
+وَالنُّونُ مِنْ طَرَفِهِ تَحْتُ اجْعَلُوا * وَالرَّا يُدَانِيهِ لِظَهْرٍ أَدْخَلُوا`
+};
+
+const DEFAULT_TAJWEED_SEED = [
+  {
+    order: 1,
+    title: "1. أحكام النون الساكنة والتنوين",
+    content: "الإظهار الحلقي: عند حروف الحلق الستة (ء، هـ، ع، ح، غ، خ).\nالإدغام: في (يرملون) — بغنة في (ينمو)، وبغير غنة في (ل، ر).\nالإقلاب: قلب النون الساكنة أو التنوين ميماً مخفاة بغنة عند حرف (ب).\nالإخفاء الحقيقي: عند باقي الحروف (15 حرفاً) مع غنة بمقدار حركتين.",
+    examples: "مَنْ آمَنَ · مَن يَقُولُ · مِن رَّبِّهِمْ · مِن بَعْدِ · كُنتُمْ"
+  },
+  {
+    order: 2,
+    title: "2. أحكام الميم الساكنة والمشددتين",
+    content: "الإخفاء الشفوي: ميم ساكنة بعدها (ب) مع غنة حركتين.\nالإدغام الشفوي: ميم ساكنة بعدها (م) متحركة مع غنة.\nالإظهار الشفوي: عند باقي الحروف (أشد إظهاراً عند الواو والفاء).\nالنون والميم المشددتان: تُغَنّان بمقدار حركتين دائماً.",
+    examples: "تَرْمِيهِم بِحِجَارَةٍ · لَهُم مَّا يَشَاءُونَ · هُمْ فِيهَا · إِنَّ · ثُمَّ"
+  },
+  {
+    order: 3,
+    title: "3. القلقلة ومراتبها",
+    content: "حروفها خمسة مجموعة في (قُطْبُ جَدٍّ) وتُقلقل إذا كانت ساكنة سكوناً أصلياً أو عارضاً للوقف، وأقواها المشدد الموقوف عليه ثم الساكن الموقوف عليه ثم الساكن وسط الكلمة.",
+    examples: "الْفَلَقْ · يَدْخُلُونَ · الْحَقّْ"
+  },
+  {
+    order: 4,
+    title: "4. المدود ومقاديرها",
+    content: "المد الطبيعي: يمد بمقدار حركتين.\nالمد المتصل: حرف مد وبعده همزة في نفس الكلمة — 4 أو 5 حركات.\nالمد المنفصل: حرف مد آخر الكلمة وهمزة أول الكلمة التالية — 4 أو 5 حركات.\nالعارض للسكون: حرف مد قبل الحرف الموقوف عليه — 2 أو 4 أو 6 حركات.\nالمد اللازم: حرف مد بعده سكون أصلي — 6 حركات لزوماً.",
+    examples: "قَالَ · السَّمَاءُ · يَا أَيُّهَا · الْعَالَمِينَ · الضَّالِّينَ"
+  },
+  {
+    order: 5,
+    title: "5. التفخيم والترقيق",
+    content: "حروف التفخيم دائماً (الاستعلاء): مجموعة في (خُصَّ ضَغْطٍ قِظْ).\nالراء: تُفخّم إذا كانت مفتوحة أو مضمومة أو ساكنة قبلها فتح أو ضم، وتُرقّق إذا كانت مكسورة أو ساكنة قبلها كسر أصلي وليس بعدها حرف استعلاء.",
+    examples: "خَالِدِينَ · قُلْ · رَبَّنَا · فِرْعَوْنَ"
+  },
+  {
+    order: 6,
+    title: "6. مخارج الحروف العامة",
+    content: "الجوف (حروف المد الثلاثة) · الحلق (ء هـ / ع ح / غ خ) · اللسان (18 حرفاً) · الشفتان (ف، ب، م، و) · الخيشوم (مخرج الغنة).",
+    examples: "مخارج الحروف سبعة عشر على المختار"
+  }
+];
+
+/* ---------- الوضع الليلي ---------- */
 const themeToggle = document.getElementById("themeToggle");
 let savedTheme = null;
 try { savedTheme = localStorage.getItem("theme"); } catch (e) {}
@@ -376,7 +617,6 @@ const app = initializeApp(firebaseConfig);
 initAppCheck(app);
 const auth = getAuth(app), db = getFirestore(app);
 auth.languageCode = "ar";
-// Firebase Storage للصور (لو غير مفعّل نرجع للحفظ داخل Firestore تلقائيًا)
 let storage = null;
 try { storage = getStorage(app); } catch (e) {}
 
@@ -386,8 +626,8 @@ async function removeStorageFile(path) {
   catch (e) { console.warn("Storage delete failed:", e); }
 }
 const $ = id => document.getElementById(id);
-let allRows = [], allUsers = [], allMedia = [], allConsults = [];
-let unsubRegs = null, unsubUsers = null, unsubMedia = null, unsubConsults = null;
+let allRows = [], allUsers = [], allMedia = [], allConsults = [], allTajweed = [];
+let unsubRegs = null, unsubUsers = null, unsubMedia = null, unsubConsults = null, unsubTajweed = null;
 
 /* ---------- تنبيهات الطلبات والاستشارات الجديدة ---------- */
 const BASE_TITLE = document.title;
@@ -448,7 +688,6 @@ function toast(text, type = "ok") {
   toastTimer = setTimeout(() => t.classList.remove("show"), 3500);
 }
 
-// تطبيع النص العربي للبحث: يتجاهل التشكيل واختلاف الألف والياء والتاء المربوطة
 function norm(s) {
   return (s || "").toLowerCase()
     .replace(/[\u064B-\u065F\u0670\u0640]/g, "")
@@ -462,7 +701,6 @@ function isHttpUrl(u) {
   catch (e) { return false; }
 }
 
-// حماية ملفات CSV من حقن المعادلات عند فتحها في Excel
 function csvCell(val) {
   let s = String(val ?? "");
   if (/^[=+\-@\t\r]/.test(s)) s = "'" + s;
@@ -486,6 +724,27 @@ function emptyRow(tbody, cols, text) {
   tbody.append(tr);
 }
 
+function blobToDataUrl(blob) {
+  return new Promise((resolve, reject) => {
+    const r = new FileReader();
+    r.onloadend = () => resolve(r.result);
+    r.onerror = reject;
+    r.readAsDataURL(blob);
+  });
+}
+
+/* أزرار تحميل نصوص المتون الافتراضية للتعديل */
+document.querySelectorAll("[data-fill-matn]").forEach(btn => {
+  btn.onclick = () => {
+    const key = btn.dataset.fillMatn;
+    const targetEl = $(btn.dataset.target);
+    if (targetEl && MATN_PRESETS[key]) {
+      targetEl.value = MATN_PRESETS[key];
+      toast("تم تحميل النص في مربع الكتابة — يمكنك تعديله الآن");
+    }
+  };
+});
+
 /* ---------- التبويبات ---------- */
 document.querySelectorAll(".tab-btn").forEach(btn => {
   btn.onclick = () => {
@@ -493,28 +752,34 @@ document.querySelectorAll(".tab-btn").forEach(btn => {
     document.querySelectorAll(".admin-panel").forEach(p => p.classList.add("hidden"));
     btn.classList.add("active");
     $(btn.dataset.tab).classList.remove("hidden");
+    if (btn.dataset.tab === "tabStats") renderStats();
   };
 });
 
 const CATEGORIES = {
   image: ["الحلقات القرآنية", "حفلات التكريم والإجازات", "المسابقات والأنشطة"],
-  pdf: ["متون التجويد", "متون القراءات", "علوم القرآن والتفسير", "آداب وحلقات"]
+  pdf: ["متون التجويد", "متون القراءات", "علوم القرآن والتفسير", "آداب وحلقات"],
+  audio: ["متن تحفة الأطفال", "متن المقدمة الجزرية", "متون القراءات", "دروس صوتية"]
 };
 
-function updateCategoryOptions() {
-  const type = $("mediaType").value;
-  const sel = $("mediaCategory");
+function populateCategorySelect(sel, type, selectedVal = "") {
   sel.replaceChildren();
-  CATEGORIES[type].forEach(c => {
+  (CATEGORIES[type] || []).forEach(c => {
     const opt = document.createElement("option");
     opt.value = c;
     opt.textContent = c;
+    if (c === selectedVal) opt.selected = true;
     sel.append(opt);
   });
+}
 
-  const isImage = type === "image";
-  $("imageUploadBox").classList.toggle("hidden", !isImage);
-  $("pdfLinkBox").classList.toggle("hidden", isImage);
+function updateCategoryOptions() {
+  const type = $("mediaType").value;
+  populateCategorySelect($("mediaCategory"), type);
+
+  $("imageUploadBox").classList.toggle("hidden", type !== "image");
+  $("pdfLinkBox").classList.toggle("hidden", type !== "pdf");
+  $("audioUploadBox").classList.toggle("hidden", type !== "audio");
 }
 $("mediaType").onchange = updateCategoryOptions;
 updateCategoryOptions();
@@ -542,7 +807,6 @@ $("loginForm").onsubmit = async e => {
   try {
     await signInWithEmailAndPassword(auth, email, pass);
   } catch (err) {
-    // إذا كان البريد ضمن قائمة الإدارة ولم يُنشأ بعد في Firebase Auth، ننشئه تلقائياً بكلمة المرور المكتوبة
     if (isAdminEmail && (err.code === "auth/user-not-found" || err.code === "auth/invalid-credential")) {
       try {
         await createUserWithEmailAndPassword(auth, email, pass);
@@ -591,7 +855,7 @@ $("resetBtn").onclick = async () => {
 $("logoutBtn").onclick = () => signOut(auth);
 $("logoutDenied").onclick = () => signOut(auth);
 
-/* ---------- ضغط الصور (مع ضمان البقاء تحت حد Firestore ~1MB) ---------- */
+/* ---------- ضغط الصور ورفع الملفات ---------- */
 const MAX_IMG_CHARS = 850000;
 
 function compressImage(file, maxWidth = 1100, quality = 0.8) {
@@ -632,7 +896,6 @@ function loadImage(file) {
   });
 }
 
-// الأفضل: ضغط الصورة بجودة أعلى ورفعها إلى Storage وحفظ الرابط فقط. لو فشل نرجع null.
 async function uploadImage(file) {
   if (!storage) return null;
   try {
@@ -654,6 +917,20 @@ async function uploadImage(file) {
   }
 }
 
+async function uploadAudioToStorage(blobOrFile, folder = "media_audio") {
+  if (!storage || !blobOrFile) return null;
+  try {
+    const ext = (blobOrFile.name && blobOrFile.name.split(".").pop()) || "webm";
+    const path = `${folder}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+    const r = storageRef(storage, path);
+    await uploadBytes(r, blobOrFile, { contentType: blobOrFile.type || "audio/webm" });
+    return { url: await getDownloadURL(r), path };
+  } catch (err) {
+    console.warn("Audio storage upload failed:", err);
+    return null;
+  }
+}
+
 /* ---------- نموذج إضافة المحتوى ---------- */
 $("mediaForm").onsubmit = async e => {
   e.preventDefault();
@@ -662,7 +939,9 @@ $("mediaForm").onsubmit = async e => {
   const title = $("mediaTitle").value.trim();
   const description = $("mediaDesc").value.trim();
   const file = $("mediaFile").files[0];
-  let finalUrl = $("mediaUrl").value.trim();
+  const audioFile = $("mediaAudioFile").files[0];
+  let finalUrl = type === "audio" ? $("mediaAudioUrl").value.trim() : $("mediaUrl").value.trim();
+  const textContent = type === "audio" ? $("mediaText").value.trim() : "";
 
   if (type === "image" && !file) {
     $("mediaMsg").className = "msg err";
@@ -682,6 +961,18 @@ $("mediaForm").onsubmit = async e => {
     return;
   }
 
+  if (type === "audio" && !audioFile && !finalUrl && !textContent) {
+    $("mediaMsg").className = "msg err";
+    $("mediaMsg").textContent = "يرجى اختيار ملف صوتي أو لصق رابط الصوت أو كتابة نص المتن.";
+    return;
+  }
+
+  if (type === "audio" && !audioFile && finalUrl && !isHttpUrl(finalUrl)) {
+    $("mediaMsg").className = "msg err";
+    $("mediaMsg").textContent = "الرابط الصوتي غير صحيح. يجب أن يبدأ بـ https://";
+    return;
+  }
+
   $("mediaSubmitBtn").disabled = true;
   $("mediaMsg").className = "msg ok";
   $("mediaMsg").textContent = "جاري الحفظ والنشر...";
@@ -692,7 +983,14 @@ $("mediaForm").onsubmit = async e => {
     if (type === "image") {
       const up = await uploadImage(file);
       if (up) { finalUrl = up.url; storagePath = up.path; inStorage = true; }
-      else { finalUrl = await compressImage(file); }   // احتياطي: الحفظ داخل Firestore
+      else { finalUrl = await compressImage(file); }
+    } else if (type === "audio" && audioFile) {
+      const up = await uploadAudioToStorage(audioFile, "media_audio");
+      if (up) { finalUrl = up.url; storagePath = up.path; inStorage = true; }
+      else {
+        finalUrl = await blobToDataUrl(audioFile);
+        if (finalUrl.length > MAX_IMG_CHARS) throw new Error("too-large");
+      }
     }
 
     await addDoc(collection(db, "media"), {
@@ -701,6 +999,7 @@ $("mediaForm").onsubmit = async e => {
       title,
       description,
       url: finalUrl,
+      ...(textContent ? { textContent } : {}),
       ...(storagePath ? { storagePath } : {}),
       createdAt: serverTimestamp()
     });
@@ -708,18 +1007,212 @@ $("mediaForm").onsubmit = async e => {
     $("mediaMsg").className = "msg ok";
     $("mediaMsg").textContent = type === "image"
       ? "تم رفع الصورة وإضافتها إلى معرض الصور بنجاح!" + (inStorage ? "" : " (حُفظت داخل قاعدة البيانات لأن Firebase Storage غير مفعّل)")
-      : "تم إضافة الكتاب إلى مكتبة المتون بنجاح!";
+      : type === "audio"
+        ? "تم حفظ المتن الصوتي في مكتبة المتون الصوتية بنجاح!"
+        : "تم إضافة الكتاب إلى مكتبة المتون بنجاح!";
     $("mediaForm").reset();
     updateCategoryOptions();
   } catch (err) {
     if (storagePath) removeStorageFile(storagePath);
     $("mediaMsg").className = "msg err";
     $("mediaMsg").textContent = err && err.message === "too-large"
-      ? "الصورة كبيرة جدًا حتى بعد الضغط. اختر صورة أصغر."
+      ? "حجم الملف كبير جدًا. اختر ملفًا أصغر أو فعّل Firebase Storage."
       : "حدث خطأ أثناء الحفظ. تأكد من تحديث قواعد Firestore Rules.";
   }
   $("mediaSubmitBtn").disabled = false;
 };
+
+/* ---------- نافذة تعديل المحتوى ونصوص المتون الصوتية (#40) ---------- */
+const editMediaModal = $("editMediaModal");
+function openEditMediaModal(m) {
+  $("editMediaId").value = m.id;
+  $("editMediaType").value = m.type || "pdf";
+  $("editMediaTitle").value = m.title || "";
+  populateCategorySelect($("editMediaCategory"), m.type || "pdf", m.category || "");
+  $("editMediaDesc").value = m.description || "";
+
+  const showUrl = m.type === "pdf" || (m.type === "audio" && (!m.url || !m.url.startsWith("data:")));
+  $("editMediaUrlBox").classList.toggle("hidden", !showUrl);
+  $("editMediaUrl").value = showUrl ? (m.url || "") : "";
+
+  const isAudio = m.type === "audio";
+  $("editMediaTextBox").classList.toggle("hidden", !isAudio);
+  $("editMediaText").value = isAudio ? (m.textContent || "") : "";
+
+  editMediaModal.classList.add("open");
+  document.body.classList.add("locked");
+}
+function closeEditMedia() {
+  editMediaModal.classList.remove("open");
+  document.body.classList.remove("locked");
+}
+$("closeEditMediaModal").onclick = closeEditMedia;
+editMediaModal.addEventListener("click", e => { if (e.target === editMediaModal) closeEditMedia(); });
+
+$("editMediaForm").onsubmit = async e => {
+  e.preventDefault();
+  const id = $("editMediaId").value;
+  const type = $("editMediaType").value;
+  const title = $("editMediaTitle").value.trim();
+  const category = $("editMediaCategory").value;
+  const description = $("editMediaDesc").value.trim();
+  const newUrl = $("editMediaUrl").value.trim();
+
+  if (!title) return toast("العنوان مطلوب", "err");
+
+  const updates = { title, category, description };
+  if (!$("editMediaUrlBox").classList.contains("hidden")) {
+    if (type === "pdf" && !isHttpUrl(newUrl)) {
+      return toast("الرابط غير صحيح. يجب أن يبدأ بـ https://", "err");
+    }
+    if (newUrl) {
+      if (!isHttpUrl(newUrl)) return toast("الرابط غير صحيح. يجب أن يبدأ بـ https://", "err");
+      updates.url = newUrl;
+    } else if (type === "audio") {
+      updates.url = "";
+    }
+  }
+  if (type === "audio") {
+    updates.textContent = $("editMediaText").value.trim();
+  }
+
+  $("saveEditMediaBtn").disabled = true;
+  try {
+    await updateDoc(doc(db, "media", id), updates);
+    toast("تم حفظ التعديلات بنجاح");
+    closeEditMedia();
+  } catch (err) {
+    toast("تعذر حفظ التعديل. تأكد من صلاحيات Firestore.", "err");
+  }
+  $("saveEditMediaBtn").disabled = false;
+};
+
+/* ---------- إدارة دليل التجويد السريع (#17) ---------- */
+function resetTajweedForm() {
+  $("tajweedEditId").value = "";
+  $("tajweedFormHeading").innerHTML = '<i class="fa-solid fa-circle-plus"></i>إضافة حكم أو باب جديد في دليل التجويد السريع';
+  $("tajweedSubmitBtn").innerHTML = '<i class="fa-solid fa-floppy-disk"></i>حفظ ونشر في دليل التجويد';
+  $("tajweedCancelEditBtn").classList.add("hidden");
+  $("tajweedForm").reset();
+  $("tajweedOrder").value = allTajweed.length + 1;
+}
+
+$("tajweedCancelEditBtn").onclick = resetTajweedForm;
+
+$("seedTajweedBtn").onclick = async () => {
+  if (allTajweed.length && !confirm("توجد قواعد مسجلة بالفعل. هل تريد إضافة القواعد الأساسية الـ 6 إليها؟")) return;
+  $("seedTajweedBtn").disabled = true;
+  try {
+    for (const rule of DEFAULT_TAJWEED_SEED) {
+      await addDoc(collection(db, "tajweed_guide"), {
+        ...rule,
+        createdAt: serverTimestamp()
+      });
+    }
+    toast("تم استيراد القواعد الأساسية الـ 6 بنجاح — يمكنك تعديلها الآن");
+  } catch (err) {
+    toast("تعذر الاستيراد. تأكد من صلاحيات مجموعة tajweed_guide في Firestore Rules.", "err");
+  }
+  $("seedTajweedBtn").disabled = false;
+};
+
+$("tajweedForm").onsubmit = async e => {
+  e.preventDefault();
+  const editId = $("tajweedEditId").value;
+  const order = parseInt($("tajweedOrder").value, 10) || 1;
+  const title = $("tajweedTitle").value.trim();
+  const content = $("tajweedContent").value.trim();
+  const examples = $("tajweedExamples").value.trim();
+
+  if (!title || !content) {
+    $("tajweedMsg").className = "msg err";
+    $("tajweedMsg").textContent = "يرجى كتابة عنوان الباب وشرح الحكم.";
+    return;
+  }
+
+  $("tajweedSubmitBtn").disabled = true;
+  try {
+    if (editId) {
+      await updateDoc(doc(db, "tajweed_guide", editId), { order, title, content, examples });
+      toast("تم تحديث حكم التجويد بنجاح");
+    } else {
+      await addDoc(collection(db, "tajweed_guide"), { order, title, content, examples, createdAt: serverTimestamp() });
+      toast("تمت إضافة الباب إلى دليل التجويد بنجاح");
+    }
+    $("tajweedMsg").className = "msg";
+    resetTajweedForm();
+  } catch (err) {
+    $("tajweedMsg").className = "msg err";
+    $("tajweedMsg").textContent = "تعذر الحفظ. تأكد من السماح للإدارة بالكتابة في مجموعة tajweed_guide في Firestore Rules.";
+  }
+  $("tajweedSubmitBtn").disabled = false;
+};
+
+function renderTajweedTable() {
+  const tbody = $("tajweedTableBody");
+  if (!allTajweed.length) {
+    emptyRow(tbody, 5, "لم تتم إضافة أحكام مخصصة بعد (يعرض الموقع حالياً القواعد الافتراضية، ويمكنك استيرادها بالأعلى لتعديلها).");
+    return;
+  }
+  tbody.replaceChildren();
+
+  allTajweed.forEach(item => {
+    const tr = document.createElement("tr");
+
+    const tdOrder = document.createElement("td");
+    tdOrder.style.fontWeight = "700";
+    tdOrder.textContent = item.order ?? "—";
+
+    const tdTitle = document.createElement("td");
+    tdTitle.style.fontWeight = "700";
+    tdTitle.textContent = item.title || "";
+
+    const tdContent = document.createElement("td");
+    tdContent.style.maxWidth = "340px";
+    tdContent.style.whiteSpace = "pre-line";
+    tdContent.textContent = item.content || "";
+
+    const tdEx = document.createElement("td");
+    tdEx.style.fontFamily = "'Amiri', serif";
+    tdEx.style.fontSize = "1.05rem";
+    tdEx.textContent = item.examples || "—";
+
+    const tdAct = document.createElement("td");
+    const editBtn = document.createElement("button");
+    editBtn.className = "btn-outline";
+    editBtn.style.cssText = "padding:5px 10px;margin-inline-end:6px";
+    editBtn.innerHTML = '<i class="fa-solid fa-pen-to-square"></i>تعديل';
+    editBtn.onclick = () => {
+      $("tajweedEditId").value = item.id;
+      $("tajweedOrder").value = item.order || 1;
+      $("tajweedTitle").value = item.title || "";
+      $("tajweedContent").value = item.content || "";
+      $("tajweedExamples").value = item.examples || "";
+      $("tajweedFormHeading").innerHTML = '<i class="fa-solid fa-pen-to-square"></i>تعديل باب: ' + (item.title || "");
+      $("tajweedSubmitBtn").innerHTML = '<i class="fa-solid fa-floppy-disk"></i>حفظ التعديلات';
+      $("tajweedCancelEditBtn").classList.remove("hidden");
+      $("tajweedForm").scrollIntoView({ behavior: "smooth" });
+    };
+
+    const delBtn = document.createElement("button");
+    delBtn.className = "del-btn";
+    delBtn.innerHTML = '<i class="fa-solid fa-trash-can"></i>حذف';
+    delBtn.onclick = async () => {
+      if (!confirm(`هل أنت متأكد من حذف "${item.title}"؟`)) return;
+      try {
+        await deleteDoc(doc(db, "tajweed_guide", item.id));
+        if ($("tajweedEditId").value === item.id) resetTajweedForm();
+        toast("تم حذف الباب من دليل التجويد");
+      } catch (err) {
+        toast("تعذر الحذف", "err");
+      }
+    };
+
+    tdAct.append(editBtn, delBtn);
+    tr.append(tdOrder, tdTitle, tdContent, tdEx, tdAct);
+    tbody.append(tr);
+  });
+}
 
 /* ---------- جدول الطلبات ---------- */
 function renderTable() {
@@ -820,11 +1313,11 @@ function renderTable() {
   });
 }
 
-/* ---------- جدول الاستشارات ---------- */
+/* ---------- جدول الاستشارات + رد المعلم الصوتي (#25) ---------- */
 function renderConsults() {
   const tbody = $("consultTableBody");
 
-  const pending = allConsults.filter(c => !c.reply).length;
+  const pending = allConsults.filter(c => !c.reply && !c.teacherAudioUrl && !c.teacherAudioData).length;
   $("consultsBadge").textContent = pending;
   $("consultsBadge").classList.toggle("hidden", pending === 0);
 
@@ -882,25 +1375,149 @@ function renderConsults() {
     replyInput.placeholder = "اكتب توجيه الشيخ للطالب هنا...";
     replyInput.setAttribute("aria-label", "رد الشيخ");
     replyInput.value = c.reply || "";
+
+    let teacherBlob = null;
+    let teacherRecorder = null;
+    let teacherChunks = [];
+    let teacherTimer = null;
+    let teacherSecs = 0;
+    let removeExistingAudio = false;
+
+    const recBar = document.createElement("div");
+    recBar.className = "teacher-rec-bar";
+
+    const recBtn = document.createElement("button");
+    recBtn.type = "button";
+    recBtn.className = "rec-mini-btn";
+    recBtn.innerHTML = '<i class="fa-solid fa-microphone"></i>تسجيل رد صوتي';
+
+    const recStatus = document.createElement("span");
+    recStatus.style.cssText = "font-size:.78rem;color:var(--text-muted)";
+
+    const clearRecBtn = document.createElement("button");
+    clearRecBtn.type = "button";
+    clearRecBtn.className = "rec-mini-clear hidden";
+    clearRecBtn.textContent = "مسح الصوت";
+
+    const teacherPreview = document.createElement("audio");
+    teacherPreview.controls = true;
+    teacherPreview.preload = "none";
+    teacherPreview.style.cssText = "width:100%;margin-top:6px;height:34px";
+
+    const existingTeacherAudio = c.teacherAudioUrl || c.teacherAudioData;
+    if (existingTeacherAudio) {
+      teacherPreview.src = existingTeacherAudio;
+      clearRecBtn.classList.remove("hidden");
+    } else {
+      teacherPreview.classList.add("hidden");
+    }
+
+    clearRecBtn.onclick = () => {
+      teacherBlob = null;
+      removeExistingAudio = true;
+      teacherPreview.removeAttribute("src");
+      teacherPreview.classList.add("hidden");
+      clearRecBtn.classList.add("hidden");
+      recStatus.textContent = "سيتم حذف الصوت عند الحفظ";
+    };
+
+    recBtn.onclick = async () => {
+      if (teacherRecorder && teacherRecorder.state === "recording") {
+        teacherRecorder.stop();
+        return;
+      }
+      if (!navigator.mediaDevices || typeof MediaRecorder === "undefined") {
+        return toast("المتصفح لا يدعم التسجيل الصوتي", "err");
+      }
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        const opts = MediaRecorder.isTypeSupported("audio/webm;codecs=opus")
+          ? { mimeType: "audio/webm;codecs=opus", audioBitsPerSecond: 20000 }
+          : { audioBitsPerSecond: 20000 };
+        teacherRecorder = new MediaRecorder(stream, opts);
+        teacherChunks = [];
+        teacherSecs = 0;
+
+        teacherRecorder.ondataavailable = ev => { if (ev.data.size > 0) teacherChunks.push(ev.data); };
+        teacherRecorder.onstop = () => {
+          clearInterval(teacherTimer);
+          stream.getTracks().forEach(t => t.stop());
+          recBtn.classList.remove("recording");
+          recBtn.innerHTML = '<i class="fa-solid fa-rotate-right"></i>إعادة التسجيل';
+          const b = new Blob(teacherChunks, { type: teacherRecorder.mimeType || "audio/webm" });
+          if (b.size > 0) {
+            teacherBlob = b;
+            removeExistingAudio = false;
+            teacherPreview.src = URL.createObjectURL(b);
+            teacherPreview.classList.remove("hidden");
+            clearRecBtn.classList.remove("hidden");
+            recStatus.textContent = `جاهز (${teacherSecs} ث)`;
+          }
+        };
+
+        teacherRecorder.start();
+        recBtn.classList.add("recording");
+        recBtn.innerHTML = '<i class="fa-solid fa-stop"></i>إيقاف';
+        recStatus.textContent = "يسجل: 0 ث";
+        teacherTimer = setInterval(() => {
+          teacherSecs++;
+          recStatus.textContent = `يسجل: ${teacherSecs} ث`;
+          if (teacherSecs >= 45 && teacherRecorder.state === "recording") teacherRecorder.stop();
+        }, 1000);
+      } catch (err) {
+        toast("يرجى السماح باستخدام المايكروفون", "err");
+      }
+    };
+
+    recBar.append(recBtn, recStatus, clearRecBtn);
+
     const saveReplyBtn = document.createElement("button");
     saveReplyBtn.className = "primary";
     saveReplyBtn.style.marginTop = "6px";
     saveReplyBtn.style.padding = "6px 12px";
     saveReplyBtn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i>حفظ وإرسال الرد';
     saveReplyBtn.onclick = async () => {
+      if (teacherRecorder && teacherRecorder.state === "recording") {
+        return toast("أوقف التسجيل الصوتي أولاً قبل الحفظ", "err");
+      }
       saveReplyBtn.disabled = true;
       try {
-        await updateDoc(doc(db, "consultations", c.id), {
+        const updates = {
           reply: replyInput.value.trim(),
           status: "تم الرد"
-        });
+        };
+        if (removeExistingAudio) {
+          updates.teacherAudioUrl = "";
+          updates.teacherAudioData = "";
+          if (c.teacherAudioPath) await removeStorageFile(c.teacherAudioPath);
+          updates.teacherAudioPath = "";
+        }
+        if (teacherBlob) {
+          const up = await uploadAudioToStorage(teacherBlob, "consultations_replies");
+          if (up) {
+            if (c.teacherAudioPath) await removeStorageFile(c.teacherAudioPath);
+            updates.teacherAudioUrl = up.url;
+            updates.teacherAudioPath = up.path;
+            updates.teacherAudioData = "";
+          } else {
+            const dataUrl = await blobToDataUrl(teacherBlob);
+            if (dataUrl.length > MAX_IMG_CHARS) {
+              toast("التسجيل الصوتي طويل جداً، سجّل مقطعاً أقصر", "err");
+              saveReplyBtn.disabled = false;
+              return;
+            }
+            updates.teacherAudioData = dataUrl;
+            updates.teacherAudioUrl = "";
+          }
+        }
+        await updateDoc(doc(db, "consultations", c.id), updates);
         toast("تم حفظ توجيه الشيخ وظهر في حساب الطالب");
       } catch (err) {
         toast("تعذر حفظ الرد. حاول مرة أخرى.", "err");
       }
       saveReplyBtn.disabled = false;
     };
-    tdReply.append(replyInput, saveReplyBtn);
+    tdReply.append(replyInput, recBar, teacherPreview, saveReplyBtn);
 
     const tdAct = document.createElement("td");
     const delBtn = document.createElement("button");
@@ -908,8 +1525,12 @@ function renderConsults() {
     delBtn.innerHTML = '<i class="fa-solid fa-trash-can"></i>حذف';
     delBtn.onclick = async () => {
       if (!confirm("حذف هذه الاستشارة؟")) return;
-      try { await deleteDoc(doc(db, "consultations", c.id)); await removeStorageFile(c.audioPath); toast("تم حذف الاستشارة"); }
-      catch (err) { toast("تعذر حذف الاستشارة", "err"); }
+      try {
+        await deleteDoc(doc(db, "consultations", c.id));
+        await removeStorageFile(c.audioPath);
+        await removeStorageFile(c.teacherAudioPath);
+        toast("تم حذف الاستشارة");
+      } catch (err) { toast("تعذر حذف الاستشارة", "err"); }
     };
     tdAct.append(delBtn);
 
@@ -922,7 +1543,7 @@ function renderConsults() {
 function renderMedia() {
   const tbody = $("mediaTableBody");
   if (!allMedia.length) {
-    emptyRow(tbody, 6, "لم يتم إضافة صور أو كتب بعد.");
+    emptyRow(tbody, 6, "لم يتم إضافة صور أو كتب أو متون صوتية بعد.");
     return;
   }
   tbody.replaceChildren();
@@ -930,9 +1551,13 @@ function renderMedia() {
   allMedia.forEach(m => {
     const tr = document.createElement("tr");
     const tdType = document.createElement("td");
-    tdType.innerHTML = m.type === "image"
-      ? '<i class="fa-solid fa-image"></i><b>معرض الصور</b>'
-      : '<i class="fa-solid fa-book"></i><b>مكتبة المتون</b>';
+    if (m.type === "image") {
+      tdType.innerHTML = '<i class="fa-solid fa-image"></i><b>معرض الصور</b>';
+    } else if (m.type === "audio") {
+      tdType.innerHTML = '<i class="fa-solid fa-headphones"></i><b>المتون الصوتية</b>';
+    } else {
+      tdType.innerHTML = '<i class="fa-solid fa-book"></i><b>مكتبة المتون</b>';
+    }
 
     const tdCat = document.createElement("td");
     tdCat.textContent = m.category || "";
@@ -943,7 +1568,7 @@ function renderMedia() {
     const p = document.createElement("div");
     p.style.fontSize = ".82rem";
     p.style.color = "var(--text-muted)";
-    p.textContent = m.description || "";
+    p.textContent = m.description || (m.textContent ? "يحتوي على نص أبيات قابل للتعديل" : "");
     tdTitle.append(b, p);
 
     const tdPrev = document.createElement("td");
@@ -957,6 +1582,17 @@ function renderMedia() {
       img.style.objectFit = "cover";
       img.style.borderRadius = "6px";
       tdPrev.append(img);
+    } else if (m.type === "audio") {
+      if (m.url) {
+        const aud = document.createElement("audio");
+        aud.controls = true;
+        aud.preload = "none";
+        aud.src = m.url;
+        aud.style.maxWidth = "200px";
+        tdPrev.append(aud);
+      } else {
+        tdPrev.textContent = "نص متن فقط";
+      }
     } else if (isHttpUrl(m.url)) {
       const a = document.createElement("a");
       a.href = m.url;
@@ -977,24 +1613,7 @@ function renderMedia() {
     editBtn.style.padding = "5px 10px";
     editBtn.style.marginInlineEnd = "6px";
     editBtn.innerHTML = '<i class="fa-solid fa-pen-to-square"></i>تعديل';
-    editBtn.onclick = async () => {
-      const newTitle = prompt("تعديل العنوان:", m.title || "");
-      if (newTitle === null) return;
-      const newDesc = prompt("تعديل الوصف:", m.description || "");
-      const updates = {
-        title: newTitle.trim() || m.title,
-        description: newDesc !== null ? newDesc.trim() : m.description
-      };
-      if (m.type === "pdf") {
-        const newUrl = prompt("تعديل رابط Google Drive:", m.url || "");
-        if (newUrl && newUrl.trim()) {
-          if (!isHttpUrl(newUrl.trim())) return toast("الرابط غير صحيح. يجب أن يبدأ بـ https://", "err");
-          updates.url = newUrl.trim();
-        }
-      }
-      try { await updateDoc(doc(db, "media", m.id), updates); toast("تم حفظ التعديل"); }
-      catch (err) { toast("تعذر حفظ التعديل", "err"); }
-    };
+    editBtn.onclick = () => openEditMediaModal(m);
 
     const delBtn = document.createElement("button");
     delBtn.className = "del-btn";
@@ -1110,6 +1729,104 @@ function renderUsers() {
   });
 }
 
+/* ---------- لوحة الإحصائيات والرسوم البيانية (#34) ---------- */
+function renderStats() {
+  const totalStudents = allUsers.length;
+  const totalRegs = allRows.length;
+  const acceptedRegs = allRows.filter(r => r.status === "مقبول").length;
+  const contactedRegs = allRows.filter(r => r.status === "تم التواصل").length;
+  const newRegs = allRows.filter(r => (r.status || "جديد") === "جديد").length;
+  const acceptRate = totalRegs ? Math.round((acceptedRegs / totalRegs) * 100) : 0;
+
+  const totalConsults = allConsults.length;
+  const repliedConsults = allConsults.filter(c => c.reply || c.teacherAudioUrl || c.teacherAudioData).length;
+  const pendingConsults = totalConsults - repliedConsults;
+  const replyRate = totalConsults ? Math.round((repliedConsults / totalConsults) * 100) : 0;
+
+  const kpis = $("analyticsKpis");
+  kpis.replaceChildren();
+  const kpiItems = [
+    { icon: "fa-users", val: totalStudents, label: "إجمالي الحسابات المسجلة" },
+    { icon: "fa-user-check", val: `${acceptRate}%`, label: `نسبة الانتظام والقبول (${acceptedRegs}/${totalRegs})` },
+    { icon: "fa-microphone-lines", val: totalConsults, label: "إجمالي الاستشارات والتلاوات" },
+    { icon: "fa-circle-check", val: `${replyRate}%`, label: `نسبة إنجاز الردود (${repliedConsults}/${totalConsults})` },
+    { icon: "fa-book-open", val: allMedia.length, label: "محتويات المكتبة والمعرض" }
+  ];
+  kpiItems.forEach(k => {
+    const card = document.createElement("div");
+    card.className = "stat-card";
+    card.innerHTML = `<i class="fa-solid ${k.icon}"></i><strong>${k.val}</strong><span>${k.label}</span>`;
+    kpis.append(card);
+  });
+
+  const progContainer = $("programBars");
+  progContainer.replaceChildren();
+  const programs = ["تحفيظ القرآن", "إجازة", "التجويد", "القراءات"];
+  programs.forEach(prog => {
+    const count = allRows.filter(r => r.program === prog).length;
+    const pct = totalRegs ? Math.round((count / totalRegs) * 100) : 0;
+    const row = document.createElement("div");
+    row.className = "bar-row";
+    row.innerHTML = `
+      <div class="bar-label"><span>${prog}</span><span>${count} طالب (${pct}%)</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div>
+    `;
+    progContainer.append(row);
+  });
+
+  const donutContainer = $("statusDonuts");
+  donutContainer.replaceChildren();
+  const r = 42, circ = 2 * Math.PI * r;
+  const pAcc = totalRegs ? (acceptedRegs / totalRegs) * circ : 0;
+  const pCon = totalRegs ? (contactedRegs / totalRegs) * circ : 0;
+  const pNew = totalRegs ? (newRegs / totalRegs) * circ : 0;
+
+  donutContainer.innerHTML = `
+    <svg width="120" height="120" viewBox="0 0 110 110" aria-label="توزيع حالات الطلبات">
+      <circle cx="55" cy="55" r="${r}" fill="none" stroke="rgba(128,128,128,0.2)" stroke-width="14"/>
+      <circle cx="55" cy="55" r="${r}" fill="none" stroke="#1d5a14" stroke-width="14" stroke-dasharray="${pAcc} ${circ}" transform="rotate(-90 55 55)"/>
+      <circle cx="55" cy="55" r="${r}" fill="none" stroke="#FAC81B" stroke-width="14" stroke-dasharray="${pCon} ${circ}" stroke-dashoffset="-${pAcc}" transform="rotate(-90 55 55)"/>
+      <circle cx="55" cy="55" r="${r}" fill="none" stroke="#a4161a" stroke-width="14" stroke-dasharray="${pNew} ${circ}" stroke-dashoffset="-${pAcc + pCon}" transform="rotate(-90 55 55)"/>
+      <text x="55" y="59" text-anchor="middle" fill="currentColor" font-size="14" font-weight="bold">${totalRegs} طلب</text>
+    </svg>
+    <div class="donut-legend">
+      <div class="legend-item"><span class="legend-dot" style="background:#1d5a14"></span>مقبول / منتظم: <strong>${acceptedRegs}</strong></div>
+      <div class="legend-item"><span class="legend-dot" style="background:#FAC81B"></span>تم التواصل: <strong>${contactedRegs}</strong></div>
+      <div class="legend-item"><span class="legend-dot" style="background:#a4161a"></span>طلبات جديدة: <strong>${newRegs}</strong></div>
+      <hr style="width:100%;border:0;border-top:1px solid var(--line);margin:2px 0">
+      <div class="legend-item"><span class="legend-dot" style="background:#25D366"></span>استشارات مجابة: <strong>${repliedConsults}</strong></div>
+      <div class="legend-item"><span class="legend-dot" style="background:#888"></span>بانتظار رد الشيخ: <strong>${pendingConsults}</strong></div>
+    </div>
+  `;
+
+  const weekContainer = $("weeklyActivityChart");
+  weekContainer.replaceChildren();
+  const dayNames = ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"];
+  const dayOrder = [6, 0, 1, 2, 3, 4, 5];
+  const counts = [0, 0, 0, 0, 0, 0, 0];
+
+  [...allRows, ...allConsults].forEach(item => {
+    if (item.createdAt && typeof item.createdAt.toDate === "function") {
+      const d = item.createdAt.toDate().getDay();
+      counts[d]++;
+    }
+  });
+  const maxDay = Math.max(1, ...counts);
+
+  dayOrder.forEach(dayIdx => {
+    const val = counts[dayIdx];
+    const hPct = Math.round((val / maxDay) * 100);
+    const col = document.createElement("div");
+    col.className = "week-col";
+    col.innerHTML = `
+      <span class="week-val">${val}</span>
+      <div class="week-bar ${val === maxDay && val > 0 ? "peak" : ""}" style="height:${Math.max(6, hPct)}%"></div>
+      <span class="week-day">${dayNames[dayIdx]}</span>
+    `;
+    weekContainer.append(col);
+  });
+}
+
 $("searchInput").oninput = renderTable;
 $("filterProgram").onchange = renderTable;
 $("filterStatus").onchange = renderTable;
@@ -1141,8 +1858,8 @@ function loadError(tbodyId, cols) {
 }
 
 onAuthStateChanged(auth, user => {
-  [unsubRegs, unsubUsers, unsubMedia, unsubConsults].forEach(u => u && u());
-  unsubRegs = unsubUsers = unsubMedia = unsubConsults = null;
+  [unsubRegs, unsubUsers, unsubMedia, unsubConsults, unsubTajweed].forEach(u => u && u());
+  unsubRegs = unsubUsers = unsubMedia = unsubConsults = unsubTajweed = null;
   regsReady = consultsReady = false;
   $("loginView").classList.add("hidden");
   $("deniedView").classList.add("hidden");
@@ -1176,17 +1893,26 @@ onAuthStateChanged(auth, user => {
     allRows = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
     renderTable();
     renderUsers();
+    renderStats();
   }, loadError("tableBody", 7));
 
   unsubUsers = onSnapshot(collection(db, "users"), snap => {
     allUsers = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
     renderUsers();
+    renderStats();
   }, loadError("usersTableBody", 5));
 
   unsubMedia = onSnapshot(collection(db, "media"), snap => {
     allMedia = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
     renderMedia();
+    renderStats();
   }, loadError("mediaTableBody", 6));
+
+  unsubTajweed = onSnapshot(collection(db, "tajweed_guide"), snap => {
+    allTajweed = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
+    if (!$("tajweedEditId").value) $("tajweedOrder").value = allTajweed.length + 1;
+    renderTajweedTable();
+  }, loadError("tajweedTableBody", 5));
 
   unsubConsults = onSnapshot(collection(db, "consultations"), snap => {
     snap.docChanges().forEach(ch => {
@@ -1198,6 +1924,7 @@ onAuthStateChanged(auth, user => {
     consultsReady = true;
     allConsults = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
     renderConsults();
+    renderStats();
   }, loadError("consultTableBody", 5));
 });
 </script>
