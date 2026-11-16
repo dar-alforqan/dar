@@ -1,4 +1,6 @@
-const CACHE_NAME = "forqan-pwa-v16";
+const STATIC_CACHE = "forqan-static-v17";
+const RUNTIME_CACHE = "forqan-runtime-v17";
+const MAX_RUNTIME_ITEMS = 60;
 
 // ملفات الموقع الأساسية (تُحفظ عند التثبيت)
 const ASSETS = [
@@ -16,7 +18,7 @@ const ASSETS = [
   "./icon-maskable-512.png"
 ];
 
-// مصادر خارجية نحفظها تلقائيًا بعد أول زيارة: أيقونات Font Awesome + الخطوط + مكتبات Firebase
+// مصادر خارجية نحفظها تلقائيًا: أيقونات Font Awesome + الخطوط + مكتبات Firebase
 const CACHEABLE_HOSTS = [
   "cdnjs.cloudflare.com",
   "www.gstatic.com",
@@ -24,10 +26,18 @@ const CACHEABLE_HOSTS = [
   "fonts.gstatic.com"
 ];
 
+async function trimCache(cacheName, maxItems) {
+  const cache = await caches.open(cacheName);
+  const keys = await cache.keys();
+  if (keys.length > maxItems) {
+    await cache.delete(keys[0]);
+    return trimCache(cacheName, maxItems);
+  }
+}
+
 self.addEventListener("install", (e) => {
   e.waitUntil(
-    caches.open(CACHE_NAME).then((cache) =>
-      // allSettled: لو ملف واحد غير موجود ما يفشلش التثبيت كله
+    caches.open(STATIC_CACHE).then((cache) =>
       Promise.allSettled(ASSETS.map((url) => cache.add(url)))
     )
   );
@@ -35,9 +45,10 @@ self.addEventListener("install", (e) => {
 });
 
 self.addEventListener("activate", (e) => {
+  const validCaches = [STATIC_CACHE, RUNTIME_CACHE];
   e.waitUntil(
     caches.keys().then((keys) =>
-      Promise.all(keys.map((k) => k !== CACHE_NAME && caches.delete(k)))
+      Promise.all(keys.map((k) => !validCaches.includes(k) && caches.delete(k)))
     )
   );
   self.clients.claim();
@@ -48,22 +59,63 @@ self.addEventListener("fetch", (e) => {
 
   const url = new URL(e.request.url);
   const sameOrigin = url.origin === self.location.origin;
-  const cacheable = sameOrigin || CACHEABLE_HOSTS.includes(url.hostname);
+  const isCdnAsset = CACHEABLE_HOSTS.includes(url.hostname);
+  const isStorageMedia = url.hostname === "firebasestorage.googleapis.com";
 
-  // أي طلب آخر (Firestore, Auth, Google Drive...) يمر مباشرة بدون تخزين
-  if (!cacheable) return;
+  // 1. التنقل بين صفحات HTML: الشبكة أولاً مع رجوع فوري للنسخة المحفوظة أوفلاين
+  if (sameOrigin && e.request.mode === "navigate") {
+    e.respondWith(
+      fetch(e.request)
+        .then((res) => {
+          if (res && res.ok) {
+            const copy = res.clone();
+            caches.open(STATIC_CACHE).then((c) => c.put(e.request, copy)).catch(() => {});
+          }
+          return res;
+        })
+        .catch(() =>
+          caches.match(e.request, { ignoreSearch: true })
+            .then((cached) => cached || caches.match("./index.html"))
+        )
+    );
+    return;
+  }
 
-  // الشبكة أولًا (يبقى المحتوى محدّث)، ولو أوفلاين نرجع للنسخة المحفوظة
-  e.respondWith(
-    fetch(e.request)
-      .then((res) => {
-        // نخزّن الردود الناجحة (والـ opaque الخاصة بملفات CSS من CDN)
-        if (res && (res.ok || res.type === "opaque")) {
-          const copy = res.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(e.request, copy)).catch(() => {});
-        }
-        return res;
+  // 2. الخطوط والأيقونات ومكتبات Firebase: Stale-While-Revalidate لسرعة الفتح أوفلاين
+  if (isCdnAsset || (sameOrigin && !e.request.url.endsWith(".html"))) {
+    e.respondWith(
+      caches.match(e.request, { ignoreSearch: sameOrigin }).then((cached) => {
+        const networkFetch = fetch(e.request)
+          .then((res) => {
+            if (res && (res.ok || res.type === "opaque")) {
+              const copy = res.clone();
+              caches.open(STATIC_CACHE).then((c) => c.put(e.request, copy)).catch(() => {});
+            }
+            return res;
+          })
+          .catch(() => cached);
+        return cached || networkFetch;
       })
-      .catch(() => caches.match(e.request, { ignoreSearch: sameOrigin }))
-  );
+    );
+    return;
+  }
+
+  // 3. صور المعرض والملفات الصوتية المرفوعة على Storage: تخزين ديناميكي محدود الحجم
+  if (isStorageMedia) {
+    e.respondWith(
+      caches.match(e.request).then((cached) => {
+        if (cached) return cached;
+        return fetch(e.request).then((res) => {
+          if (res && res.ok) {
+            const copy = res.clone();
+            caches.open(RUNTIME_CACHE).then((c) => {
+              c.put(e.request, copy);
+              trimCache(RUNTIME_CACHE, MAX_RUNTIME_ITEMS);
+            }).catch(() => {});
+          }
+          return res;
+        });
+      })
+    );
+  }
 });
