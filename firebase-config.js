@@ -4,6 +4,7 @@ export const firebaseConfig = {
   projectId: "dar-alforqan",
   storageBucket: "dar-alforqan.appspot.com",
   messagingSenderId: "52759865906",
+  // تنبيه: استبدل appId بالقيمة الكاملة من Firebase Console > Project settings > Your apps
   appId: "1:52759865906:web:..."
 };
 
