@@ -30,7 +30,7 @@ exports.notifyNewConsultation = onDocumentCreated(
       ["الهاتف", d.phone || "غير مسجل"],
       ["الموضوع", d.topic],
       ["التفاصيل", String(d.notes || "").slice(0, 500)],
-      ["تسجيل صوتي", d.audioUrl || d.audioData ? "نعم" : "لا"]
+      ["تسجيل صوتي", (d.audioUrl || d.audioData) ? "نعم" : "لا"]
     ]);
   }
 );
