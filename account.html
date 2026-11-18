@@ -270,11 +270,6 @@ import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWith
 import { getFirestore, collection, doc, setDoc, getDoc, addDoc, query, where, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
-const ADMIN_EMAILS = [
-  "bdallhhshad7@gmail.com",
-  "daralforqan@gmail.com"
-];
-
 const DEFAULT_TAJWEED_RULES = [
   {
     order: 1,
@@ -406,7 +401,8 @@ let hasConsultations = false;
 
 const errors = {
   "auth/invalid-email":"البريد الإلكتروني غير صحيح.",
-  "auth/email-already-in-use":"هذا البريد مسجّل مسبقًا بكلمة مرور أخرى. اضغط «نسيت كلمة المرور؟» بالأسفل أو غيّرها من لوحة Firebase.",
+  "auth/email-already-in-use":"هذا البريد مسجّل مسبقًا. انتقل إلى تبويب «تسجيل الدخول»، وإن نسيت كلمة المرور فاضغط «نسيت كلمة المرور؟».",
+  "auth/user-disabled":"تم إيقاف هذا الحساب. تواصل مع إدارة الدار.",
   "auth/weak-password":"يجب ألا تقل كلمة المرور عن 6 أحرف.",
   "auth/invalid-credential":"البريد الإلكتروني أو كلمة المرور غير صحيحة (إذا نسيت كلمة المرور اضغط «نسيت كلمة المرور؟» بالأسفل).",
   "auth/user-not-found":"لا يوجد حساب مسجّل بهذا البريد بعد. اضغط على تبويب «إنشاء حساب» بالأعلى لتسجيله.",
@@ -482,7 +478,6 @@ $("exportConsultPdfBtn").onclick = () => {
 $("authForm").onsubmit = async e => {
   e.preventDefault(); clear($("authMsg"));
   const email = $("email").value.trim(), pass = $("password").value;
-  const isAdminEmail = ADMIN_EMAILS.map(a => a.toLowerCase()).includes(email.toLowerCase());
 
   if (!email || pass.length < 6) return show($("authMsg"), "err", "اكتب البريد الإلكتروني وكلمة مرور من 6 أحرف على الأقل.");
   if (mode === "signup" && ($("name").value.trim().length < 2 || $("signupPhone").value.trim().length < 8)) {
@@ -494,31 +489,20 @@ $("authForm").onsubmit = async e => {
       const cred = await createUserWithEmailAndPassword(auth, email, pass);
       const n = $("name").value.trim();
       const ph = $("signupPhone").value.trim();
-      if (n) await updateProfile(cred.user, { displayName: n });
-      await setDoc(doc(db, "users", cred.user.uid), {
-        uid: cred.user.uid,
-        name: n,
-        email: cred.user.email,
-        phone: ph,
-        createdAt: serverTimestamp()
-      }, { merge: true });
-    } else {
       try {
-        await signInWithEmailAndPassword(auth, email, pass);
-      } catch (loginErr) {
-        if (isAdminEmail && (loginErr.code === "auth/user-not-found" || loginErr.code === "auth/invalid-credential")) {
-          const cred = await createUserWithEmailAndPassword(auth, email, pass);
-          await setDoc(doc(db, "users", cred.user.uid), {
-            uid: cred.user.uid,
-            name: "إدارة دار الفرقان",
-            email: cred.user.email,
-            phone: "01099262489",
-            createdAt: serverTimestamp()
-          }, { merge: true });
-        } else {
-          throw loginErr;
-        }
+        if (n) await updateProfile(cred.user, { displayName: n });
+        await setDoc(doc(db, "users", cred.user.uid), {
+          uid: cred.user.uid,
+          name: n,
+          email: cred.user.email,
+          phone: ph,
+          createdAt: serverTimestamp()
+        }, { merge: true });
+      } catch (profileErr) {
+        // الحساب أُنشئ بنجاح؛ سيُستكمل ملف المستخدم تلقائيًا عند تحميل الصفحة
       }
+    } else {
+      await signInWithEmailAndPassword(auth, email, pass);
     }
   } catch (err) {
     show($("authMsg"), "err", errors[err.code] || ("حدث خطأ أثناء الدخول (" + (err.code || "غير معروف") + ")."));
@@ -556,12 +540,14 @@ $("regForm").onsubmit = async e => {
       notes,
       createdAt: serverTimestamp()
     });
-    await setDoc(doc(db, "users", auth.currentUser.uid), {
-      uid: auth.currentUser.uid,
-      name: fullName,
-      email: auth.currentUser.email,
-      phone: phone
-    }, { merge: true });
+    try {
+      await setDoc(doc(db, "users", auth.currentUser.uid), {
+        uid: auth.currentUser.uid,
+        name: fullName,
+        email: auth.currentUser.email,
+        phone: phone
+      }, { merge: true });
+    } catch (e) { /* الطلب نفسه حُفظ؛ لا نعرض خطأ للطالب */ }
     currentUserPhone = phone;
 
     const waText = `السلام عليكم ورحمة الله وبركاته\n*طلب تسجيل جديد - دار الفرقان*\n• *الاسم:* ${fullName}\n• *الهاتف:* ${phone}\n• *البرنامج:* ${program}\n• *ملاحظات:* ${notes || 'لا توجد'}`;
@@ -617,8 +603,9 @@ $("recordBtn").onclick = async () => {
     return show($("consultMsg"), "err", "متصفحك لا يدعم التسجيل الصوتي. جرّب متصفحًا آخر أو اكتب سؤالك نصًا.");
   }
   clear($("consultMsg"));
+  let stream = null;
   try {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     const options = MediaRecorder.isTypeSupported("audio/webm;codecs=opus")
       ? { mimeType: "audio/webm;codecs=opus", audioBitsPerSecond: 20000 }
       : { audioBitsPerSecond: 20000 };
@@ -657,7 +644,8 @@ $("recordBtn").onclick = async () => {
       if (recSeconds >= 45 && mediaRecorder.state === "recording") mediaRecorder.stop();
     }, 1000);
   } catch (err) {
-    show($("consultMsg"), "err", "يرجى السماح للمتصفح باستخدام المايكروفون لتسجيل التلاوة.");
+    if (stream) stream.getTracks().forEach(t => t.stop());
+    show($("consultMsg"), "err", "تعذر بدء التسجيل. تأكد من السماح للمتصفح باستخدام المايكروفون.");
   }
 };
 
@@ -678,7 +666,7 @@ $("consultForm").onsubmit = async e => {
     if (recordedBlob) {
       audioData = await blobToDataUrl(recordedBlob);
       if (audioData.length > MAX_AUDIO_CHARS) {
-        show($("consultMsg"), "err", "حجم التسجيل كبير جداً. سجّل مقطعًا أقصر (أقل من 30 ثانية) وحاول مرة أخرى.");
+        show($("consultMsg"), "err", "حجم التسجيل كبير جداً. سجّل مقطعًا أقصر وحاول مرة أخرى.");
         busy($("consultBtn"), false);
         return;
       }
@@ -719,10 +707,31 @@ $("consultForm").onsubmit = async e => {
 };
 
 /* ---------- حالة الدخول والقوائم ---------- */
+// يمنع تسرّب بيانات مستخدم سابق (الاسم/الهاتف/القوائم) إلى مستخدم جديد على نفس الجهاز
+function resetUserState() {
+  currentUserPhone = "";
+  hasConsultations = false;
+  $("hello").textContent = "";
+  ["fullName", "phone", "notes", "consultTopic", "consultNotes"].forEach(id => { $(id).value = ""; });
+  $("list").innerHTML = "<p>لا توجد طلبات سابقة بعد.</p>";
+  $("consultList").innerHTML = "<p>لا توجد استشارات مرسلة بعد.</p>";
+  clear($("regMsg"));
+  clear($("consultMsg"));
+  if (mediaRecorder && mediaRecorder.state === "recording") {
+    clearInterval(recInterval);
+    try { mediaRecorder.stream.getTracks().forEach(t => t.stop()); } catch (e) {}
+    mediaRecorder.onstop = null;
+    try { mediaRecorder.stop(); } catch (e) {}
+    $("recordBtn").classList.remove("recording");
+  }
+  resetAudioUI();
+}
+
 onAuthStateChanged(auth, async user => {
   if (unsubReg) { unsubReg(); unsubReg = null; }
   if (unsubConsult) { unsubConsult(); unsubConsult = null; }
   if (unsubBlock) { unsubBlock(); unsubBlock = null; }
+  resetUserState();
 
   $("authView").classList.toggle("hidden", !!user);
   $("appView").classList.toggle("hidden", !user);
@@ -742,13 +751,13 @@ onAuthStateChanged(auth, async user => {
     const userRef = doc(db, "users", user.uid);
     const userSnap = await getDoc(userRef);
     if (!userSnap.exists()) {
+      // لا نكتب phone/name فارغين حتى لا نمسح ما حفظه نموذج إنشاء الحساب في نفس اللحظة
       await setDoc(userRef, {
         uid: user.uid,
-        name: user.displayName || "",
         email: user.email,
-        phone: "",
+        ...(user.displayName ? { name: user.displayName } : {}),
         createdAt: serverTimestamp()
-      });
+      }, { merge: true });
     } else {
       const uData = userSnap.data();
       if (uData.phone) {
@@ -758,6 +767,9 @@ onAuthStateChanged(auth, async user => {
       if (uData.name && !$("fullName").value) $("fullName").value = uData.name;
     }
   } catch (e) {}
+
+  // لو خرج المستخدم أو تغيّر الحساب أثناء التحميل لا نربط مستمعين لحساب قديم
+  if (!auth.currentUser || auth.currentUser.uid !== user.uid) return;
 
   const listError = el => () => { el.replaceChildren(); const p = document.createElement("p"); p.textContent = "تعذر تحميل البيانات. تأكد من الاتصال بالإنترنت ثم أعد تحميل الصفحة."; el.append(p); };
 
