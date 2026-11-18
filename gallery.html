@@ -275,7 +275,7 @@ function openLightbox(i) {
 function closeLightbox() {
   lb.classList.remove("open");
   document.body.classList.remove("locked");
-  lbImg.src = "";
+  lbImg.removeAttribute("src");
   current = -1;
   if (lastFocus) lastFocus.focus();
 }
@@ -323,6 +323,10 @@ onSnapshot(query(collection(db, "media"), where("type", "==", "image")), snap =>
     .map(d => ({ id: d.id, ...d.data() }))
     .sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
   renderPhotos();
+  // لو تغيّرت القائمة والعارض مفتوح (إضافة/حذف صورة) نضبط الصورة المعروضة
+  if (lb.classList.contains("open")) {
+    if (current >= shown.length) closeLightbox(); else showAt(current);
+  }
 }, () => {
   grid.setAttribute("aria-busy", "false");
   countEl.textContent = "";
