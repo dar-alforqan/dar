@@ -1,5 +1,5 @@
-const STATIC_CACHE = "forqan-static-v17";
-const RUNTIME_CACHE = "forqan-runtime-v17";
+const STATIC_CACHE = "forqan-static-v18";
+const RUNTIME_CACHE = "forqan-runtime-v18";
 const MAX_RUNTIME_ITEMS = 60;
 
 // ملفات الموقع الأساسية (تُحفظ عند التثبيت)
@@ -56,6 +56,8 @@ self.addEventListener("activate", (e) => {
 
 self.addEventListener("fetch", (e) => {
   if (e.request.method !== "GET") return;
+  // طلبات Range (تشغيل الصوت والفيديو، خصوصًا على سفاري) تُترك للشبكة مباشرة
+  if (e.request.headers.has("range")) return;
 
   const url = new URL(e.request.url);
   const sameOrigin = url.origin === self.location.origin;
@@ -93,7 +95,7 @@ self.addEventListener("fetch", (e) => {
             }
             return res;
           })
-          .catch(() => cached);
+          .catch(() => cached || Response.error());
         return cached || networkFetch;
       })
     );
