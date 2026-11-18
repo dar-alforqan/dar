@@ -376,6 +376,11 @@ a:focus-visible,.top:focus-visible,.cta:focus-visible,.theme-btn:focus-visible,.
     if (installBtn) installBtn.style.display = "inline-flex";
   });
 
+  window.addEventListener("appinstalled", () => {
+    deferredPrompt = null;
+    if (installBtn) installBtn.style.display = "none";
+  });
+
   // الآيفون لا يدعم نافذة التثبيت التلقائية: نعرض الخطوات يدويًا
   const toast = document.getElementById("toast");
   const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
