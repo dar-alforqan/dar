@@ -450,7 +450,7 @@ body.dark-mode .msg.ok{background:#0e2e13;color:#85e085}
           <div id="programBars"></div>
         </div>
         <div class="chart-card">
-          <h3><i class="fa-solid fa-chart-donut"></i>حالة الطلبات واستشارات التلاوة</h3>
+          <h3><i class="fa-solid fa-chart-pie"></i>حالة الطلبات واستشارات التلاوة</h3>
           <div id="statusDonuts" class="donut-wrap"></div>
         </div>
       </div>
@@ -507,7 +507,7 @@ body.dark-mode .msg.ok{background:#0e2e13;color:#85e085}
 <script type="module">
 import { firebaseConfig, initAppCheck } from "./firebase-config.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, sendPasswordResetEmail, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getFirestore, collection, onSnapshot, doc, setDoc, addDoc, updateDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getStorage, ref as storageRef, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
@@ -800,29 +800,17 @@ $("loginForm").onsubmit = async e => {
   $("loginMsg").className = "msg";
   const email = $("email").value.trim();
   const pass = $("password").value;
-  const isAdminEmail = ADMIN_EMAILS.map(a => a.toLowerCase()).includes(email.toLowerCase());
 
   $("loginBtn").disabled = true;
   $("loginBtn").innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>لحظة من فضلك...';
   try {
     await signInWithEmailAndPassword(auth, email, pass);
   } catch (err) {
-    if (isAdminEmail && (err.code === "auth/user-not-found" || err.code === "auth/invalid-credential")) {
-      try {
-        await createUserWithEmailAndPassword(auth, email, pass);
-        $("loginBtn").disabled = false;
-        $("loginBtn").innerHTML = LOGIN_BTN_HTML;
-        return;
-      } catch (createErr) {
-        err = createErr;
-      }
-    }
-
     $("loginMsg").className = "msg err";
     if (err.code === "auth/too-many-requests") {
       $("loginMsg").textContent = "محاولات كثيرة. انتظر قليلًا ثم حاول مرة أخرى.";
-    } else if (err.code === "auth/email-already-in-use" || err.code === "auth/wrong-password" || err.code === "auth/invalid-credential") {
-      $("loginMsg").textContent = "هذا الحساب مسجل بكلمة مرور قديمة مختلفة. اضغط «نسيت كلمة المرور؟» بالأسفل وفحص مجلد الرسائل غير المرغوب فيها (Spam)، أو غيّرها من Firebase Console.";
+    } else if (["auth/invalid-credential", "auth/wrong-password", "auth/user-not-found", "auth/invalid-email"].includes(err.code)) {
+      $("loginMsg").textContent = "البريد الإلكتروني أو كلمة المرور غير صحيحة. إذا نسيت كلمة المرور اضغط «نسيت كلمة المرور؟» وافحص مجلد الرسائل غير المرغوب فيها (Spam).";
     } else if (err.code === "auth/network-request-failed") {
       $("loginMsg").textContent = "مشكلة في الاتصال بالإنترنت. حاول مرة أخرى.";
     } else {
@@ -847,7 +835,7 @@ $("resetBtn").onclick = async () => {
   } catch (err) {
     $("loginMsg").className = "msg err";
     $("loginMsg").textContent = err.code === "auth/user-not-found"
-      ? "هذا البريد غير مسجل بعد. اكتب كلمة المرور واضغط «دخول» ليتم إنشاؤه."
+      ? "هذا البريد غير مسجل. أنشئ الحساب أولًا من صفحة «حسابي» (تبويب إنشاء حساب) بنفس البريد، أو من Firebase Console."
       : "تعذر إرسال الرسالة (" + (err.code || "خطأ") + ").";
   }
 };
@@ -917,10 +905,23 @@ async function uploadImage(file) {
   }
 }
 
+function guessAudioExt(f) {
+  if (f.name && f.name.includes(".")) {
+    const e = f.name.split(".").pop().toLowerCase().replace(/[^a-z0-9]/g, "");
+    if (e) return e;
+  }
+  const t = (f.type || "").toLowerCase();
+  if (t.includes("mp4") || t.includes("aac")) return "m4a";
+  if (t.includes("mpeg")) return "mp3";
+  if (t.includes("ogg")) return "ogg";
+  if (t.includes("wav")) return "wav";
+  return "webm";
+}
+
 async function uploadAudioToStorage(blobOrFile, folder = "media_audio") {
   if (!storage || !blobOrFile) return null;
   try {
-    const ext = (blobOrFile.name && blobOrFile.name.split(".").pop()) || "webm";
+    const ext = guessAudioExt(blobOrFile);
     const path = `${folder}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
     const r = storageRef(storage, path);
     await uploadBytes(r, blobOrFile, { contentType: blobOrFile.type || "audio/webm" });
@@ -1048,6 +1049,7 @@ function closeEditMedia() {
 }
 $("closeEditMediaModal").onclick = closeEditMedia;
 editMediaModal.addEventListener("click", e => { if (e.target === editMediaModal) closeEditMedia(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape" && editMediaModal.classList.contains("open")) closeEditMedia(); });
 
 $("editMediaForm").onsubmit = async e => {
   e.preventDefault();
@@ -1325,10 +1327,19 @@ function renderConsults() {
     emptyRow(tbody, 5, "لا توجد استشارات أو تلاوات مرسلة حالياً.");
     return;
   }
+
+  // أي تحديث يصل من القاعدة يعيد بناء الجدول؛ نُبقي الصفوف التي فيها رد غير محفوظ
+  // أو تسجيل صوتي قيد العمل كما هي حتى لا يضيع ما كتبه المسؤول.
+  const existingRows = new Map();
+  [...tbody.children].forEach(row => { if (row.dataset && row.dataset.id) existingRows.set(row.dataset.id, row); });
   tbody.replaceChildren();
 
   allConsults.forEach(c => {
+    const old = existingRows.get(c.id);
+    if (old && typeof old._dirty === "function" && old._dirty()) { tbody.append(old); return; }
+
     const tr = document.createElement("tr");
+    tr.dataset.id = c.id;
 
     const tdStudent = document.createElement("td");
     const stName = document.createElement("strong");
@@ -1429,8 +1440,9 @@ function renderConsults() {
       if (!navigator.mediaDevices || typeof MediaRecorder === "undefined") {
         return toast("المتصفح لا يدعم التسجيل الصوتي", "err");
       }
+      let stream = null;
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        stream = await navigator.mediaDevices.getUserMedia({ audio: true });
         const opts = MediaRecorder.isTypeSupported("audio/webm;codecs=opus")
           ? { mimeType: "audio/webm;codecs=opus", audioBitsPerSecond: 20000 }
           : { audioBitsPerSecond: 20000 };
@@ -1448,6 +1460,7 @@ function renderConsults() {
           if (b.size > 0) {
             teacherBlob = b;
             removeExistingAudio = false;
+            if (teacherPreview.src && teacherPreview.src.startsWith("blob:")) URL.revokeObjectURL(teacherPreview.src);
             teacherPreview.src = URL.createObjectURL(b);
             teacherPreview.classList.remove("hidden");
             clearRecBtn.classList.remove("hidden");
@@ -1465,7 +1478,8 @@ function renderConsults() {
           if (teacherSecs >= 45 && teacherRecorder.state === "recording") teacherRecorder.stop();
         }, 1000);
       } catch (err) {
-        toast("يرجى السماح باستخدام المايكروفون", "err");
+        if (stream) stream.getTracks().forEach(t => t.stop());
+        toast("تعذر بدء التسجيل. تأكد من السماح باستخدام المايكروفون", "err");
       }
     };
 
@@ -1480,10 +1494,15 @@ function renderConsults() {
       if (teacherRecorder && teacherRecorder.state === "recording") {
         return toast("أوقف التسجيل الصوتي أولاً قبل الحفظ", "err");
       }
+      const replyText = replyInput.value.trim();
+      const keepsAudio = !!existingTeacherAudio && !removeExistingAudio;
+      if (!replyText && !teacherBlob && !keepsAudio) {
+        return toast("اكتب توجيه الشيخ أو سجّل رداً صوتياً أولاً", "err");
+      }
       saveReplyBtn.disabled = true;
       try {
         const updates = {
-          reply: replyInput.value.trim(),
+          reply: replyText,
           status: "تم الرد"
         };
         if (removeExistingAudio) {
@@ -1511,6 +1530,9 @@ function renderConsults() {
           }
         }
         await updateDoc(doc(db, "consultations", c.id), updates);
+        teacherBlob = null;
+        removeExistingAudio = false;
+        tr._dirty = () => false; // تم الحفظ: يُعاد بناء الصف من البيانات الجديدة
         toast("تم حفظ توجيه الشيخ وظهر في حساب الطالب");
       } catch (err) {
         toast("تعذر حفظ الرد. حاول مرة أخرى.", "err");
@@ -1533,6 +1555,12 @@ function renderConsults() {
       } catch (err) { toast("تعذر حذف الاستشارة", "err"); }
     };
     tdAct.append(delBtn);
+
+    tr._dirty = () =>
+      (teacherRecorder && teacherRecorder.state === "recording") ||
+      !!teacherBlob ||
+      removeExistingAudio ||
+      replyInput.value.trim() !== (c.reply || "").trim();
 
     tr.append(tdStudent, tdTopic, tdAudio, tdReply, tdAct);
     tbody.append(tr);
@@ -1861,6 +1889,9 @@ onAuthStateChanged(auth, user => {
   [unsubRegs, unsubUsers, unsubMedia, unsubConsults, unsubTajweed].forEach(u => u && u());
   unsubRegs = unsubUsers = unsubMedia = unsubConsults = unsubTajweed = null;
   regsReady = consultsReady = false;
+  allRows = []; allUsers = []; allMedia = []; allConsults = []; allTajweed = [];
+  [["tableBody", 7], ["consultTableBody", 5], ["mediaTableBody", 6], ["tajweedTableBody", 5], ["usersTableBody", 5]]
+    .forEach(([id, cols]) => emptyRow($(id), cols, "جاري التحميل..."));
   $("loginView").classList.add("hidden");
   $("deniedView").classList.add("hidden");
   $("adminView").classList.add("hidden");
