@@ -552,6 +552,20 @@ onSnapshot(query(collection(db, "media"), where("type", "==", "pdf")), snap => {
 });
 
 /* ---------- جلب المتون الصوتية المضافة من لوحة الإدارة (#40) ---------- */
+const tuhfaSlot = document.getElementById("tuhfaAudioSlot");
+const jazariyyahSlot = document.getElementById("jazariyyahAudioSlot");
+// نحفظ النص الافتراضي للخانتين لنرجعه لو حُذف التسجيل من لوحة الإدارة
+const SLOT_DEFAULTS = new Map([[tuhfaSlot, tuhfaSlot.innerHTML], [jazariyyahSlot, jazariyyahSlot.innerHTML]]);
+
+function makeAudioEl(src, marginTop) {
+  const aud = document.createElement("audio");
+  aud.controls = true;
+  aud.preload = "none";
+  aud.src = src;
+  aud.style.cssText = `width:100%;margin-top:${marginTop}`;
+  return aud;
+}
+
 onSnapshot(query(collection(db, "media"), where("type", "==", "audio")), snap => {
   const audios = snap.docs
     .map(d => ({ id: d.id, ...d.data() }))
@@ -559,31 +573,26 @@ onSnapshot(query(collection(db, "media"), where("type", "==", "audio")), snap =>
 
   const dynContainer = document.getElementById("dynamicAudioContainer");
   dynContainer.replaceChildren();
-
-  const tuhfaSlot = document.getElementById("tuhfaAudioSlot");
-  const jazariyyahSlot = document.getElementById("jazariyyahAudioSlot");
+  SLOT_DEFAULTS.forEach((html, slot) => { slot.innerHTML = html; });
+  const filledSlots = new Set();
 
   audios.forEach(item => {
     const src = getAudioStreamUrl(item.url);
-    if (!src) return;
+    // عنصر بلا صوت وبلا نص لا يُعرض؛ أما النص وحده (بدون صوت) فيُعرض كبطاقة قراءة
+    if (!src && !item.textContent) return;
 
-    if (item.category === "متن تحفة الأطفال" && !item.textContent) {
-      tuhfaSlot.replaceChildren();
-      const lbl = document.createElement("strong");
-      lbl.textContent = item.title || "تسجيل متن تحفة الأطفال";
-      const aud = document.createElement("audio");
-      aud.controls = true; aud.preload = "none"; aud.src = src; aud.style.cssText = "width:100%;margin-top:6px";
-      tuhfaSlot.append(lbl, aud);
-      return;
+    // تسجيل صوتي بلا نص لمتن مدمج: يوضع في خانته (الأحدث فقط)، وما عداه يظهر كبطاقة مستقلة
+    let slot = null;
+    if (src && !item.textContent) {
+      if (item.category === "متن تحفة الأطفال") slot = tuhfaSlot;
+      else if (item.category === "متن المقدمة الجزرية") slot = jazariyyahSlot;
     }
-
-    if (item.category === "متن المقدمة الجزرية" && !item.textContent) {
-      jazariyyahSlot.replaceChildren();
+    if (slot && !filledSlots.has(slot)) {
+      filledSlots.add(slot);
+      slot.replaceChildren();
       const lbl = document.createElement("strong");
-      lbl.textContent = item.title || "تسجيل متن المقدمة الجزرية";
-      const aud = document.createElement("audio");
-      aud.controls = true; aud.preload = "none"; aud.src = src; aud.style.cssText = "width:100%;margin-top:6px";
-      jazariyyahSlot.append(lbl, aud);
+      lbl.textContent = item.title || (slot === tuhfaSlot ? "تسجيل متن تحفة الأطفال" : "تسجيل متن المقدمة الجزرية");
+      slot.append(lbl, makeAudioEl(src, "6px"));
       return;
     }
 
@@ -591,7 +600,9 @@ onSnapshot(query(collection(db, "media"), where("type", "==", "audio")), snap =>
     art.className = "matn-card";
     const badge = document.createElement("span");
     badge.className = "badge";
-    badge.innerHTML = `<i class="fa-solid fa-headphones"></i>${item.category || "متن صوتي"}`;
+    const badgeIcon = document.createElement("i");
+    badgeIcon.className = "fa-solid fa-headphones";
+    badge.append(badgeIcon, document.createTextNode(item.category || "متن صوتي"));
     const h2 = document.createElement("h2");
     h2.textContent = item.title || "متن صوتي";
     art.append(badge, h2);
@@ -600,9 +611,7 @@ onSnapshot(query(collection(db, "media"), where("type", "==", "audio")), snap =>
       desc.textContent = item.description;
       art.append(desc);
     }
-    const aud = document.createElement("audio");
-    aud.controls = true; aud.preload = "none"; aud.src = src; aud.style.cssText = "width:100%;margin-top:10px";
-    art.append(aud);
+    if (src) art.append(makeAudioEl(src, "10px"));
 
     if (item.textContent) {
       const verses = document.createElement("div");
