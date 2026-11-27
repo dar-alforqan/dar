@@ -1,5 +1,5 @@
-const STATIC_CACHE = "forqan-static-v35";
-const RUNTIME_CACHE = "forqan-runtime-v35";
+const STATIC_CACHE = "forqan-static-v36";
+const RUNTIME_CACHE = "forqan-runtime-v36";
 const MAX_RUNTIME_ITEMS = 60;
 
 // ملفات الموقع الأساسية (تُحفظ عند التثبيت)
