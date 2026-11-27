@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>معرض الصور والأنشطة | دار الفرقان</title>
+<meta name="description" content="صور الحلقات القرآنية والتكريمات والأنشطة بدار الفرقان لتحفيظ القرآن الكريم.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ar_AR">
+<meta property="og:title" content="معرض الصور والأنشطة | دار الفرقان">
+<meta property="og:description" content="صور الحلقات القرآنية والتكريمات والأنشطة بدار الفرقان لتحفيظ القرآن الكريم.">
+<meta property="og:image" content="https://dar-alforqan.github.io/dar/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://dar-alforqan.github.io/dar/gallery.html">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://dar-alforqan.github.io/dar/gallery.html">
+<link rel="icon" type="image/png" sizes="96x96" href="icon-96.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#3A181E">
+<link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+<link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js">
+<link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js">
+<link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"></noscript>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&display=swap"></noscript>
+
+<style>
+:root{color-scheme:light}
+body.dark-mode{color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:"Cairo",Tahoma,"Segoe UI",Arial,sans-serif;background:var(--cream);color:var(--ink);line-height:1.7;transition:background .25s ease,color .25s ease;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+.fa-solid,.fa-regular,.fa-brands{margin-inline-end:6px}
+body.locked{overflow:hidden}
+header{background:var(--header-bg);color:var(--header-text);padding:18px 20px;padding-top:calc(18px + env(safe-area-inset-top,0));border-bottom:5px solid var(--gold);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.brand-box{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit}
+.brand-box img{width:46px;height:46px;border-radius:50%;object-fit:cover;border:2px solid var(--gold)}
+header h1{font-family:"Amiri","Traditional Arabic",Georgia,serif;font-size:1.85rem;margin:0;color:var(--gold);line-height:1.3}
+header p{margin:2px 0 0;opacity:.85;font-size:.9rem}
+.header-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.nav-btn{background:transparent;border:1px solid var(--gold);color:var(--gold);padding:6px 14px;border-radius:20px;cursor:pointer;font:inherit;font-size:.88rem;font-weight:700;text-decoration:none;transition:filter .2s}
+.nav-btn:hover{filter:brightness(1.15)}
+.nav-btn.gold{background:var(--gold);color:#3A181E}
+
+main{max-width:1050px;margin:0 auto;padding:28px 16px calc(70px + env(safe-area-inset-bottom,0))}
+.cats{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;justify-content:center}
+.cat-btn{padding:7px 16px;border:1px solid var(--wine);background:transparent;color:var(--wine);border-radius:20px;cursor:pointer;font:inherit;font-size:.9rem;font-weight:700;transition:background .2s}
+.cat-btn:hover{background:rgba(250,200,27,.15)}
+.cat-btn.active{background:var(--wine);color:var(--on-wine)}
+.count{text-align:center;margin:0 0 18px;font-size:.88rem;color:var(--text-muted);min-height:1.5em}
+
+.gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px}
+.photo-card{background:var(--card-bg);border:1px solid var(--line);border-radius:12px;overflow:hidden;cursor:pointer;transition:transform .2s ease,box-shadow .2s ease,background .25s ease;position:relative}
+.photo-card:hover{transform:translateY(-4px);box-shadow:0 8px 22px rgba(0,0,0,.14)}
+.img-wrap{position:relative;width:100%;height:220px;overflow:hidden;background:#2c1218}
+.img-wrap img{width:100%;height:100%;object-fit:cover;pointer-events:none;-webkit-user-drag:none;opacity:0;transition:opacity .4s ease}
+.img-wrap img.loaded{opacity:1}
+.img-shield{position:absolute;inset:0;z-index:2}
+/* أيقونة التكبير في زاوية الصورة */
+.zoom{position:absolute;bottom:10px;inset-inline-start:10px;z-index:3;width:34px;height:34px;border-radius:50%;background:rgba(58,24,30,.82);color:var(--gold);display:grid;place-items:center;font-size:.85rem;pointer-events:none}
+.zoom i{margin:0}
+.caption{padding:14px}
+.caption strong{display:block;font-family:"Amiri","Traditional Arabic",Georgia,serif;font-size:1.3rem;color:var(--wine);line-height:1.5}
+.caption p{margin:4px 0 0;font-size:.88rem;color:var(--text-muted)}
+.msg{grid-column:1/-1;text-align:center;padding:40px 10px;color:var(--text-muted)}
+
+.skel{height:290px;border-radius:12px;border:1px solid var(--line);background:linear-gradient(90deg,var(--card-bg) 25%,rgba(250,200,27,.12) 50%,var(--card-bg) 75%);background-size:200% 100%;animation:sh 1.4s infinite}
+@keyframes sh{to{background-position:-200% 0}}
+
+.lightbox{position:fixed;inset:0;background:rgba(10,3,5,.94);z-index:100;display:none;flex-direction:column;align-items:center;justify-content:center;padding:20px}
+.lightbox.open{display:flex}
+.lightbox-img-wrap{position:relative;max-width:92vw;max-height:78vh;display:flex;align-items:center;justify-content:center;touch-action:pan-y}
+.lightbox-img-wrap img{max-width:92vw;max-height:78vh;border-radius:10px;border:2px solid var(--gold);pointer-events:none;-webkit-user-drag:none}
+.img-shield-lb{position:absolute;inset:0;z-index:2}
+.lightbox-caption{color:#fff;margin-top:12px;text-align:center;max-width:600px}
+.lightbox-close{position:absolute;top:calc(20px + env(safe-area-inset-top,0));left:20px;background:var(--gold);color:#3A181E;border:0;padding:8px 18px;border-radius:20px;font:inherit;font-weight:700;cursor:pointer;z-index:105}
+.lb-count{position:absolute;top:calc(26px + env(safe-area-inset-top,0));right:20px;color:#F6E7DD;font-size:.9rem;z-index:105}
+.lb-nav{position:absolute;top:50%;transform:translateY(-50%);width:46px;height:46px;border-radius:50%;border:2px solid var(--gold);background:rgba(58,24,30,.85);color:var(--gold);font-size:1.1rem;line-height:1;cursor:pointer;z-index:105;display:flex;align-items:center;justify-content:center}
+.lb-nav i{margin:0}
+.lb-nav:hover{background:var(--gold);color:#3A181E}
+.lb-next{left:14px}
+.lb-prev{right:14px}
+.lb-nav[hidden]{display:none}
+
+a:focus-visible,button:focus-visible,.photo-card:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+@media(max-width:600px){
+  header h1{font-size:1.5rem}
+  .img-wrap{height:200px}
+  .lb-nav{width:40px;height:40px;top:auto;bottom:calc(24px + env(safe-area-inset-bottom,0));transform:none}
+}
+@media(hover:none){.photo-card:hover{transform:none;box-shadow:none}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+</style>
+<link rel="stylesheet" href="theme.css">
+</head>
+<body oncontextmenu="return false">
+<script>(function(){try{var o=localStorage.getItem("dar-theme-override");var d=o?o==="dark":matchMedia("(prefers-color-scheme: dark)").matches;document.body.classList.toggle("dark-mode",d);var f=parseInt(localStorage.getItem("dar-font-scale"),10);if(f>=85&&f<=150)document.documentElement.style.fontSize=f+"%"}catch(e){}})()</script>
+<script src="theme.js" defer></script>
+<script src="site-config.js" defer></script>
+
+<header>
+  <a href="index.html" class="brand-box">
+    <img src="icon-96.png" alt="شعار دار الفرقان" width="48" height="48" decoding="async">
+    <div>
+      <h1>معرض الصور والأنشطة</h1>
+      <p>صور الحلقات القرآنية والتكريمات بدار الفرقان</p>
+    </div>
+  </a>
+  <div class="header-actions">
+    <a href="index.html" class="nav-btn"><i class="fa-solid fa-house"></i>الرئيسية</a>
+    <a href="library.html" class="nav-btn"><i class="fa-solid fa-book-open"></i>المكتبة</a>
+    <a href="account.html" class="nav-btn gold"><i class="fa-solid fa-user"></i>حسابي</a>
+    <button id="themeToggle" class="nav-btn" type="button" aria-label="تبديل الوضع"><i class="fa-solid fa-moon"></i>ليلي</button>
+  </div>
+</header>
+
+<main>
+  <div class="cats">
+    <button class="cat-btn active" data-cat="all" aria-pressed="true"><i class="fa-solid fa-border-all"></i>كل الصور</button>
+    <button class="cat-btn" data-cat="الحلقات القرآنية" aria-pressed="false"><i class="fa-solid fa-book-quran"></i>الحلقات القرآنية</button>
+    <button class="cat-btn" data-cat="حفلات التكريم والإجازات" aria-pressed="false"><i class="fa-solid fa-award"></i>حفلات التكريم والإجازات</button>
+    <button class="cat-btn" data-cat="المسابقات والأنشطة" aria-pressed="false"><i class="fa-solid fa-trophy"></i>المسابقات والأنشطة</button>
+  </div>
+  <div class="count" id="count" aria-live="polite"></div>
+
+  <div id="galleryGrid" class="gallery-grid" aria-busy="true">
+    <div class="skel"></div><div class="skel"></div><div class="skel"></div>
+  </div>
+</main>
+
+<div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-label="عرض الصورة">
+  <button id="closeLightbox" class="lightbox-close" type="button"><i class="fa-solid fa-xmark"></i>إغلاق</button>
+  <div class="lb-count" id="lbCount"></div>
+  <button id="lbPrev" class="lb-nav lb-prev" type="button" aria-label="الصورة السابقة"><i class="fa-solid fa-chevron-right"></i></button>
+  <button id="lbNext" class="lb-nav lb-next" type="button" aria-label="الصورة التالية"><i class="fa-solid fa-chevron-left"></i></button>
+  <div class="lightbox-img-wrap" id="lbWrap">
+    <img id="lightboxImg" src="" alt="">
+    <div class="img-shield-lb"></div>
+  </div>
+  <div class="lightbox-caption">
+    <strong id="lightboxTitle" style="font-size:1.3rem;color:var(--gold);display:block"></strong>
+    <span id="lightboxDesc" style="font-size:.92rem;opacity:.9"></span>
+  </div>
+</div>
+
+<script type="module">
+import { firebaseConfig, initAppCheck } from "./firebase-config.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, query, where, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+/* ---------- البيانات ---------- */
+const app = initializeApp(firebaseConfig);
+initAppCheck(app);
+const db = getFirestore(app);
+const grid = document.getElementById("galleryGrid");
+const countEl = document.getElementById("count");
+let allPhotos = [];
+let shown = [];          // الصور المعروضة حاليًا (للتنقل داخل العارض)
+let activeCat = "all";
+let current = -1;
+
+function showMessage(text) {
+  grid.replaceChildren();
+  const p = document.createElement("p");
+  p.className = "msg";
+  p.textContent = text;
+  grid.append(p);
+}
+
+function renderPhotos() {
+  grid.setAttribute("aria-busy", "false");
+  shown = allPhotos.filter(p => activeCat === "all" || p.category === activeCat);
+  countEl.textContent = allPhotos.length ? `عدد الصور: ${shown.length}` : "";
+
+  if (!shown.length) {
+    showMessage("لا توجد صور مضافة في هذا القسم حالياً.");
+    return;
+  }
+
+  grid.replaceChildren();
+  shown.forEach((p, i) => {
+    const card = document.createElement("div");
+    card.className = "photo-card";
+    card.tabIndex = 0;
+    card.setAttribute("role", "button");
+    card.setAttribute("aria-label", "عرض صورة: " + (p.title || "نشاط بدار الفرقان"));
+
+    const imgWrap = document.createElement("div");
+    imgWrap.className = "img-wrap";
+    const img = document.createElement("img");
+    img.loading = "lazy";
+    img.decoding = "async";
+    img.alt = p.title || "صورة نشاط";
+    img.draggable = false;
+    img.onload = () => img.classList.add("loaded");
+    img.onerror = () => { imgWrap.style.display = "none"; };
+    img.src = p.url;
+    const shield = document.createElement("div");
+    shield.className = "img-shield";
+    const zoom = document.createElement("span");
+    zoom.className = "zoom";
+    zoom.setAttribute("aria-hidden", "true");
+    zoom.innerHTML = '<i class="fa-solid fa-expand"></i>';
+    imgWrap.append(img, shield, zoom);
+
+    const cap = document.createElement("div");
+    cap.className = "caption";
+    const st = document.createElement("strong");
+    st.textContent = p.title || "نشاط بدار الفرقان";
+    const desc = document.createElement("p");
+    desc.textContent = p.description || p.category || "";
+    cap.append(st, desc);
+
+    card.append(imgWrap, cap);
+    card.onclick = () => openLightbox(i);
+    card.onkeydown = e => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openLightbox(i); }
+    };
+    grid.append(card);
+  });
+}
+
+/* ---------- العارض (Lightbox) ---------- */
+const lb = document.getElementById("lightbox");
+const lbImg = document.getElementById("lightboxImg");
+const lbPrev = document.getElementById("lbPrev");
+const lbNext = document.getElementById("lbNext");
+const closeBtn = document.getElementById("closeLightbox");
+let lastFocus = null;
+
+function showAt(i) {
+  if (i < 0 || i >= shown.length) return;
+  current = i;
+  const p = shown[i];
+  lbImg.src = p.url;
+  lbImg.alt = p.title || "";
+  document.getElementById("lightboxTitle").textContent = p.title || "";
+  document.getElementById("lightboxDesc").textContent = p.description || "";
+  document.getElementById("lbCount").textContent = `${i + 1} / ${shown.length}`;
+  lbPrev.hidden = i === 0;
+  lbNext.hidden = i === shown.length - 1;
+}
+function openLightbox(i) {
+  lastFocus = document.activeElement;
+  showAt(i);
+  lb.classList.add("open");
+  document.body.classList.add("locked");
+  closeBtn.focus();
+}
+function closeLightbox() {
+  lb.classList.remove("open");
+  document.body.classList.remove("locked");
+  lbImg.removeAttribute("src");
+  current = -1;
+  if (lastFocus) lastFocus.focus();
+}
+closeBtn.onclick = closeLightbox;
+lbPrev.onclick = () => showAt(current - 1);
+lbNext.onclick = () => showAt(current + 1);
+lb.addEventListener("click", e => { if (e.target === lb) closeLightbox(); });
+
+// لوحة المفاتيح: Esc للإغلاق، والأسهم للتنقل (اتجاه عربي: السهم الأيسر = التالي)
+document.addEventListener("keydown", e => {
+  if (!lb.classList.contains("open")) return;
+  if (e.key === "Escape") closeLightbox();
+  else if (e.key === "ArrowLeft") showAt(current + 1);
+  else if (e.key === "ArrowRight") showAt(current - 1);
+});
+
+// السحب بالإصبع: يسارًا = التالي، يمينًا = السابق
+let sx = null;
+const wrap = document.getElementById("lbWrap");
+wrap.addEventListener("touchstart", e => { sx = e.touches[0].clientX; }, { passive: true });
+wrap.addEventListener("touchend", e => {
+  if (sx === null) return;
+  const dx = e.changedTouches[0].clientX - sx;
+  sx = null;
+  if (Math.abs(dx) < 50) return;
+  showAt(dx < 0 ? current + 1 : current - 1);
+}, { passive: true });
+
+/* ---------- التصنيفات ---------- */
+document.querySelectorAll(".cat-btn").forEach(btn => {
+  btn.onclick = () => {
+    document.querySelectorAll(".cat-btn").forEach(b => {
+      b.classList.remove("active");
+      b.setAttribute("aria-pressed", "false");
+    });
+    btn.classList.add("active");
+    btn.setAttribute("aria-pressed", "true");
+    activeCat = btn.dataset.cat;
+    renderPhotos();
+  };
+});
+
+onSnapshot(query(collection(db, "media"), where("type", "==", "image")), snap => {
+  allPhotos = snap.docs
+    .map(d => ({ id: d.id, ...d.data() }))
+    .sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+  renderPhotos();
+  // لو تغيّرت القائمة والعارض مفتوح (إضافة/حذف صورة) نضبط الصورة المعروضة
+  if (lb.classList.contains("open")) {
+    if (current >= shown.length) closeLightbox(); else showAt(current);
+  }
+}, () => {
+  grid.setAttribute("aria-busy", "false");
+  countEl.textContent = "";
+  showMessage("حدث خطأ أثناء تحميل المعرض. تأكد من اتصالك بالإنترنت ثم أعد تحميل الصفحة.");
+});
+</script>
+</body>
+</html>

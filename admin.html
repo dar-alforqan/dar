@@ -1,0 +1,2459 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>لوحة التحكم الشاملة | دار الفرقان</title>
+<meta name="robots" content="noindex, nofollow">
+
+<link rel="icon" type="image/png" sizes="96x96" href="icon-96.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#3A181E">
+<link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+<link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js">
+<link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js">
+<link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js">
+<link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js">
+<link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"></noscript>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&display=swap"></noscript>
+
+<style>
+:root{color-scheme:light}
+body.dark-mode{color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Cairo",Tahoma,"Segoe UI",Arial,sans-serif;background:var(--cream);color:var(--ink);line-height:1.6;transition:background .25s ease,color .25s ease}
+body.locked{overflow:hidden}
+.fa-solid,.fa-regular,.fa-brands{margin-inline-end:6px}
+.pw-btn .fa-solid{margin-inline-end:0}
+header{background:var(--header-bg);color:var(--header-text);padding:18px 20px;padding-top:calc(18px + env(safe-area-inset-top,0));border-bottom:5px solid var(--gold);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.brand-box{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit}
+.brand-box img{width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid var(--gold)}
+header h1{font-family:"Amiri","Traditional Arabic",Georgia,serif;font-size:1.8rem;margin:0;color:var(--gold);line-height:1.3}
+header p{margin:2px 0 0;font-size:.88rem;opacity:.85}
+.header-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.theme-btn,.nav-link{background:transparent;border:1px solid var(--gold);color:var(--gold);padding:6px 14px;border-radius:20px;cursor:pointer;font:inherit;font-size:.85rem;font-weight:bold;text-decoration:none;transition:filter .2s}
+.theme-btn:hover,.nav-link:hover{filter:brightness(1.15)}
+
+main{max-width:1150px;margin:0 auto;padding:24px 16px calc(60px + env(safe-area-inset-bottom,0))}
+.card{background:var(--card-bg);border:1px solid var(--line);border-radius:10px;padding:20px;margin-bottom:20px}
+.auth-box{max-width:440px;margin:40px auto}
+label{display:block;font-weight:600;margin:12px 0 4px;font-size:.92rem}
+input,select,textarea{width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;font:inherit;background:var(--input-bg);color:var(--ink)}
+input:focus,select:focus,textarea:focus,button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offset:1px}
+input:focus,select:focus,textarea:focus{border-color:var(--gold)}
+.pw{position:relative}
+.pw input{padding-right:46px}
+.pw-btn{position:absolute;right:4px;top:50%;transform:translateY(-50%);background:none;border:0;cursor:pointer;font-size:1.1rem;padding:6px 10px;color:var(--ink)}
+.link{background:none;border:0;color:var(--wine);text-decoration:underline;font:inherit;cursor:pointer;padding:0;margin-top:12px;font-size:.9rem}
+.primary{padding:11px 20px;background:var(--gold);color:#3A181E;border:0;border-radius:8px;font:inherit;font-weight:700;cursor:pointer;transition:filter .2s}
+.primary:hover{filter:brightness(1.06)}
+.primary:disabled{opacity:.6;cursor:wait}
+.btn-outline{padding:8px 16px;background:transparent;border:1px solid var(--wine);color:var(--wine);border-radius:8px;font:inherit;font-weight:700;cursor:pointer}
+
+.admin-tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}
+.tab-btn{flex:1;min-width:160px;padding:12px;border:2px solid var(--wine);background:var(--card-bg);color:var(--wine);border-radius:10px;font:inherit;font-weight:700;cursor:pointer;transition:.2s}
+.tab-btn.active{background:var(--wine);color:var(--on-wine)}
+
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:20px}
+.stat-card{background:var(--card-bg);border:1px solid var(--line);border-top:4px solid var(--gold);border-radius:10px;padding:14px 16px;text-align:center}
+.stat-card i{display:inline-grid;place-items:center;width:38px;height:38px;margin:0 0 6px;border-radius:10px;background:rgba(250,200,27,.18);color:var(--wine);font-size:1rem}
+.stat-card strong{display:block;font-size:1.8rem;color:var(--wine);font-family:"Amiri","Traditional Arabic",Georgia,serif;line-height:1.2}
+.stat-card span{font-size:.88rem;color:var(--text-muted)}
+
+/* لوحة الرسوم البيانية للإدارة (#34) */
+.charts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-bottom:20px}
+.chart-card{background:var(--card-bg);border:1px solid var(--line);border-radius:10px;padding:18px}
+.chart-card h3{margin:0 0 14px;font-family:"Amiri","Traditional Arabic",Georgia,serif;font-size:1.35rem;color:var(--wine)}
+.bar-row{margin-bottom:12px}
+.bar-label{display:flex;justify-content:space-between;font-size:.88rem;font-weight:700;margin-bottom:4px}
+.bar-track{height:12px;background:rgba(128,128,128,.16);border-radius:8px;overflow:hidden}
+.bar-fill{height:100%;background:linear-gradient(90deg,var(--wine),var(--gold));border-radius:8px;transition:width .4s ease}
+.donut-wrap{display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap}
+.donut-legend{display:flex;flex-direction:column;gap:8px;font-size:.88rem}
+.legend-item{display:flex;align-items:center;gap:8px}
+.legend-dot{width:12px;height:12px;border-radius:50%;flex:none}
+.week-chart{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;align-items:end;height:150px;padding-top:16px}
+.week-col{display:flex;flex-direction:column;align-items:center;height:100%;justify-content:flex-end;gap:4px}
+.week-bar{width:100%;max-width:34px;background:var(--gold);border-radius:6px 6px 0 0;min-height:4px;transition:height .4s ease}
+.week-bar.peak{background:var(--wine)}
+.week-val{font-size:.78rem;font-weight:700;color:var(--wine)}
+.week-day{font-size:.78rem;color:var(--text-muted)}
+
+/* مسجل صوت رد الشيخ (#25) */
+.teacher-rec-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:6px}
+.rec-mini-btn{background:#a4161a;color:#fff;border:0;padding:5px 12px;border-radius:16px;font:inherit;font-size:.8rem;font-weight:700;cursor:pointer}
+.rec-mini-btn.recording{background:#1d5a14}
+.rec-mini-clear{background:none;border:0;color:var(--err);font:inherit;font-size:.8rem;text-decoration:underline;cursor:pointer;padding:0}
+
+.toolbar{display:grid;grid-template-columns:1fr repeat(2,auto) auto;gap:10px;align-items:end;margin-bottom:16px}
+@media(max-width:760px){.toolbar{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.toolbar{grid-template-columns:1fr}}
+
+.table-wrap{overflow-x:auto;background:var(--card-bg);border:1px solid var(--line);border-radius:10px}
+table{width:100%;border-collapse:collapse;min-width:780px;text-align:right}
+th,td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:middle;font-size:.9rem}
+th{background:var(--header-bg);color:var(--gold);font-weight:700;white-space:nowrap}
+tr:hover td{background:var(--row-hover)}
+.status-select{padding:5px 8px;border-radius:6px;font-weight:700;font-size:.85rem;width:auto;min-width:120px}
+.wa-btn{display:inline-flex;align-items:center;gap:4px;background:#25D366;color:#fff;text-decoration:none;padding:5px 10px;border-radius:6px;font-size:.8rem;font-weight:700;white-space:nowrap}
+.wa-btn .fa-brands{margin-inline-end:0}
+.del-btn{background:#fbe3e3;color:#a4161a;border:0;padding:6px 10px;border-radius:6px;cursor:pointer;font:inherit;font-size:.82rem;font-weight:700}
+body.dark-mode .del-btn{background:#3b1012;color:#ff9b9e}
+.msg{margin-top:12px;padding:10px;border-radius:8px;display:none}
+.msg.err{display:block;background:#fbe3e3;color:var(--err)}
+.msg.ok{display:block;background:#e5f3e2;color:#1d5a14}
+body.dark-mode .msg.err{background:#3b1012;color:#ff9b9e}
+body.dark-mode .msg.ok{background:#0e2e13;color:#85e085}
+.top-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.hint{font-size:.82rem;color:var(--text-muted);margin-top:4px;display:block}
+.badge{display:inline-block;min-width:22px;padding:0 7px;border-radius:11px;background:var(--gold);color:#3A181E;font-size:.8rem;line-height:22px}
+.helper-presets{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.preset-btn{background:rgba(250,200,27,.18);border:1px solid var(--wine);color:var(--wine);padding:4px 10px;border-radius:14px;font:inherit;font-size:.8rem;font-weight:700;cursor:pointer}
+.hidden{display:none !important}
+
+/* نافذة تعديل المحتوى (#40) */
+.modal{position:fixed;inset:0;background:rgba(10,3,5,.82);z-index:180;display:none;align-items:center;justify-content:center;padding:16px}
+.modal.open{display:flex}
+.modal-box{background:var(--card-bg);color:var(--ink);width:100%;max-width:650px;max-height:88vh;border-radius:12px;border:2px solid var(--gold);display:flex;flex-direction:column;overflow:hidden}
+.modal-head{background:var(--header-bg);color:var(--gold);padding:14px 18px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.modal-head strong{font-family:"Amiri","Traditional Arabic",Georgia,serif;font-size:1.35rem}
+.modal-close{background:#a4161a;color:#fff;border:0;padding:6px 14px;border-radius:6px;font:inherit;font-size:.86rem;font-weight:700;cursor:pointer}
+.modal-body{padding:18px;overflow-y:auto}
+
+/* إشعار منبثق بدل alert */
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(24px + env(safe-area-inset-bottom,0));z-index:200;max-width:92%;padding:12px 20px;border-radius:10px;font-weight:700;box-shadow:0 6px 18px rgba(0,0,0,.35);display:none;border:1px solid var(--gold);background:var(--header-bg);color:var(--header-text)}
+.toast.show{display:block}
+.toast.err{background:#a4161a;color:#fff;border-color:#a4161a}
+
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+<link rel="stylesheet" href="theme.css">
+</head>
+<body>
+<script>(function(){try{var o=localStorage.getItem("dar-theme-override");var d=o?o==="dark":matchMedia("(prefers-color-scheme: dark)").matches;document.body.classList.toggle("dark-mode",d);var f=parseInt(localStorage.getItem("dar-font-scale"),10);if(f>=85&&f<=150)document.documentElement.style.fontSize=f+"%"}catch(e){}})()</script>
+<script src="theme.js" defer></script>
+
+<header>
+  <a href="index.html" class="brand-box">
+    <img src="icon-96.png" alt="شعار دار الفرقان" width="48" height="48" decoding="async">
+    <div>
+      <h1>لوحة تحكم دار الفرقان</h1>
+      <p>الإدارة الشاملة للطلبات، التلاوات، المكتبة، المعرض، التجويد، والحسابات</p>
+    </div>
+  </a>
+  <div class="header-actions">
+    <a href="index.html" class="nav-link"><i class="fa-solid fa-house"></i>الرئيسية</a>
+    <a href="library.html" class="nav-link"><i class="fa-solid fa-book-open"></i>المكتبة</a>
+    <a href="gallery.html" class="nav-link"><i class="fa-solid fa-images"></i>المعرض</a>
+    <button id="themeToggle" class="theme-btn" type="button" aria-label="تبديل الوضع"><i class="fa-solid fa-moon"></i>ليلي</button>
+  </div>
+</header>
+
+<main>
+  <section id="loginView" class="card auth-box hidden">
+    <h2 style="margin-top:0"><i class="fa-solid fa-shield-halved"></i>تسجيل دخول الإدارة</h2>
+    <form id="loginForm">
+      <label for="email">البريد الإلكتروني للمسؤول</label>
+      <input id="email" type="email" dir="ltr" autocomplete="username" required>
+      <label for="password">كلمة المرور</label>
+      <div class="pw">
+        <input id="password" type="password" dir="ltr" autocomplete="current-password" required>
+        <button class="pw-btn" id="pwToggle" type="button" aria-label="إظهار كلمة المرور"><i class="fa-solid fa-eye"></i></button>
+      </div>
+      <button class="primary" style="width:100%;margin-top:16px" type="submit" id="loginBtn"><i class="fa-solid fa-right-to-bracket"></i>دخول</button>
+      <button class="link" id="resetBtn" type="button">نسيت كلمة المرور؟</button>
+      <div id="loginMsg" class="msg" role="alert"></div>
+    </form>
+  </section>
+
+  <section id="deniedView" class="card auth-box hidden" style="text-align:center">
+    <h2 style="color:var(--err);margin-top:0"><i class="fa-solid fa-ban"></i>غير مصرح لك بالدخول</h2>
+    <p>الحساب المسجل حالياً (<strong id="currentUserEmail" dir="ltr"></strong>) ليس ضمن حسابات إدارة الدار.</p>
+    <button id="logoutDenied" class="primary" type="button"><i class="fa-solid fa-right-from-bracket"></i>تسجيل الخروج وتبديل الحساب</button>
+  </section>
+
+  <section id="adminView" class="hidden">
+    <div class="top-bar">
+      <div><i class="fa-solid fa-user-shield"></i>مرحباً بك، <strong id="adminEmailDisplay" dir="ltr"></strong></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button id="notifyBtn" class="btn-outline hidden" type="button"><i class="fa-solid fa-bell"></i>تفعيل تنبيهات المتصفح</button>
+        <button id="logoutBtn" class="btn-outline" type="button"><i class="fa-solid fa-right-from-bracket"></i>تسجيل الخروج</button>
+      </div>
+    </div>
+
+    <div id="verifyBox" class="msg err hidden">
+      <i class="fa-solid fa-envelope-circle-check"></i>إيميلك غير مؤكد عند Firebase، وبدون التأكيد قواعد الحماية بتمنع قراءة البيانات.
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+        <button id="verifyBtn" class="btn-outline" type="button">إرسال رابط التأكيد لإيميلي</button>
+        <button id="verifyReloadBtn" class="btn-outline" type="button">أكدت الإيميل، حدّث الصفحة</button>
+      </div>
+    </div>
+
+    <div class="admin-tabs">
+      <button class="tab-btn active" data-tab="tabRegs" type="button"><i class="fa-solid fa-clipboard-list"></i>طلبات التسجيل</button>
+      <button class="tab-btn" data-tab="tabConsults" type="button"><i class="fa-solid fa-microphone-lines"></i>استشارات التلاوة والحفظ <span id="consultsBadge" class="badge hidden">0</span></button>
+      <button class="tab-btn" data-tab="tabMedia" type="button"><i class="fa-solid fa-photo-film"></i>المكتبة والمعرض والمتون</button>
+      <button class="tab-btn" data-tab="tabTajweed" type="button"><i class="fa-solid fa-book-bookmark"></i>دليل التجويد السريع</button>
+      <button class="tab-btn" data-tab="tabProgress" type="button"><i class="fa-solid fa-chart-line"></i>متابعة الطلاب</button>
+      <button class="tab-btn" data-tab="tabUsers" type="button"><i class="fa-solid fa-users"></i>سجل الحسابات (<span id="usersCountBadge">0</span>)</button>
+      <button class="tab-btn" data-tab="tabStats" type="button"><i class="fa-solid fa-chart-pie"></i>الإحصائيات والتقارير</button>
+      <button class="tab-btn" data-tab="tabNews" type="button"><i class="fa-solid fa-newspaper"></i>المنشورات والمسابقات</button>
+      <button class="tab-btn" data-tab="tabSettings" type="button"><i class="fa-solid fa-gear"></i>إعدادات الموقع</button>
+    </div>
+
+    <div id="tabRegs" class="admin-panel">
+      <div class="stats">
+        <div class="stat-card"><i class="fa-solid fa-inbox"></i><strong id="statTotal">0</strong><span>إجمالي الطلبات</span></div>
+        <div class="stat-card"><i class="fa-solid fa-bell"></i><strong id="statNew">0</strong><span>طلبات جديدة</span></div>
+        <div class="stat-card"><i class="fa-solid fa-phone"></i><strong id="statContacted">0</strong><span>تم التواصل</span></div>
+        <div class="stat-card"><i class="fa-solid fa-user-check"></i><strong id="statAccepted">0</strong><span>مقبول / انتظم</span></div>
+      </div>
+
+      <div class="card toolbar">
+        <div>
+          <label for="searchInput" style="margin-top:0">بحث بالاسم أو الهاتف</label>
+          <input id="searchInput" type="search" placeholder="اكتب اسم الطالب أو رقمه...">
+        </div>
+        <div>
+          <label for="filterProgram" style="margin-top:0">البرنامج</label>
+          <select id="filterProgram">
+            <option value="all">كل البرامج</option>
+            <option value="تحفيظ القرآن">تحفيظ القرآن</option>
+            <option value="إجازة">إجازة</option>
+            <option value="التجويد">التجويد</option>
+            <option value="القراءات">القراءات</option>
+          </select>
+        </div>
+        <div>
+          <label for="filterStatus" style="margin-top:0">الحالة</label>
+          <select id="filterStatus">
+            <option value="all">كل الحالات</option>
+            <option value="جديد">جديد</option>
+            <option value="تم التواصل">تم التواصل</option>
+            <option value="مقبول">مقبول</option>
+            <option value="مرفوض">مرفوض</option>
+          </select>
+        </div>
+        <div>
+          <button id="exportBtn" class="primary" type="button" style="width:100%"><i class="fa-solid fa-file-excel"></i>تحميل Excel</button>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>الاسم الكامل</th>
+              <th>رقم الواتساب</th>
+              <th>البرنامج</th>
+              <th>الملاحظات</th>
+              <th>التاريخ</th>
+              <th>الحالة</th>
+              <th>إجراء</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <tr><td colspan="7" style="text-align:center;padding:24px">جاري تحميل الطلبات...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="tabConsults" class="admin-panel hidden">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>الطالب والهاتف</th>
+              <th>الموضوع والسؤال</th>
+              <th>التسجيل الصوتي</th>
+              <th>رد وتوجيه الشيخ (نص وصوت)</th>
+              <th>إجراء</th>
+            </tr>
+          </thead>
+          <tbody id="consultTableBody">
+            <tr><td colspan="5" style="text-align:center;padding:24px">جاري تحميل الاستشارات...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="tabMedia" class="admin-panel hidden">
+      <div class="card">
+        <h3 style="margin-top:0;color:var(--wine)"><i class="fa-solid fa-circle-plus"></i>إضافة صورة للمعرض أو كتاب PDF أو متن صوتي للمكتبة</h3>
+        <form id="mediaForm">
+          <div class="form-grid">
+            <div>
+              <label for="mediaType">نوع الإضافة (أين سيظهر؟)</label>
+              <select id="mediaType">
+                <option value="image">صورة من الجهاز (تذهب لمعرض الصور للعرض فقط)</option>
+                <option value="pdf">كتاب أو متن على Google Drive (يذهب للمكتبة للتحميل)</option>
+                <option value="audio">متن صوتي للتجويد (يذهب لقسم المتون الصوتية في المكتبة)</option>
+              </select>
+            </div>
+            <div>
+              <label for="mediaCategory">التصنيف الفرعي</label>
+              <select id="mediaCategory"></select>
+            </div>
+            <div>
+              <label for="mediaTitle">العنوان (اسم المتن أو عنوان الصورة)</label>
+              <input id="mediaTitle" placeholder="مثال: متن الجزرية / تكريم حفظة الدار" required>
+            </div>
+          </div>
+
+          <label for="mediaDesc">وصف مختصر (اختياري)</label>
+          <input id="mediaDesc" placeholder="نبذة قصيرة تظهر تحت العنوان...">
+
+          <div id="imageUploadBox" style="margin-top:8px">
+            <label for="mediaFile">اختر الصورة من هاتفك أو جهازك</label>
+            <input id="mediaFile" type="file" accept="image/*">
+            <span class="hint">يتم ضغط الصورة وضبط جودتها تلقائياً لتعمل في المعرض بسرعة عالية.</span>
+          </div>
+
+          <div id="pdfLinkBox" class="hidden" style="margin-top:8px">
+            <label for="mediaUrl">رابط الملف على Google Drive</label>
+            <input id="mediaUrl" type="url" dir="ltr" placeholder="https://drive.google.com/file/d/.../view?usp=sharing">
+            <span class="hint">ارفع الملف على Google Drive مهما كان حجمه (حتى 2 جيجا أو أكثر)، واجعل المشاركة "أي شخص لديه الرابط" ثم الصق الرابط هنا.</span>
+          </div>
+
+          <div id="audioUploadBox" class="hidden" style="margin-top:8px">
+            <label for="mediaAudioFile">رفع ملف الصوت (MP3 / M4A / WAV) أو وضع رابط مباشر بالأسفل</label>
+            <input id="mediaAudioFile" type="file" accept="audio/*">
+            <label for="mediaAudioUrl">أو رابط الملف الصوتي المباشر (اختياري في حال الرفع من الجهاز)</label>
+            <input id="mediaAudioUrl" type="url" dir="ltr" placeholder="https://...">
+            <label for="mediaText">نص أبيات المتن (اختياري — يظهر للطالب للقراءة أثناء الاستماع، ويمكنك تعديله لاحقاً)</label>
+            <div class="helper-presets">
+              <button type="button" class="preset-btn" data-fill-matn="tuhfa" data-target="mediaText"><i class="fa-solid fa-wand-magic-sparkles"></i>تحميل نص تحفة الأطفال للتعديل</button>
+              <button type="button" class="preset-btn" data-fill-matn="jazariyyah" data-target="mediaText"><i class="fa-solid fa-wand-magic-sparkles"></i>تحميل نص الجزرية للتعديل</button>
+            </div>
+            <textarea id="mediaText" rows="5" style="font-family:'Amiri',serif;font-size:1.15rem;margin-top:6px" placeholder="اكتب أبيات المتن هنا..."></textarea>
+          </div>
+
+          <button id="mediaSubmitBtn" class="primary" type="submit" style="margin-top:16px"><i class="fa-solid fa-cloud-arrow-up"></i>حفظ ونشر في القسم المخصص</button>
+          <div id="mediaMsg" class="msg" role="status"></div>
+        </form>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>القسم</th>
+              <th>التصنيف</th>
+              <th>العنوان والوصف</th>
+              <th>معاينة</th>
+              <th>التاريخ</th>
+              <th>تعديل / حذف</th>
+            </tr>
+          </thead>
+          <tbody id="mediaTableBody">
+            <tr><td colspan="6" style="text-align:center;padding:24px">جاري تحميل محتويات المكتبة والمعرض...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- إدارة دليل التجويد السريع (#17) -->
+    <div id="tabTajweed" class="admin-panel hidden">
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+          <h3 id="tajweedFormHeading" style="margin:0;color:var(--wine)"><i class="fa-solid fa-circle-plus"></i>إضافة حكم أو باب جديد في دليل التجويد السريع</h3>
+          <button id="seedTajweedBtn" class="btn-outline" type="button" style="font-size:.85rem"><i class="fa-solid fa-download"></i>استيراد القواعد الأساسية الـ 6 للتعديل</button>
+        </div>
+        <form id="tajweedForm">
+          <input type="hidden" id="tajweedEditId">
+          <div class="form-grid">
+            <div>
+              <label for="tajweedOrder">رقم الترتيب</label>
+              <input id="tajweedOrder" type="number" min="1" value="1" required>
+            </div>
+            <div style="grid-column:span 2">
+              <label for="tajweedTitle">عنوان الباب أو الحكم</label>
+              <input id="tajweedTitle" placeholder="مثال: أحكام النون الساكنة والتنوين" required>
+            </div>
+          </div>
+
+          <label for="tajweedContent">شرح الحكم والقواعد</label>
+          <textarea id="tajweedContent" rows="4" placeholder="اكتب شرح الحكم وحروفه ومقدار الغنة أو المد بوضوح..." required></textarea>
+
+          <label for="tajweedExamples">أمثلة قرآنية توضيحية (اختياري)</label>
+          <input id="tajweedExamples" placeholder="مثال: مَنْ آمَنَ · سَمِيعٌ عَلِيمٌ · مِن بَعْدِ">
+
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px">
+            <button id="tajweedSubmitBtn" class="primary" type="submit" style="margin-top:0"><i class="fa-solid fa-floppy-disk"></i>حفظ ونشر في دليل التجويد</button>
+            <button id="tajweedCancelEditBtn" class="btn-outline hidden" type="button">إلغاء التعديل</button>
+          </div>
+          <div id="tajweedMsg" class="msg" role="status"></div>
+        </form>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:70px">الترتيب</th>
+              <th>عنوان الباب / الحكم</th>
+              <th>الشرح</th>
+              <th>الأمثلة القرآنية</th>
+              <th>تعديل / حذف</th>
+            </tr>
+          </thead>
+          <tbody id="tajweedTableBody">
+            <tr><td colspan="5" style="text-align:center;padding:24px">جاري تحميل أحكام دليل التجويد...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- لوحة متابعة تقدّم الطلاب (#6) -->
+    <div id="tabProgress" class="admin-panel hidden">
+      <div class="card" style="margin-bottom:14px">
+        <h3 style="margin-top:0"><i class="fa-solid fa-chart-line"></i>تسجيل تقدّم طالب</h3>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px">
+          <div><label for="progStudent" style="margin-top:0">الطالب</label><select id="progStudent"><option value="">اختر الطالب...</option></select></div>
+          <div><label for="progType" style="margin-top:0">نوع الجلسة</label>
+            <select id="progType"><option>حفظ جديد</option><option>مراجعة</option><option>تلاوة</option><option>تجويد</option><option>اختبار</option></select></div>
+          <div><label for="progSurah" style="margin-top:0">السورة</label><select id="progSurah"></select></div>
+          <div><label for="progRange" style="margin-top:0">الآيات أو الصفحات</label><input id="progRange" maxlength="120" placeholder="مثال: من الآية 1 إلى 20 (أو «كاملة»). الأرقام تُحدّث خريطة الحفظ"></div>
+          <div><label for="progRating" style="margin-top:0">التقييم</label>
+            <select id="progRating"><option value="">بدون تقييم</option><option>ممتاز</option><option>جيد جدًا</option><option>جيد</option><option>يحتاج مراجعة</option></select></div>
+        </div>
+        <label for="progNote">ملاحظة (اختياري، يراها الطالب في حسابه وولي أمره إن كان مرتبطًا)</label>
+        <textarea id="progNote" rows="2" maxlength="600"></textarea>
+        <button id="progSaveBtn" class="primary" type="button" style="margin-top:12px"><i class="fa-solid fa-floppy-disk"></i>حفظ في سجل الطالب</button>
+      </div>
+      <div class="card" style="margin-bottom:14px">
+        <h3 style="margin-top:0"><i class="fa-solid fa-award"></i>شهادة إتمام للطباعة</h3>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px">
+          <div><label for="certStudent" style="margin-top:0">الطالب</label><select id="certStudent"><option value="">اختر الطالب...</option></select></div>
+          <div><label for="certTitle" style="margin-top:0">سبب الشهادة</label>
+            <input id="certTitle" list="certTitles" maxlength="120" placeholder="مثال: إتمام حفظ جزء عمّ">
+            <datalist id="certTitles"><option value="إتمام حفظ جزء عمّ"><option value="إتمام حفظ القرآن الكريم"><option value="إتمام دورة التجويد"><option value="التفوّق في الحفظ والمراجعة"><option value="إتمام حفظ متن تحفة الأطفال"><option value="إتمام حفظ المقدمة الجزرية"></datalist></div>
+          <div><label for="certSheikh" style="margin-top:0">اسم الشيخ (للتوقيع)</label><input id="certSheikh" maxlength="80" placeholder="اسم الشيخ"></div>
+        </div>
+        <button id="certBtn" class="primary" type="button" style="margin-top:12px"><i class="fa-solid fa-print"></i>فتح الشهادة للطباعة / حفظ PDF</button>
+      </div>
+      <div class="card" style="margin-bottom:14px">
+        <h3 style="margin-top:0"><i class="fa-solid fa-people-roof"></i>أولياء الأمور</h3>
+        <p style="margin:0 0 12px;font-size:.9rem;opacity:.9">اربط بريد ولي الأمر بحساب الطالب ليتابع تقدّمه من «بوابة ولي الأمر» (قراءة فقط، ولا يرى استشاراته). لا يظهر أي أثر لهذا الربط في حساب الطالب. اربطه للطلاب دون 18 سنة بموافقة ولي الأمر، ولمن هم فوق 18 بموافقة الطالب نفسه.</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px">
+          <div><label for="glStudent" style="margin-top:0">الطالب</label><select id="glStudent"><option value="">اختر الطالب...</option></select></div>
+          <div><label for="glEmail" style="margin-top:0">بريد ولي الأمر (Gmail مثلًا)</label><input id="glEmail" type="email" dir="ltr" placeholder="parent@gmail.com" autocomplete="off"></div>
+        </div>
+        <button id="glSaveBtn" class="primary" type="button" style="margin-top:12px"><i class="fa-solid fa-link"></i>ربط ولي الأمر بالطالب</button>
+        <div class="table-wrap" style="margin-top:14px">
+          <table>
+            <thead><tr><th>الطالب</th><th>بريد ولي الأمر</th><th>تاريخ الربط</th><th>إلغاء الربط</th></tr></thead>
+            <tbody id="glTableBody"><tr><td colspan="4" style="text-align:center;padding:18px">لا توجد روابط بعد.</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card" style="margin-bottom:14px">
+        <label for="progFilter" style="margin-top:0">عرض سجل</label>
+        <select id="progFilter"><option value="">كل الطلاب (آخر 100 تسجيل)</option></select>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>الطالب</th><th>الجلسة</th><th>السورة</th><th>الآيات / الصفحات</th><th>التقييم</th><th>التاريخ</th><th>حذف</th></tr></thead>
+          <tbody id="progTableBody"><tr><td colspan="7" style="text-align:center;padding:24px">جاري التحميل...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="tabUsers" class="admin-panel hidden">
+      <div class="card" style="margin-bottom:14px">
+        <label for="userSearchInput" style="margin-top:0">بحث في الحسابات بالاسم أو البريد أو رقم الهاتف</label>
+        <input id="userSearchInput" type="search" placeholder="ابحث عن أي حساب...">
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>الاسم</th>
+              <th>البريد الإلكتروني</th>
+              <th>رقم الهاتف</th>
+              <th>تاريخ التسجيل</th>
+              <th>إدارة الحساب</th>
+            </tr>
+          </thead>
+          <tbody id="usersTableBody">
+            <tr><td colspan="5" style="text-align:center;padding:24px">جاري تحميل سجل الحسابات...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- لوحة الإحصائيات والتقارير (#34) -->
+    <div id="tabNews" class="admin-panel hidden">
+      <div class="card" style="margin-bottom:14px">
+        <h3 style="margin-top:0"><i class="fa-solid fa-pen-to-square"></i><span id="newsFormTitle">منشور جديد</span></h3>
+        <p style="margin:0 0 12px;font-size:.9rem;opacity:.9">يظهر المنشور في «الأخبار والمسابقات» بالصفحة الرئيسية وفي صفحة المنشورات بشكل يشبه فيسبوك. الصور برابط خارجي أو مرفوعة بحجم صغير (تُضغط تلقائيًا).</p>
+        <input type="hidden" id="newsEditId">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px">
+          <div><label for="newsKind" style="margin-top:0">النوع</label>
+            <select id="newsKind"><option>منشور</option><option>خبر</option><option>مسابقة</option><option>إعلان</option></select></div>
+          <div><label for="newsTitle" style="margin-top:0">عنوان (اختياري)</label><input id="newsTitle" maxlength="120"></div>
+        </div>
+        <label for="newsBody">اكتب المنشور</label>
+        <textarea id="newsBody" rows="5" maxlength="3000" placeholder="بمَ تريد أن تُخبر الطلاب والأهالي؟"></textarea>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px">
+          <div><label for="newsImageUrl">رابط صورة (https، اختياري)</label><input id="newsImageUrl" dir="ltr" placeholder="https://..."></div>
+          <div><label for="newsImageFile">أو ارفع صورة من جهازك</label><input id="newsImageFile" type="file" accept="image/*"></div>
+        </div>
+        <img id="newsImagePreview" class="hidden" alt="معاينة الصورة" style="max-width:100%;max-height:220px;border-radius:10px;margin-top:8px">
+        <label class="consent hidden" id="newsRemoveImgWrap"><input id="newsRemoveImg" type="checkbox"><span>حذف الصورة الحالية</span></label>
+        <label for="newsLink">رابط للتفاصيل أو المشاركة (اختياري)</label>
+        <input id="newsLink" dir="ltr" placeholder="https://...">
+        <label class="consent"><input id="newsPinned" type="checkbox"><span>تثبيت المنشور في أعلى القائمة</span></label>
+        <button id="newsSaveBtn" class="primary" type="button" style="margin-top:12px"><i class="fa-solid fa-paper-plane"></i>نشر</button>
+        <button id="newsCancelBtn" class="link hidden" type="button">إلغاء التعديل</button>
+      </div>
+      <div id="newsAdminList"></div>
+    </div>
+
+    <div id="tabSettings" class="admin-panel hidden">
+      <div class="card" style="margin-bottom:14px">
+        <h3 style="margin-top:0"><i class="fa-solid fa-address-book"></i>بيانات التواصل في الموقع</h3>
+        <p style="margin:0 0 12px;font-size:.9rem;opacity:.9">تتغيّر في الصفحة الرئيسية وسياسة الخصوصية وأزرار الواتساب فور الحفظ. اترك الخانة فارغة لإبقاء القيمة المكتوبة في الصفحات.</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px">
+          <div><label for="setPhone" style="margin-top:0">الرقم الظاهر للزوار</label><input id="setPhone" dir="ltr" placeholder="01099262489"></div>
+          <div><label for="setWhatsapp" style="margin-top:0">رقم الواتساب (دولي بدون +)</label><input id="setWhatsapp" dir="ltr" placeholder="201099262489"></div>
+          <div><label for="setEmail" style="margin-top:0">البريد الإلكتروني</label><input id="setEmail" type="email" dir="ltr" placeholder="daralforqan@gmail.com"></div>
+          <div><label for="setFacebook" style="margin-top:0">رابط صفحة فيسبوك</label><input id="setFacebook" dir="ltr" placeholder="https://www.facebook.com/..."></div>
+        </div>
+      </div>
+      <div class="card" style="margin-bottom:14px">
+        <h3 style="margin-top:0"><i class="fa-solid fa-bullhorn"></i>شريط إعلان أعلى الموقع</h3>
+        <label class="consent"><input id="setAnncOn" type="checkbox"><span>إظهار الشريط للزوار</span></label>
+        <label for="setAnnc">نص الإعلان</label>
+        <input id="setAnnc" maxlength="160" placeholder="مثال: التسجيل مفتوح للدفعة الجديدة">
+        <label for="setAnncLink">رابط (اختياري)</label>
+        <input id="setAnncLink" dir="ltr" placeholder="https://...">
+      </div>
+      <button id="setSaveBtn" class="primary" type="button"><i class="fa-solid fa-floppy-disk"></i>حفظ الإعدادات</button>
+    </div>
+
+    <div id="tabStats" class="admin-panel hidden">
+      <div class="stats" id="analyticsKpis"></div>
+      <div class="charts-grid">
+        <div class="chart-card">
+          <h3><i class="fa-solid fa-graduation-cap"></i>توزيع الطلاب حسب البرامج التعليمية</h3>
+          <div id="programBars"></div>
+        </div>
+        <div class="chart-card">
+          <h3><i class="fa-solid fa-chart-pie"></i>حالة الطلبات واستشارات التلاوة</h3>
+          <div id="statusDonuts" class="donut-wrap"></div>
+        </div>
+      </div>
+      <div class="chart-card">
+        <h3><i class="fa-solid fa-calendar-week"></i>نشاط إرسال الطلبات والتلاوات خلال أيام الأسبوع</h3>
+        <div id="weeklyActivityChart" class="week-chart"></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- نافذة تعديل عناصر المكتبة والمتون الصوتية والمعرض (#40) -->
+<div id="editMediaModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="editMediaModalTitle">
+  <div class="modal-box">
+    <div class="modal-head">
+      <strong id="editMediaModalTitle"><i class="fa-solid fa-pen-to-square"></i>تعديل المحتوى</strong>
+      <button id="closeEditMediaModal" class="modal-close" type="button"><i class="fa-solid fa-xmark"></i>إغلاق</button>
+    </div>
+    <div class="modal-body">
+      <form id="editMediaForm">
+        <input type="hidden" id="editMediaId">
+        <input type="hidden" id="editMediaType">
+        <label for="editMediaTitle">العنوان</label>
+        <input id="editMediaTitle" required>
+
+        <label for="editMediaCategory">التصنيف الفرعي</label>
+        <select id="editMediaCategory"></select>
+
+        <label for="editMediaDesc">وصف مختصر</label>
+        <input id="editMediaDesc">
+
+        <div id="editMediaUrlBox" class="hidden">
+          <label for="editMediaUrl">الرابط (Google Drive أو رابط الصوت المباشر)</label>
+          <input id="editMediaUrl" type="url" dir="ltr">
+        </div>
+
+        <div id="editMediaTextBox" class="hidden">
+          <label for="editMediaText">نص أبيات المتن (يمكنك تعديل التشكيل أو الأبيات بحرية)</label>
+          <div class="helper-presets">
+            <button type="button" class="preset-btn" data-fill-matn="tuhfa" data-target="editMediaText"><i class="fa-solid fa-wand-magic-sparkles"></i>إدراج نص تحفة الأطفال</button>
+            <button type="button" class="preset-btn" data-fill-matn="jazariyyah" data-target="editMediaText"><i class="fa-solid fa-wand-magic-sparkles"></i>إدراج نص الجزرية</button>
+          </div>
+          <textarea id="editMediaText" rows="9" style="font-family:'Amiri',serif;font-size:1.15rem;margin-top:6px"></textarea>
+        </div>
+
+        <button id="saveEditMediaBtn" class="primary" type="submit" style="width:100%;margin-top:16px"><i class="fa-solid fa-floppy-disk"></i>حفظ التعديلات</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script type="module">
+import { firebaseConfig, initAppCheck } from "./firebase-config.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, sendPasswordResetEmail, sendEmailVerification, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, collection, onSnapshot, doc, setDoc, addDoc, updateDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getStorage, ref as storageRef, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+
+const ADMIN_EMAILS = [
+  "bdallhhshad7@gmail.com",
+  "daralforqan@gmail.com"
+];
+
+/* ---------- النصوص الافتراضية للمتون وقواعد التجويد لتسهيل الاستيراد والتعديل ---------- */
+const MATN_PRESETS = {
+  tuhfa: `المقدمة
+يَقُولُ رَاجِي رَحْمَةِ الْغَفُورِ * دَوْمًا سُلَيْمَانُ هُوَ الْجَمْزُورِي
+الْحَمْدُ لِلَّهِ مُصَلِّيًا عَلَى * مُحَمَّدٍ وَآلِهِ وَمَنْ تَلَا
+وَبَعْدُ هَذَا النَّظْمُ لِلْمُرِيدِ * فِي النُّونِ وَالتَّنْوِينِ وَالْمُدُودِ
+سَمَّيْتُهُ بِتُحْفَةِ الْأَطْفَالِ * عَنْ شَيْخِنَا الْمِيهِيِّ ذِي الْكَمَالِ
+أَرْجُو بِهِ أَنْ يَنْفَعَ الطُّلَّابَا * وَالْأَجْرَ وَالْقَبُولَ وَالثَّوَابَا
+
+أحكام النون الساكنة والتنوين
+لِلنُّونِ إِنْ تَسْكُنْ وَلِلتَّنْوِينِ * أَرْبَعُ أَحْكَامٍ فَخُذْ تَبْيِينِي
+فَالْأَوَّلُ الْإِظْهَارُ قَبْلَ أَحْرُفِ * لِلْحَلْقِ سِتٌّ رُتِّبَتْ فَلْتَعْرِفِ
+هَمْزٌ فَهَاءٌ ثُمَّ عَيْنٌ حَاءُ * مُهْمَلَتَانِ ثُمَّ غَيْنٌ خَاءُ
+وَالثَّانِي إِدْغَامٌ بِسِتَّةٍ أَتَتْ * فِي يَرْمَلُونَ عِنْدَهُمْ قَدْ ثَبَتَتْ
+لَكِنَّهَا قِسْمَانِ قِسْمٌ يُدْغَمَا * فِيهِ بِغُنَّةٍ بِيَنْمُو عُلِمَا
+إِلَّا إِذَا كَانَا بِكِلْمَةٍ فَلَا * تُدْغِمْ كَدُنْيَا ثُمَّ صِنْوَانٍ تَلَا
+وَالثَّانِي إِدْغَامٌ بِغَيْرِ غُنَّهْ * فِي اللَّامِ وَالرَّا ثُمَّ كَرِّرَنَّهْ
+وَالثَّالِثُ الْإِقْلَابُ عِنْدَ الْبَاءِ * مِيمًا بِغُنَّةٍ مَعَ الْإِخْفَاءِ
+وَالرَّابِعُ الْإِخْفَاءُ عِنْدَ الْفَاضِلِ * مِنَ الْحُرُوفِ وَاجِبٌ لِلْفَاضِلِ
+فِي خَمْسَةٍ مِنْ بَعْدِ عَشْرٍ رَمْزُهَا * فِي كِلْمِ هَذَا الْبَيْتِ قَدْ ضَمَّنْتُهَا
+صِفْ ذَا ثَنَا كَمْ جَادَ شَخْصٌ قَدْ سَمَا * دُمْ طَيِّبًا زِدْ فِي تُقًى ضَعْ ظَالِمَا`,
+
+  jazariyyah: `المقدمة
+يَقُولُ رَاجِي عَفْوِ رَبٍّ سَامِعِ * مُحَمَّدُ بْنُ الْجَزَرِيِّ الشَّافِعِي
+الْحَمْدُ لِلَّهِ وَصَلَّى اللَّهُ * عَلَى نَبِيِّهِ وَمُصْطَفَاهُ
+مُحَمَّدٍ وَآلِهِ وَصَحْبِهِ * وَمُقْرِئِ الْقُرْآنِ مَعْ مُحِبِّهِ
+وَبَعْدُ إِنَّ هَذِهِ مُقَدِّمَهْ * فِيمَا عَلَى قَارِئِهِ أَنْ يَعْلَمَهْ
+إِذْ وَاجِبٌ عَلَيْهِمُ مُحَتَّمُ * قَبْلَ الشُّرُوعِ أَوَّلًا أَنْ يَعْلَمُوا
+مَخَارِجَ الْحُرُوفِ وَالصِّفَاتِ * لِيَلْفِظُوا بِأَفْصَحِ اللُّغَاتِ
+
+باب مخارج الحروف
+مَخَارِجُ الْحُرُوفِ سَبْعَةَ عَشَرْ * عَلَى الَّذِي يَخْتَارُهُ مَنِ اخْتَبَرْ
+فَأَلِفُ الْجَوْفِ وَأُخْتَاهَا وَهِي * حُرُوفُ مَدٍّ لِلْهَوَاءِ تَنْتَهِي
+ثُمَّ لِأَقْصَى الْحَلْقِ هَمْزٌ هَاءُ * ثُمَّ لِوَسْطِهِ فَعَيْنٌ حَاءُ
+أَدْنَاهُ غَيْنٌ خَاؤُهَا وَالْقَافُ * أَقْصَى اللِّسَانِ فَوْقُ ثُمَّ الْكَافُ
+أَسْفَلُ وَالْوَسْطُ فَجِيمُ الشِّينُ يَا * وَالضَّادُ مِنْ حَافَتِهِ إِذْ وَلِيَا
+الْأَضْرَاسَ مِنْ أَيْسَرَ أَوْ يُمْنَاهَا * وَاللَّامُ أَدْنَاهَا لِمُنْتَهَاهَا
+وَالنُّونُ مِنْ طَرَفِهِ تَحْتُ اجْعَلُوا * وَالرَّا يُدَانِيهِ لِظَهْرٍ أَدْخَلُوا`
+};
+
+const DEFAULT_TAJWEED_SEED = [
+  {
+    order: 1,
+    title: "1. أحكام النون الساكنة والتنوين",
+    content: "الإظهار الحلقي: عند حروف الحلق الستة (ء، هـ، ع، ح، غ، خ).\nالإدغام: في (يرملون) — بغنة في (ينمو)، وبغير غنة في (ل، ر).\nالإقلاب: قلب النون الساكنة أو التنوين ميماً مخفاة بغنة عند حرف (ب).\nالإخفاء الحقيقي: عند باقي الحروف (15 حرفاً) مع غنة بمقدار حركتين.",
+    examples: "مَنْ آمَنَ · مَن يَقُولُ · مِن رَّبِّهِمْ · مِن بَعْدِ · كُنتُمْ"
+  },
+  {
+    order: 2,
+    title: "2. أحكام الميم الساكنة والمشددتين",
+    content: "الإخفاء الشفوي: ميم ساكنة بعدها (ب) مع غنة حركتين.\nالإدغام الشفوي: ميم ساكنة بعدها (م) متحركة مع غنة.\nالإظهار الشفوي: عند باقي الحروف (أشد إظهاراً عند الواو والفاء).\nالنون والميم المشددتان: تُغَنّان بمقدار حركتين دائماً.",
+    examples: "تَرْمِيهِم بِحِجَارَةٍ · لَهُم مَّا يَشَاءُونَ · هُمْ فِيهَا · إِنَّ · ثُمَّ"
+  },
+  {
+    order: 3,
+    title: "3. القلقلة ومراتبها",
+    content: "حروفها خمسة مجموعة في (قُطْبُ جَدٍّ) وتُقلقل إذا كانت ساكنة سكوناً أصلياً أو عارضاً للوقف، وأقواها المشدد الموقوف عليه ثم الساكن الموقوف عليه ثم الساكن وسط الكلمة.",
+    examples: "الْفَلَقْ · يَدْخُلُونَ · الْحَقّْ"
+  },
+  {
+    order: 4,
+    title: "4. المدود ومقاديرها",
+    content: "المد الطبيعي: يمد بمقدار حركتين.\nالمد المتصل: حرف مد وبعده همزة في نفس الكلمة — 4 أو 5 حركات.\nالمد المنفصل: حرف مد آخر الكلمة وهمزة أول الكلمة التالية — 4 أو 5 حركات.\nالعارض للسكون: حرف مد قبل الحرف الموقوف عليه — 2 أو 4 أو 6 حركات.\nالمد اللازم: حرف مد بعده سكون أصلي — 6 حركات لزوماً.",
+    examples: "قَالَ · السَّمَاءُ · يَا أَيُّهَا · الْعَالَمِينَ · الضَّالِّينَ"
+  },
+  {
+    order: 5,
+    title: "5. التفخيم والترقيق",
+    content: "حروف التفخيم دائماً (الاستعلاء): مجموعة في (خُصَّ ضَغْطٍ قِظْ).\nالراء: تُفخّم إذا كانت مفتوحة أو مضمومة أو ساكنة قبلها فتح أو ضم، وتُرقّق إذا كانت مكسورة أو ساكنة قبلها كسر أصلي وليس بعدها حرف استعلاء.",
+    examples: "خَالِدِينَ · قُلْ · رَبَّنَا · فِرْعَوْنَ"
+  },
+  {
+    order: 6,
+    title: "6. مخارج الحروف العامة",
+    content: "الجوف (حروف المد الثلاثة) · الحلق (ء هـ / ع ح / غ خ) · اللسان (18 حرفاً) · الشفتان (ف، ب، م، و) · الخيشوم (مخرج الغنة).",
+    examples: "مخارج الحروف سبعة عشر على المختار"
+  }
+];
+
+const app = initializeApp(firebaseConfig);
+initAppCheck(app);
+const auth = getAuth(app), db = getFirestore(app);
+auth.languageCode = "ar";
+let storage = null;
+try { storage = getStorage(app); } catch (e) {}
+
+async function removeStorageFile(path) {
+  if (!storage || !path) return;
+  try { await deleteObject(storageRef(storage, path)); }
+  catch (e) { console.warn("Storage delete failed:", e); }
+}
+const $ = id => document.getElementById(id);
+let allRows = [], allUsers = [], allMedia = [], allConsults = [], allTajweed = [], allProgress = [], allLinks = [];
+let unsubLinks = null;
+let unsubRegs = null, unsubUsers = null, unsubMedia = null, unsubConsults = null, unsubTajweed = null, unsubProgress = null;
+
+/* ---------- تنبيهات الطلبات والاستشارات الجديدة ---------- */
+const BASE_TITLE = document.title;
+let regsReady = false, consultsReady = false, unseen = 0;
+
+function beep() {
+  try {
+    const AC = window.AudioContext || window.webkitAudioContext;
+    const ctx = new AC();
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.frequency.value = 880;
+    g.gain.setValueAtTime(0.0001, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.2, ctx.currentTime + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.4);
+    o.start(); o.stop(ctx.currentTime + 0.4);
+    setTimeout(() => ctx.close(), 600);
+  } catch (e) {}
+}
+function clearUnseen() { unseen = 0; document.title = BASE_TITLE; }
+window.addEventListener("focus", clearUnseen);
+document.addEventListener("visibilitychange", () => { if (!document.hidden) clearUnseen(); });
+
+function notifyNew(title, body) {
+  toast(title + (body ? ": " + body : ""));
+  beep();
+  if (document.hidden) {
+    unseen++;
+    document.title = `(${unseen}) ${BASE_TITLE}`;
+    try {
+      if ("Notification" in window && Notification.permission === "granted") {
+        new Notification(title, { body, icon: "icon-192.png", dir: "rtl", lang: "ar" });
+      }
+    } catch (e) {}
+  }
+}
+
+const notifyBtn = $("notifyBtn");
+function refreshNotifyBtn() {
+  notifyBtn.classList.toggle("hidden", !("Notification" in window) || Notification.permission !== "default");
+}
+notifyBtn.onclick = async () => {
+  try {
+    const p = await Notification.requestPermission();
+    toast(p === "granted" ? "تم تفعيل التنبيهات" : "لم يتم السماح بالتنبيهات", p === "granted" ? "ok" : "err");
+  } catch (e) {}
+  refreshNotifyBtn();
+};
+refreshNotifyBtn();
+
+/* ---------- أدوات مساعدة ---------- */
+let toastTimer = null;
+function toast(text, type = "ok") {
+  const t = $("toast");
+  t.textContent = text;
+  t.className = "toast show" + (type === "err" ? " err" : "");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove("show"), 3500);
+}
+
+function norm(s) {
+  return (s || "").toLowerCase()
+    .replace(/[\u064B-\u065F\u0670\u0640]/g, "")
+    .replace(/[أإآٱ]/g, "ا")
+    .replace(/ى/g, "ي")
+    .replace(/ة/g, "ه");
+}
+
+function isHttpUrl(u) {
+  try { const x = new URL(u); return x.protocol === "https:" || x.protocol === "http:"; }
+  catch (e) { return false; }
+}
+
+function csvCell(val) {
+  let s = String(val ?? "");
+  if (/^[=+\-@\t\r]/.test(s)) s = "'" + s;
+  return `"${s.replace(/"/g, '""')}"`;
+}
+
+function formatWaPhone(phone) {
+  let clean = (phone || "").replace(/\D/g, "");
+  if (clean.startsWith("01") && clean.length === 11) clean = "2" + clean;
+  return clean;
+}
+
+function emptyRow(tbody, cols, text) {
+  tbody.replaceChildren();
+  const tr = document.createElement("tr");
+  const td = document.createElement("td");
+  td.colSpan = cols;
+  td.style.cssText = "text-align:center;padding:24px";
+  td.textContent = text;
+  tr.append(td);
+  tbody.append(tr);
+}
+
+function blobToDataUrl(blob) {
+  return new Promise((resolve, reject) => {
+    const r = new FileReader();
+    r.onloadend = () => resolve(r.result);
+    r.onerror = reject;
+    r.readAsDataURL(blob);
+  });
+}
+
+/* أزرار تحميل نصوص المتون الافتراضية للتعديل */
+document.querySelectorAll("[data-fill-matn]").forEach(btn => {
+  btn.onclick = () => {
+    const key = btn.dataset.fillMatn;
+    const targetEl = $(btn.dataset.target);
+    if (targetEl && MATN_PRESETS[key]) {
+      targetEl.value = MATN_PRESETS[key];
+      toast("تم تحميل النص في مربع الكتابة — يمكنك تعديله الآن");
+    }
+  };
+});
+
+/* ---------- متابعة تقدّم الطلاب (#6) ---------- */
+const SURAHS = ["الفاتحة","البقرة","آل عمران","النساء","المائدة","الأنعام","الأعراف","الأنفال","التوبة","يونس","هود","يوسف","الرعد","إبراهيم","الحجر","النحل","الإسراء","الكهف","مريم","طه","الأنبياء","الحج","المؤمنون","النور","الفرقان","الشعراء","النمل","القصص","العنكبوت","الروم","لقمان","السجدة","الأحزاب","سبأ","فاطر","يس","الصافات","ص","الزمر","غافر","فصلت","الشورى","الزخرف","الدخان","الجاثية","الأحقاف","محمد","الفتح","الحجرات","ق","الذاريات","الطور","النجم","القمر","الرحمن","الواقعة","الحديد","المجادلة","الحشر","الممتحنة","الصف","الجمعة","المنافقون","التغابن","الطلاق","التحريم","الملك","القلم","الحاقة","المعارج","نوح","الجن","المزمل","المدثر","القيامة","الإنسان","المرسلات","النبأ","النازعات","عبس","التكوير","الانفطار","المطففين","الانشقاق","البروج","الطارق","الأعلى","الغاشية","الفجر","البلد","الشمس","الليل","الضحى","الشرح","التين","العلق","القدر","البينة","الزلزلة","العاديات","القارعة","التكاثر","العصر","الهمزة","الفيل","قريش","الماعون","الكوثر","الكافرون","النصر","المسد","الإخلاص","الفلق","الناس"];
+$("progSurah").replaceChildren(...SURAHS.map(n => { const o = document.createElement("option"); o.textContent = n; return o; }));
+
+function fillStudentSelects() {
+  const sorted = [...allUsers].sort((a, b) => (a.name || a.email || "").localeCompare(b.name || b.email || "", "ar"));
+  [["progStudent", "اختر الطالب..."], ["progFilter", "كل الطلاب (آخر 100 تسجيل)"], ["glStudent", "اختر الطالب..."], ["certStudent", "اختر الطالب..."]].forEach(([id, first]) => {
+    const sel = $(id), keep = sel.value;
+    sel.replaceChildren();
+    const o0 = document.createElement("option"); o0.value = ""; o0.textContent = first; sel.append(o0);
+    sorted.forEach(u => {
+      const o = document.createElement("option"); o.value = u.id;
+      o.textContent = (u.name || "بدون اسم") + " — " + (u.email || "");
+      sel.append(o);
+    });
+    if (keep && sorted.some(u => u.id === keep)) sel.value = keep;
+  });
+}
+
+function renderProgress() {
+  const body = $("progTableBody"), f = $("progFilter").value;
+  const rows = allProgress.filter(r => !f || r.uid === f).slice(0, 100);
+  if (!rows.length) return emptyRow(body, 7, "لا توجد تسجيلات متابعة بعد.");
+  body.replaceChildren();
+  rows.forEach(r => {
+    const tr = document.createElement("tr");
+    const cell = (t, small) => {
+      const td = document.createElement("td"); td.textContent = t || "";
+      if (small) { const sm = document.createElement("small"); sm.style.display = "block"; sm.style.opacity = ".8"; sm.textContent = small; td.append(sm); }
+      tr.append(td); return td;
+    };
+    cell(r.studentName); cell(r.type); cell(r.surah); cell(r.range, r.note); cell(r.rating);
+    cell(r.createdAt ? r.createdAt.toDate().toLocaleDateString("ar-EG") : "");
+    const tdDel = document.createElement("td");
+    const del = document.createElement("button");
+    del.type = "button"; del.className = "btn-outline"; del.innerHTML = '<i class="fa-solid fa-trash-can"></i>';
+    del.setAttribute("aria-label", "حذف");
+    del.onclick = async () => {
+      if (!confirm("حذف هذا التسجيل من سجل الطالب؟")) return;
+      try { await deleteDoc(doc(db, "progress", r.id)); toast("تم الحذف"); }
+      catch (e) { toast("تعذر الحذف", "err"); }
+    };
+    tdDel.append(del); tr.append(tdDel);
+    body.append(tr);
+  });
+}
+$("progFilter").onchange = renderProgress;
+
+$("progSaveBtn").onclick = async () => {
+  const uid = $("progStudent").value;
+  if (!uid) return toast("اختر الطالب أولًا", "err");
+  const u = allUsers.find(x => x.id === uid);
+  const btn = $("progSaveBtn");
+  btn.disabled = true;
+  try {
+    await addDoc(collection(db, "progress"), {
+      uid,
+      studentName: ((u && (u.name || u.email)) || "").slice(0, 100),
+      type: $("progType").value,
+      surah: $("progSurah").value,
+      range: $("progRange").value.trim().slice(0, 120),
+      rating: $("progRating").value,
+      note: $("progNote").value.trim().slice(0, 600),
+      createdAt: serverTimestamp()
+    });
+    $("progRange").value = ""; $("progNote").value = ""; $("progRating").value = "";
+    $("progFilter").value = uid; renderProgress();
+    toast("تم حفظ المتابعة، وسيراها الطالب في حسابه");
+  } catch (e) {
+    toast("تعذر الحفظ. تأكد من إضافة قواعد progress في Firestore.", "err");
+  }
+  btn.disabled = false;
+};
+
+
+/* ---------- أولياء الأمور (ربط سري: لا يظهر للطالب) ---------- */
+function renderLinks() {
+  const body = $("glTableBody");
+  body.replaceChildren();
+  if (!allLinks.length) { emptyRow(body, 4, "لا توجد روابط بعد."); return; }
+  allLinks.forEach(l => {
+    const tr = document.createElement("tr");
+    const c1 = document.createElement("td"); c1.textContent = l.studentName || "";
+    const c2 = document.createElement("td"); c2.textContent = l.guardianEmail || ""; c2.dir = "ltr";
+    const c3 = document.createElement("td"); c3.textContent = l.createdAt ? l.createdAt.toDate().toLocaleDateString("ar-EG") : "";
+    const c4 = document.createElement("td");
+    const b = document.createElement("button"); b.type = "button"; b.className = "btn-outline"; b.textContent = "إلغاء الربط";
+    b.onclick = async () => {
+      if (!confirm("إلغاء ربط " + l.guardianEmail + " بالطالب " + l.studentName + "؟")) return;
+      try { await deleteDoc(doc(db, "guardian_links", l.id)); toast("تم إلغاء الربط"); }
+      catch (e) { toast("تعذر إلغاء الربط", "err"); }
+    };
+    c4.append(b);
+    tr.append(c1, c2, c3, c4);
+    body.append(tr);
+  });
+}
+
+$("glSaveBtn").onclick = async () => {
+  const uid = $("glStudent").value, email = $("glEmail").value.trim().toLowerCase();
+  if (!uid) return toast("اختر الطالب أولًا", "err");
+  if (!/^[^\s@\/]+@[^\s@\/]+\.[^\s@\/]+$/.test(email)) return toast("اكتب بريد ولي الأمر بشكل صحيح", "err");
+  const u = allUsers.find(x => x.id === uid);
+  const btn = $("glSaveBtn"); btn.disabled = true;
+  try {
+    await setDoc(doc(db, "guardian_links", uid + "__" + email), {
+      studentUid: uid,
+      studentName: ((u && (u.name || u.email)) || "").slice(0, 100),
+      guardianEmail: email,
+      createdAt: serverTimestamp()
+    });
+    $("glEmail").value = "";
+    toast("تم الربط. يدخل ولي الأمر من صفحة بوابة ولي الأمر بنفس هذا البريد.");
+  } catch (e) {
+    toast("تعذر الربط. تأكد من إضافة قواعد guardian_links في Firestore.", "err");
+  }
+  btn.disabled = false;
+};
+
+
+/* ---------- شهادة إتمام للطباعة ---------- */
+function escH(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); }
+try { $("certSheikh").value = localStorage.getItem("dar-cert-sheikh") || ""; } catch (e) {}
+$("certBtn").onclick = () => {
+  const uid = $("certStudent").value, title = $("certTitle").value.trim(), sheikh = $("certSheikh").value.trim();
+  const u = allUsers.find(x => x.id === uid);
+  if (!u) return toast("اختر الطالب أولًا", "err");
+  if (title.length < 3) return toast("اكتب سبب الشهادة", "err");
+  try { localStorage.setItem("dar-cert-sheikh", sheikh); } catch (e) {}
+  const name = u.name || u.email || "";
+  const now = new Date();
+  const greg = now.toLocaleDateString("ar-EG", { day: "numeric", month: "long", year: "numeric" });
+  let hij = "";
+  try { hij = new Intl.DateTimeFormat("ar-SA-u-ca-islamic-umalqura", { day: "numeric", month: "long", year: "numeric" }).format(now).replace(/\s*هـ?$/, "") + " هـ"; } catch (e) {}
+  const logo = new URL("icon-256.png", location.href).href;
+  const star = "data:image/svg+xml," + encodeURIComponent("<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect x='2.3' y='2.3' width='11.4' height='11.4' fill='#B8975A'/><rect x='2.3' y='2.3' width='11.4' height='11.4' transform='rotate(45 8 8)' fill='#B8975A'/></svg>");
+  const html = '<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><title>شهادة - ' + escH(name) + '</title>' +
+    '<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;700;800&display=swap" rel="stylesheet">' +
+    '<style>@page{size:A4 landscape;margin:0}*{box-sizing:border-box}html,body{margin:0;height:100%}' +
+    'body{font-family:Cairo,Tahoma,Arial,sans-serif;color:#2B1015;background:#e9e1d9;-webkit-print-color-adjust:exact;print-color-adjust:exact}' +
+    '.page{width:297mm;height:210mm;margin:0 auto;background:#FBF1EA;padding:9mm;position:relative}' +
+    '.f1{position:absolute;inset:6mm;border:2.2mm solid #3A181E}.f2{position:absolute;inset:11mm;border:.6mm solid #B8975A}' +
+    '.cr{position:absolute;width:11mm;height:11mm;background:url("' + star + '") center/contain no-repeat;background-color:#FBF1EA}' +
+    '.cr.a{top:5.4mm;right:5.4mm}.cr.b{top:5.4mm;left:5.4mm}.cr.c{bottom:5.4mm;right:5.4mm}.cr.d{bottom:5.4mm;left:5.4mm}' +
+    '.in{position:absolute;inset:16mm 20mm;display:flex;flex-direction:column;align-items:center;text-align:center}' +
+    '.in img{width:30mm;height:30mm;border-radius:50%}' +
+    'h1{font-family:Amiri,serif;font-size:15mm;margin:3mm 0 1mm;color:#3A181E}' +
+    '.k{font-size:5.4mm;color:#6B4A47;margin:2mm 0 0}.nm{font-family:Amiri,serif;font-size:14mm;color:#3A181E;border-bottom:.6mm solid #FAC81B;padding:0 14mm 1mm;margin:8mm 0 7mm}' +
+    '.tt{font-size:6.6mm;margin:0;line-height:2}.tt b{color:#3A181E}.q{font-family:Amiri,serif;font-size:5.4mm;color:#6B4A47;margin-top:auto}' +
+    '.sg{display:flex;justify-content:space-between;width:100%;margin-top:6mm;align-items:flex-end}.sg div{width:70mm;text-align:center;font-size:4.6mm}' +
+    '.ln{border-top:.4mm solid #3A181E;margin-bottom:1.5mm}.dt{font-size:4.6mm;color:#6B4A47;margin:7mm 0 0}' +
+    '.pr{position:fixed;top:10px;left:10px}@media print{body{background:none}.pr{display:none}.page{margin:0}}</style></head><body>' +
+    '<div class="page"><div class="f1"></div><div class="f2"></div><i class="cr a"></i><i class="cr b"></i><i class="cr c"></i><i class="cr d"></i>' +
+    '<div class="in"><img src="' + logo + '" alt=""><h1>شهادة إتمام</h1>' +
+    '<p class="k">تشهد إدارة دار الفرقان لتحفيظ القرآن الكريم بأن الطالب / الطالبة</p>' +
+    '<div class="nm">' + escH(name) + '</div>' +
+    '<p class="tt">قد حقّق <b>' + escH(title) + '</b><br>نسأل الله أن ينفع به، وأن يجعله من أهل القرآن الكريم</p>' +
+    '<p class="dt">بتاريخ ' + escH(hij) + (hij ? " الموافق " : "") + escH(greg) + '</p>' +
+    '<div class="q">«خَيْرُكُمْ مَنْ تَعَلَّمَ الْقُرْآنَ وَعَلَّمَهُ»</div>' +
+    '<div class="sg"><div><div class="ln"></div>' + (/^(الشيخ|الأستاذ|الدكتور|فضيلة)/.test(sheikh) ? '' : 'الشيخ ') + escH(sheikh) + '</div><div><div class="ln"></div>ختم الدار</div></div></div></div>' +
+    '<button class="pr" onclick="print()" style="padding:10px 22px;font:inherit;background:#FAC81B;border:0;border-radius:20px;font-weight:700;cursor:pointer">طباعة / حفظ PDF</button></body></html>';
+  const url = URL.createObjectURL(new Blob([html], { type: "text/html;charset=utf-8" }));
+  const w = window.open(url, "_blank");
+  if (!w) location.href = url;
+};
+
+/* ---------- المنشورات والمسابقات ---------- */
+let allNews = [], unsubNews = null, newsImageData = "", newsHadImage = false;
+
+async function compressPostImage(file, maxW = 900, maxChars = 150000) {
+  const bmp = await createImageBitmap(file);
+  let w = Math.min(maxW, bmp.width), h = Math.round(bmp.height * w / bmp.width), q = 0.82;
+  for (let i = 0; i < 14; i++) {
+    const c = document.createElement("canvas"); c.width = w; c.height = h;
+    c.getContext("2d").drawImage(bmp, 0, 0, w, h);
+    const d = c.toDataURL("image/jpeg", q);
+    if (d.length <= maxChars) return d;
+    if (q > 0.5) q -= 0.1; else { w = Math.round(w * 0.8); h = Math.round(h * 0.8); q = 0.8; }
+  }
+  return "";
+}
+
+function resetNewsForm() {
+  ["newsEditId", "newsTitle", "newsBody", "newsImageUrl", "newsLink"].forEach(id => { $(id).value = ""; });
+  $("newsKind").value = "منشور"; $("newsPinned").checked = false; $("newsImageFile").value = "";
+  $("newsRemoveImg").checked = false; $("newsRemoveImgWrap").classList.add("hidden");
+  $("newsImagePreview").classList.add("hidden"); $("newsImagePreview").removeAttribute("src");
+  newsImageData = ""; newsHadImage = false;
+  $("newsFormTitle").textContent = "منشور جديد"; $("newsSaveBtn").innerHTML = '<i class="fa-solid fa-paper-plane"></i>نشر';
+  $("newsCancelBtn").classList.add("hidden");
+}
+$("newsCancelBtn").onclick = resetNewsForm;
+
+$("newsImageFile").onchange = async () => {
+  const f = $("newsImageFile").files[0];
+  if (!f) { newsImageData = ""; return; }
+  try {
+    const d = await compressPostImage(f);
+    if (!d) { toast("تعذر ضغط الصورة. جرّب صورة أصغر أو استخدم رابطًا", "err"); $("newsImageFile").value = ""; return; }
+    newsImageData = d; $("newsImageUrl").value = "";
+    $("newsImagePreview").src = d; $("newsImagePreview").classList.remove("hidden");
+    toast("تم تجهيز الصورة (" + Math.round(d.length / 1366) + " ك.ب تقريبًا)");
+  } catch (e) { toast("تعذر قراءة الصورة", "err"); }
+};
+
+$("newsSaveBtn").onclick = async () => {
+  const kind = $("newsKind").value, title = $("newsTitle").value.trim(), body = $("newsBody").value.trim();
+  const imageUrl = $("newsImageUrl").value.trim(), link = $("newsLink").value.trim(), pinned = $("newsPinned").checked;
+  const editId = $("newsEditId").value;
+  if (!body && !title) return toast("اكتب نص المنشور أو عنوانه", "err");
+  if (imageUrl && !/^https:\/\//i.test(imageUrl)) return toast("رابط الصورة يجب أن يبدأ بـ https://", "err");
+  if (link && !/^https:\/\//i.test(link)) return toast("رابط التفاصيل يجب أن يبدأ بـ https://", "err");
+  const data = { kind, title, body, link, pinned, imageUrl };
+  if (newsImageData) { data.imageData = newsImageData; data.imageUrl = ""; data.hasImage = true; }
+  else if (imageUrl) { data.imageData = ""; data.hasImage = false; }
+  else if ($("newsRemoveImg").checked) { data.imageData = ""; data.imageUrl = ""; data.hasImage = false; }
+  else if (!editId) { data.imageData = ""; data.hasImage = false; }
+  const btn = $("newsSaveBtn"); btn.disabled = true;
+  try {
+    if (editId) { data.updatedAt = serverTimestamp(); await updateDoc(doc(db, "news", editId), data); toast("تم حفظ التعديل"); }
+    else { data.createdAt = serverTimestamp(); await addDoc(collection(db, "news"), data); toast("تم نشر المنشور"); }
+    resetNewsForm();
+  } catch (e) {
+    toast("تعذر الحفظ. تأكد من إضافة قواعد news في Firestore.", "err");
+  }
+  btn.disabled = false;
+};
+
+function renderNewsAdmin() {
+  const box = $("newsAdminList"); box.replaceChildren();
+  if (!allNews.length) { const p = document.createElement("p"); p.textContent = "لا توجد منشورات بعد."; box.append(p); return; }
+  allNews.forEach(n => {
+    const card = document.createElement("div"); card.className = "card"; card.style.marginBottom = "10px";
+    const head = document.createElement("div"); head.style.cssText = "display:flex;gap:8px;align-items:center;flex-wrap:wrap";
+    const k = document.createElement("span"); k.className = "badge"; k.textContent = n.kind || "منشور";
+    const t = document.createElement("strong"); t.textContent = n.title || (n.body || "").slice(0, 50);
+    const d = document.createElement("small"); d.textContent = n.createdAt ? n.createdAt.toDate().toLocaleDateString("ar-EG") : "";
+    head.append(k, t);
+    if (n.pinned) { const p = document.createElement("span"); p.textContent = "📌 مثبّت"; head.append(p); }
+    if (n.hasImage || n.imageUrl) { const p = document.createElement("span"); p.textContent = "🖼️"; head.append(p); }
+    head.append(d);
+    const body = document.createElement("p"); body.style.cssText = "margin:8px 0;white-space:pre-wrap"; body.textContent = (n.body || "").slice(0, 200) + ((n.body || "").length > 200 ? "…" : "");
+    const act = document.createElement("div"); act.style.cssText = "display:flex;gap:8px;flex-wrap:wrap";
+    const pin = document.createElement("button"); pin.type = "button"; pin.className = "btn-outline"; pin.textContent = n.pinned ? "إلغاء التثبيت" : "تثبيت";
+    pin.onclick = async () => { try { await updateDoc(doc(db, "news", n.id), { pinned: !n.pinned }); } catch (e) { toast("تعذر التحديث", "err"); } };
+    const ed = document.createElement("button"); ed.type = "button"; ed.className = "btn-outline"; ed.textContent = "تعديل";
+    ed.onclick = () => {
+      resetNewsForm();
+      $("newsEditId").value = n.id; $("newsKind").value = n.kind || "منشور"; $("newsTitle").value = n.title || "";
+      $("newsBody").value = n.body || ""; $("newsImageUrl").value = n.imageUrl || ""; $("newsLink").value = n.link || "";
+      $("newsPinned").checked = !!n.pinned;
+      const img = n.imageUrl || n.imageData || "";
+      if (img) { $("newsImagePreview").src = img; $("newsImagePreview").classList.remove("hidden"); $("newsRemoveImgWrap").classList.remove("hidden"); }
+      $("newsFormTitle").textContent = "تعديل منشور"; $("newsSaveBtn").innerHTML = '<i class="fa-solid fa-floppy-disk"></i>حفظ التعديل';
+      $("newsCancelBtn").classList.remove("hidden");
+      $("newsBody").scrollIntoView({ behavior: "smooth", block: "center" });
+    };
+    const del = document.createElement("button"); del.type = "button"; del.className = "btn-outline"; del.textContent = "حذف";
+    del.onclick = async () => {
+      if (!confirm("حذف هذا المنشور نهائيًا؟")) return;
+      try { await deleteDoc(doc(db, "news", n.id)); toast("تم الحذف"); } catch (e) { toast("تعذر الحذف", "err"); }
+    };
+    act.append(pin, ed, del);
+    card.append(head, body, act);
+    box.append(card);
+  });
+}
+
+/* ---------- إعدادات الموقع ---------- */
+let unsubSettings = null;
+const SET_FIELDS = ["setPhone", "setWhatsapp", "setEmail", "setFacebook", "setAnnc", "setAnncLink"];
+$("setSaveBtn").onclick = async () => {
+  const phone = $("setPhone").value.trim(), wa = $("setWhatsapp").value.replace(/\D/g, ""), email = $("setEmail").value.trim();
+  const fb = $("setFacebook").value.trim(), annc = $("setAnnc").value.trim(), al = $("setAnncLink").value.trim();
+  if (wa && (wa.length < 8 || wa.length > 15)) return toast("رقم الواتساب الدولي غير صحيح (مثال 201099262489)", "err");
+  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return toast("البريد الإلكتروني غير صحيح", "err");
+  if (fb && !/^https:\/\//i.test(fb)) return toast("رابط فيسبوك يجب أن يبدأ بـ https://", "err");
+  if (al && !/^https:\/\//i.test(al)) return toast("رابط الإعلان يجب أن يبدأ بـ https://", "err");
+  if ($("setAnncOn").checked && !annc) return toast("اكتب نص الإعلان أو أوقف إظهاره", "err");
+  const btn = $("setSaveBtn"); btn.disabled = true;
+  try {
+    await setDoc(doc(db, "site_settings", "main"), {
+      phone, whatsapp: wa, email, facebook: fb,
+      announcementOn: $("setAnncOn").checked, announcement: annc, announcementLink: al,
+      updatedAt: serverTimestamp()
+    }, { merge: true });
+    try { localStorage.removeItem("dar-settings-cache"); } catch (e) {}
+    toast("تم حفظ الإعدادات، وتظهر للزوار خلال لحظات");
+  } catch (e) { toast("تعذر الحفظ. تأكد من إضافة قواعد site_settings في Firestore.", "err"); }
+  btn.disabled = false;
+};
+
+/* ---------- التبويبات ---------- */
+document.querySelectorAll(".tab-btn").forEach(btn => {
+  btn.onclick = () => {
+    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+    document.querySelectorAll(".admin-panel").forEach(p => p.classList.add("hidden"));
+    btn.classList.add("active");
+    $(btn.dataset.tab).classList.remove("hidden");
+    if (btn.dataset.tab === "tabStats") renderStats();
+  };
+});
+
+const CATEGORIES = {
+  image: ["الحلقات القرآنية", "حفلات التكريم والإجازات", "المسابقات والأنشطة"],
+  pdf: ["متون التجويد", "متون القراءات", "علوم القرآن والتفسير", "آداب وحلقات"],
+  audio: ["متن تحفة الأطفال", "متن المقدمة الجزرية", "متون القراءات", "دروس صوتية"]
+};
+
+function populateCategorySelect(sel, type, selectedVal = "") {
+  sel.replaceChildren();
+  (CATEGORIES[type] || []).forEach(c => {
+    const opt = document.createElement("option");
+    opt.value = c;
+    opt.textContent = c;
+    if (c === selectedVal) opt.selected = true;
+    sel.append(opt);
+  });
+}
+
+function updateCategoryOptions() {
+  const type = $("mediaType").value;
+  populateCategorySelect($("mediaCategory"), type);
+
+  $("imageUploadBox").classList.toggle("hidden", type !== "image");
+  $("pdfLinkBox").classList.toggle("hidden", type !== "pdf");
+  $("audioUploadBox").classList.toggle("hidden", type !== "audio");
+}
+$("mediaType").onchange = updateCategoryOptions;
+updateCategoryOptions();
+
+/* ---------- الدخول والخروج ---------- */
+$("pwToggle").onclick = () => {
+  const hidden = $("password").type === "password";
+  $("password").type = hidden ? "text" : "password";
+  $("pwToggle").innerHTML = hidden
+    ? '<i class="fa-solid fa-eye-slash"></i>'
+    : '<i class="fa-solid fa-eye"></i>';
+  $("pwToggle").setAttribute("aria-label", hidden ? "إخفاء كلمة المرور" : "إظهار كلمة المرور");
+};
+
+const LOGIN_BTN_HTML = '<i class="fa-solid fa-right-to-bracket"></i>دخول';
+$("loginForm").onsubmit = async e => {
+  e.preventDefault();
+  $("loginMsg").className = "msg";
+  const email = $("email").value.trim();
+  const pass = $("password").value;
+
+  $("loginBtn").disabled = true;
+  $("loginBtn").innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>لحظة من فضلك...';
+  try {
+    await signInWithEmailAndPassword(auth, email, pass);
+  } catch (err) {
+    $("loginMsg").className = "msg err";
+    if (err.code === "auth/too-many-requests") {
+      $("loginMsg").textContent = "محاولات كثيرة. انتظر قليلًا ثم حاول مرة أخرى.";
+    } else if (["auth/invalid-credential", "auth/wrong-password", "auth/user-not-found", "auth/invalid-email"].includes(err.code)) {
+      $("loginMsg").textContent = "البريد الإلكتروني أو كلمة المرور غير صحيحة. إذا نسيت كلمة المرور اضغط «نسيت كلمة المرور؟» وافحص مجلد الرسائل غير المرغوب فيها (Spam).";
+    } else if (err.code === "auth/network-request-failed") {
+      $("loginMsg").textContent = "مشكلة في الاتصال بالإنترنت. حاول مرة أخرى.";
+    } else {
+      $("loginMsg").textContent = "تعذر تسجيل الدخول (" + (err.code || "خطأ") + ").";
+    }
+  }
+  $("loginBtn").disabled = false;
+  $("loginBtn").innerHTML = LOGIN_BTN_HTML;
+};
+
+$("resetBtn").onclick = async () => {
+  const email = $("email").value.trim();
+  if (!email) {
+    $("loginMsg").className = "msg err";
+    $("loginMsg").textContent = "اكتب البريد الإلكتروني أولاً ثم اضغط نسيت كلمة المرور.";
+    return;
+  }
+  try {
+    await sendPasswordResetEmail(auth, email);
+    $("loginMsg").className = "msg ok";
+    $("loginMsg").textContent = "تم إرسال رابط إعادة التعيين إلى بريدك. (مهم جداً: ابحث في مجلد الرسائل غير المرغوب فيها Spam / غير هام).";
+  } catch (err) {
+    $("loginMsg").className = "msg err";
+    $("loginMsg").textContent = err.code === "auth/user-not-found"
+      ? "هذا البريد غير مسجل. أنشئ الحساب أولًا من صفحة «حسابي» (تبويب إنشاء حساب) بنفس البريد، أو من Firebase Console."
+      : "تعذر إرسال الرسالة (" + (err.code || "خطأ") + ").";
+  }
+};
+
+$("logoutBtn").onclick = () => signOut(auth);
+$("logoutDenied").onclick = () => signOut(auth);
+
+/* ---------- ضغط الصور ورفع الملفات ---------- */
+const MAX_IMG_CHARS = 850000;
+
+function compressImage(file, maxWidth = 1100, quality = 0.8) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = new Image();
+      img.onload = () => {
+        let width = maxWidth, q = quality;
+        for (let i = 0; i < 6; i++) {
+          const scale = Math.min(1, width / img.width);
+          const canvas = document.createElement("canvas");
+          canvas.width = Math.round(img.width * scale);
+          canvas.height = Math.round(img.height * scale);
+          canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
+          const data = canvas.toDataURL("image/jpeg", q);
+          if (data.length <= MAX_IMG_CHARS) return resolve(data);
+          width = Math.round(width * 0.8);
+          q = Math.max(0.5, q - 0.1);
+        }
+        reject(new Error("too-large"));
+      };
+      img.onerror = reject;
+      img.src = e.target.result;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+function loadImage(file) {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => { URL.revokeObjectURL(url); resolve(img); };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error("bad-image")); };
+    img.src = url;
+  });
+}
+
+async function uploadImage(file) {
+  if (!storage) return null;
+  try {
+    const img = await loadImage(file);
+    const scale = Math.min(1, 1600 / img.width);
+    const canvas = document.createElement("canvas");
+    canvas.width = Math.round(img.width * scale);
+    canvas.height = Math.round(img.height * scale);
+    canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
+    const blob = await new Promise(r => canvas.toBlob(r, "image/jpeg", 0.82));
+    if (!blob) return null;
+    const path = `media/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.jpg`;
+    const r = storageRef(storage, path);
+    await uploadBytes(r, blob, { contentType: "image/jpeg" });
+    return { url: await getDownloadURL(r), path };
+  } catch (err) {
+    console.warn("Storage upload failed, falling back to Firestore:", err);
+    return null;
+  }
+}
+
+function guessAudioExt(f) {
+  if (f.name && f.name.includes(".")) {
+    const e = f.name.split(".").pop().toLowerCase().replace(/[^a-z0-9]/g, "");
+    if (e) return e;
+  }
+  const t = (f.type || "").toLowerCase();
+  if (t.includes("mp4") || t.includes("aac")) return "m4a";
+  if (t.includes("mpeg")) return "mp3";
+  if (t.includes("ogg")) return "ogg";
+  if (t.includes("wav")) return "wav";
+  return "webm";
+}
+
+async function uploadAudioToStorage(blobOrFile, folder = "media_audio") {
+  if (!storage || !blobOrFile) return null;
+  try {
+    const ext = guessAudioExt(blobOrFile);
+    const path = `${folder}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+    const r = storageRef(storage, path);
+    await uploadBytes(r, blobOrFile, { contentType: blobOrFile.type || "audio/webm" });
+    return { url: await getDownloadURL(r), path };
+  } catch (err) {
+    console.warn("Audio storage upload failed:", err);
+    return null;
+  }
+}
+
+/* ---------- نموذج إضافة المحتوى ---------- */
+$("mediaForm").onsubmit = async e => {
+  e.preventDefault();
+  const type = $("mediaType").value;
+  const category = $("mediaCategory").value;
+  const title = $("mediaTitle").value.trim();
+  const description = $("mediaDesc").value.trim();
+  const file = $("mediaFile").files[0];
+  const audioFile = $("mediaAudioFile").files[0];
+  let finalUrl = type === "audio" ? $("mediaAudioUrl").value.trim() : $("mediaUrl").value.trim();
+  const textContent = type === "audio" ? $("mediaText").value.trim() : "";
+
+  if (type === "image" && !file) {
+    $("mediaMsg").className = "msg err";
+    $("mediaMsg").textContent = "يرجى اختيار الصورة من جهازك أولاً.";
+    return;
+  }
+
+  if (type === "pdf" && !finalUrl) {
+    $("mediaMsg").className = "msg err";
+    $("mediaMsg").textContent = "يرجى لصق رابط الملف من Google Drive.";
+    return;
+  }
+
+  if (type === "pdf" && !isHttpUrl(finalUrl)) {
+    $("mediaMsg").className = "msg err";
+    $("mediaMsg").textContent = "الرابط غير صحيح. يجب أن يبدأ بـ https://";
+    return;
+  }
+
+  if (type === "audio" && !audioFile && !finalUrl && !textContent) {
+    $("mediaMsg").className = "msg err";
+    $("mediaMsg").textContent = "يرجى اختيار ملف صوتي أو لصق رابط الصوت أو كتابة نص المتن.";
+    return;
+  }
+
+  if (type === "audio" && !audioFile && finalUrl && !isHttpUrl(finalUrl)) {
+    $("mediaMsg").className = "msg err";
+    $("mediaMsg").textContent = "الرابط الصوتي غير صحيح. يجب أن يبدأ بـ https://";
+    return;
+  }
+
+  $("mediaSubmitBtn").disabled = true;
+  $("mediaMsg").className = "msg ok";
+  $("mediaMsg").textContent = "جاري الحفظ والنشر...";
+
+  let storagePath = "";
+  let inStorage = false;
+  try {
+    if (type === "image") {
+      const up = await uploadImage(file);
+      if (up) { finalUrl = up.url; storagePath = up.path; inStorage = true; }
+      else { finalUrl = await compressImage(file); }
+    } else if (type === "audio" && audioFile) {
+      const up = await uploadAudioToStorage(audioFile, "media_audio");
+      if (up) { finalUrl = up.url; storagePath = up.path; inStorage = true; }
+      else {
+        finalUrl = await blobToDataUrl(audioFile);
+        if (finalUrl.length > MAX_IMG_CHARS) throw new Error("too-large");
+      }
+    }
+
+    await addDoc(collection(db, "media"), {
+      type,
+      category,
+      title,
+      description,
+      url: finalUrl,
+      ...(textContent ? { textContent } : {}),
+      ...(storagePath ? { storagePath } : {}),
+      createdAt: serverTimestamp()
+    });
+
+    $("mediaMsg").className = "msg ok";
+    $("mediaMsg").textContent = type === "image"
+      ? "تم رفع الصورة وإضافتها إلى معرض الصور بنجاح!" + (inStorage ? "" : " (حُفظت داخل قاعدة البيانات لأن Firebase Storage غير مفعّل)")
+      : type === "audio"
+        ? "تم حفظ المتن الصوتي في مكتبة المتون الصوتية بنجاح!"
+        : "تم إضافة الكتاب إلى مكتبة المتون بنجاح!";
+    $("mediaForm").reset();
+    updateCategoryOptions();
+  } catch (err) {
+    if (storagePath) removeStorageFile(storagePath);
+    $("mediaMsg").className = "msg err";
+    $("mediaMsg").textContent = err && err.message === "too-large"
+      ? "حجم الملف كبير جدًا. اختر ملفًا أصغر أو فعّل Firebase Storage."
+      : "حدث خطأ أثناء الحفظ. تأكد من تحديث قواعد Firestore Rules.";
+  }
+  $("mediaSubmitBtn").disabled = false;
+};
+
+/* ---------- نافذة تعديل المحتوى ونصوص المتون الصوتية (#40) ---------- */
+const editMediaModal = $("editMediaModal");
+function openEditMediaModal(m) {
+  $("editMediaId").value = m.id;
+  $("editMediaType").value = m.type || "pdf";
+  $("editMediaTitle").value = m.title || "";
+  populateCategorySelect($("editMediaCategory"), m.type || "pdf", m.category || "");
+  $("editMediaDesc").value = m.description || "";
+
+  const showUrl = m.type === "pdf" || (m.type === "audio" && (!m.url || !m.url.startsWith("data:")));
+  $("editMediaUrlBox").classList.toggle("hidden", !showUrl);
+  $("editMediaUrl").value = showUrl ? (m.url || "") : "";
+
+  const isAudio = m.type === "audio";
+  $("editMediaTextBox").classList.toggle("hidden", !isAudio);
+  $("editMediaText").value = isAudio ? (m.textContent || "") : "";
+
+  editMediaModal.classList.add("open");
+  document.body.classList.add("locked");
+}
+function closeEditMedia() {
+  editMediaModal.classList.remove("open");
+  document.body.classList.remove("locked");
+}
+$("closeEditMediaModal").onclick = closeEditMedia;
+editMediaModal.addEventListener("click", e => { if (e.target === editMediaModal) closeEditMedia(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape" && editMediaModal.classList.contains("open")) closeEditMedia(); });
+
+$("editMediaForm").onsubmit = async e => {
+  e.preventDefault();
+  const id = $("editMediaId").value;
+  const type = $("editMediaType").value;
+  const title = $("editMediaTitle").value.trim();
+  const category = $("editMediaCategory").value;
+  const description = $("editMediaDesc").value.trim();
+  const newUrl = $("editMediaUrl").value.trim();
+
+  if (!title) return toast("العنوان مطلوب", "err");
+
+  const updates = { title, category, description };
+  if (!$("editMediaUrlBox").classList.contains("hidden")) {
+    if (type === "pdf" && !isHttpUrl(newUrl)) {
+      return toast("الرابط غير صحيح. يجب أن يبدأ بـ https://", "err");
+    }
+    if (newUrl) {
+      if (!isHttpUrl(newUrl)) return toast("الرابط غير صحيح. يجب أن يبدأ بـ https://", "err");
+      updates.url = newUrl;
+    } else if (type === "audio") {
+      updates.url = "";
+    }
+  }
+  if (type === "audio") {
+    updates.textContent = $("editMediaText").value.trim();
+  }
+
+  $("saveEditMediaBtn").disabled = true;
+  try {
+    await updateDoc(doc(db, "media", id), updates);
+    toast("تم حفظ التعديلات بنجاح");
+    closeEditMedia();
+  } catch (err) {
+    toast("تعذر حفظ التعديل. تأكد من صلاحيات Firestore.", "err");
+  }
+  $("saveEditMediaBtn").disabled = false;
+};
+
+/* ---------- إدارة دليل التجويد السريع (#17) ---------- */
+function resetTajweedForm() {
+  $("tajweedEditId").value = "";
+  $("tajweedFormHeading").innerHTML = '<i class="fa-solid fa-circle-plus"></i>إضافة حكم أو باب جديد في دليل التجويد السريع';
+  $("tajweedSubmitBtn").innerHTML = '<i class="fa-solid fa-floppy-disk"></i>حفظ ونشر في دليل التجويد';
+  $("tajweedCancelEditBtn").classList.add("hidden");
+  $("tajweedForm").reset();
+  $("tajweedOrder").value = allTajweed.length + 1;
+}
+
+$("tajweedCancelEditBtn").onclick = resetTajweedForm;
+
+$("seedTajweedBtn").onclick = async () => {
+  if (allTajweed.length && !confirm("توجد قواعد مسجلة بالفعل. هل تريد إضافة القواعد الأساسية الـ 6 إليها؟")) return;
+  $("seedTajweedBtn").disabled = true;
+  try {
+    for (const rule of DEFAULT_TAJWEED_SEED) {
+      await addDoc(collection(db, "tajweed_guide"), {
+        ...rule,
+        createdAt: serverTimestamp()
+      });
+    }
+    toast("تم استيراد القواعد الأساسية الـ 6 بنجاح — يمكنك تعديلها الآن");
+  } catch (err) {
+    toast("تعذر الاستيراد. تأكد من صلاحيات مجموعة tajweed_guide في Firestore Rules.", "err");
+  }
+  $("seedTajweedBtn").disabled = false;
+};
+
+$("tajweedForm").onsubmit = async e => {
+  e.preventDefault();
+  const editId = $("tajweedEditId").value;
+  const order = parseInt($("tajweedOrder").value, 10) || 1;
+  const title = $("tajweedTitle").value.trim();
+  const content = $("tajweedContent").value.trim();
+  const examples = $("tajweedExamples").value.trim();
+
+  if (!title || !content) {
+    $("tajweedMsg").className = "msg err";
+    $("tajweedMsg").textContent = "يرجى كتابة عنوان الباب وشرح الحكم.";
+    return;
+  }
+
+  $("tajweedSubmitBtn").disabled = true;
+  try {
+    if (editId) {
+      await updateDoc(doc(db, "tajweed_guide", editId), { order, title, content, examples });
+      toast("تم تحديث حكم التجويد بنجاح");
+    } else {
+      await addDoc(collection(db, "tajweed_guide"), { order, title, content, examples, createdAt: serverTimestamp() });
+      toast("تمت إضافة الباب إلى دليل التجويد بنجاح");
+    }
+    $("tajweedMsg").className = "msg";
+    resetTajweedForm();
+  } catch (err) {
+    $("tajweedMsg").className = "msg err";
+    $("tajweedMsg").textContent = "تعذر الحفظ. تأكد من السماح للإدارة بالكتابة في مجموعة tajweed_guide في Firestore Rules.";
+  }
+  $("tajweedSubmitBtn").disabled = false;
+};
+
+function renderTajweedTable() {
+  const tbody = $("tajweedTableBody");
+  if (!allTajweed.length) {
+    emptyRow(tbody, 5, "لم تتم إضافة أحكام مخصصة بعد (يعرض الموقع حالياً القواعد الافتراضية، ويمكنك استيرادها بالأعلى لتعديلها).");
+    return;
+  }
+  tbody.replaceChildren();
+
+  allTajweed.forEach(item => {
+    const tr = document.createElement("tr");
+
+    const tdOrder = document.createElement("td");
+    tdOrder.style.fontWeight = "700";
+    tdOrder.textContent = item.order ?? "—";
+
+    const tdTitle = document.createElement("td");
+    tdTitle.style.fontWeight = "700";
+    tdTitle.textContent = item.title || "";
+
+    const tdContent = document.createElement("td");
+    tdContent.style.maxWidth = "340px";
+    tdContent.style.whiteSpace = "pre-line";
+    tdContent.textContent = item.content || "";
+
+    const tdEx = document.createElement("td");
+    tdEx.style.fontFamily = "'Amiri', serif";
+    tdEx.style.fontSize = "1.05rem";
+    tdEx.textContent = item.examples || "—";
+
+    const tdAct = document.createElement("td");
+    const editBtn = document.createElement("button");
+    editBtn.className = "btn-outline";
+    editBtn.style.cssText = "padding:5px 10px;margin-inline-end:6px";
+    editBtn.innerHTML = '<i class="fa-solid fa-pen-to-square"></i>تعديل';
+    editBtn.onclick = () => {
+      $("tajweedEditId").value = item.id;
+      $("tajweedOrder").value = item.order || 1;
+      $("tajweedTitle").value = item.title || "";
+      $("tajweedContent").value = item.content || "";
+      $("tajweedExamples").value = item.examples || "";
+      $("tajweedFormHeading").innerHTML = '<i class="fa-solid fa-pen-to-square"></i>تعديل باب: ' + (item.title || "");
+      $("tajweedSubmitBtn").innerHTML = '<i class="fa-solid fa-floppy-disk"></i>حفظ التعديلات';
+      $("tajweedCancelEditBtn").classList.remove("hidden");
+      $("tajweedForm").scrollIntoView({ behavior: "smooth" });
+    };
+
+    const delBtn = document.createElement("button");
+    delBtn.className = "del-btn";
+    delBtn.innerHTML = '<i class="fa-solid fa-trash-can"></i>حذف';
+    delBtn.onclick = async () => {
+      if (!confirm(`هل أنت متأكد من حذف "${item.title}"؟`)) return;
+      try {
+        await deleteDoc(doc(db, "tajweed_guide", item.id));
+        if ($("tajweedEditId").value === item.id) resetTajweedForm();
+        toast("تم حذف الباب من دليل التجويد");
+      } catch (err) {
+        toast("تعذر الحذف", "err");
+      }
+    };
+
+    tdAct.append(editBtn, delBtn);
+    tr.append(tdOrder, tdTitle, tdContent, tdEx, tdAct);
+    tbody.append(tr);
+  });
+}
+
+/* ---------- جدول الطلبات ---------- */
+/* الطلبات بعد تطبيق البحث وفلاتر البرنامج والحالة (تُستخدم في الجدول والتصدير) */
+function filterRegs() {
+  const search = $("searchInput").value.trim();
+  const searchN = norm(search);
+  const progFilter = $("filterProgram").value;
+  const statusFilter = $("filterStatus").value;
+  return allRows.filter(r => {
+    const st = r.status || "جديد";
+    const matchSearch = !search || norm(r.fullName).includes(searchN) || (r.phone || "").includes(search);
+    const matchProg = progFilter === "all" || r.program === progFilter;
+    const matchStatus = statusFilter === "all" || st === statusFilter;
+    return matchSearch && matchProg && matchStatus;
+  });
+}
+
+function renderTable() {
+  const search = $("searchInput").value.trim();
+  const searchN = norm(search);
+  const progFilter = $("filterProgram").value;
+  const statusFilter = $("filterStatus").value;
+
+  $("statTotal").textContent = allRows.length;
+  $("statNew").textContent = allRows.filter(r => (r.status || "جديد") === "جديد").length;
+  $("statContacted").textContent = allRows.filter(r => r.status === "تم التواصل").length;
+  $("statAccepted").textContent = allRows.filter(r => r.status === "مقبول").length;
+
+  const filtered = filterRegs();
+
+  const tbody = $("tableBody");
+
+  if (!filtered.length) {
+    emptyRow(tbody, 7, "لا توجد طلبات مطابقة للبحث.");
+    return;
+  }
+  tbody.replaceChildren();
+
+  filtered.forEach(r => {
+    const tr = document.createElement("tr");
+    const status = r.status || "جديد";
+    const dateStr = r.createdAt ? r.createdAt.toDate().toLocaleDateString("ar-EG") : "غير محدد";
+    const waPhone = formatWaPhone(r.phone);
+    const waMsg = encodeURIComponent(`السلام عليكم أ/ ${r.fullName}، نتواصل معكم من إدارة دار الفرقان بخصوص طلب التسجيل في برنامج (${r.program}).`);
+
+    const tdName = document.createElement("td");
+    tdName.style.fontWeight = "700";
+    tdName.textContent = r.fullName || "";
+
+    const tdPhone = document.createElement("td");
+    const phoneSpan = document.createElement("div");
+    phoneSpan.dir = "ltr";
+    phoneSpan.textContent = r.phone || "";
+    const waLink = document.createElement("a");
+    waLink.className = "wa-btn";
+    waLink.href = `https://wa.me/${waPhone}?text=${waMsg}`;
+    waLink.target = "_blank";
+    waLink.rel = "noopener";
+    waLink.innerHTML = '<i class="fa-brands fa-whatsapp"></i>مراسلة';
+    tdPhone.append(phoneSpan, waLink);
+
+    const tdProg = document.createElement("td");
+    tdProg.textContent = r.program || "";
+
+    const tdNotes = document.createElement("td");
+    tdNotes.style.maxWidth = "220px";
+    tdNotes.textContent = r.notes || "—";
+
+    const tdDate = document.createElement("td");
+    tdDate.textContent = dateStr;
+
+    const tdStatus = document.createElement("td");
+    const select = document.createElement("select");
+    select.className = "status-select";
+    select.setAttribute("aria-label", "حالة الطلب");
+    ["جديد", "تم التواصل", "مقبول", "مرفوض"].forEach(optVal => {
+      const opt = document.createElement("option");
+      opt.value = optVal;
+      opt.textContent = optVal;
+      if (optVal === status) opt.selected = true;
+      select.append(opt);
+    });
+    select.onchange = async () => {
+      try {
+        await updateDoc(doc(db, "registrations", r.id), { status: select.value });
+        toast("تم تحديث الحالة");
+      } catch (err) {
+        toast("تعذر تحديث الحالة", "err");
+        select.value = status;
+      }
+    };
+    const noteBtn = document.createElement("button");
+    noteBtn.type = "button"; noteBtn.className = "btn-outline";
+    noteBtn.style.cssText = "margin-top:6px;padding:3px 10px;font-size:.78rem";
+    noteBtn.textContent = r.adminNote ? "ملاحظة للطالب ✓" : "ملاحظة للطالب";
+    noteBtn.onclick = async () => {
+      const txt = prompt("ملاحظة تظهر للطالب بجانب طلبه (اتركها فارغة لحذفها):", r.adminNote || "");
+      if (txt === null) return;
+      try {
+        await updateDoc(doc(db, "registrations", r.id), { adminNote: txt.trim().slice(0, 300) });
+        toast("تم حفظ الملاحظة");
+      } catch (err) { toast("تعذر حفظ الملاحظة", "err"); }
+    };
+    tdStatus.append(select, document.createElement("br"), noteBtn);
+
+    const tdAction = document.createElement("td");
+    const delBtn = document.createElement("button");
+    delBtn.className = "del-btn";
+    delBtn.innerHTML = '<i class="fa-solid fa-trash-can"></i>حذف';
+    delBtn.onclick = async () => {
+      if (!confirm(`هل أنت متأكد من حذف طلب "${r.fullName}"؟`)) return;
+      try { await deleteDoc(doc(db, "registrations", r.id)); toast("تم حذف الطلب"); }
+      catch (err) { toast("تعذر حذف الطلب", "err"); }
+    };
+    tdAction.append(delBtn);
+
+    tr.append(tdName, tdPhone, tdProg, tdNotes, tdDate, tdStatus, tdAction);
+    tbody.append(tr);
+  });
+}
+
+/* ---------- جدول الاستشارات + رد المعلم الصوتي (#25) ---------- */
+function renderConsults() {
+  const tbody = $("consultTableBody");
+
+  const pending = allConsults.filter(c => !c.reply && !c.teacherAudioUrl && !c.teacherAudioData).length;
+  $("consultsBadge").textContent = pending;
+  $("consultsBadge").classList.toggle("hidden", pending === 0);
+
+  if (!allConsults.length) {
+    emptyRow(tbody, 5, "لا توجد استشارات أو تلاوات مرسلة حالياً.");
+    return;
+  }
+
+  // أي تحديث يصل من القاعدة يعيد بناء الجدول؛ نُبقي الصفوف التي فيها رد غير محفوظ
+  // أو تسجيل صوتي قيد العمل كما هي حتى لا يضيع ما كتبه المسؤول.
+  const existingRows = new Map();
+  [...tbody.children].forEach(row => { if (row.dataset && row.dataset.id) existingRows.set(row.dataset.id, row); });
+  tbody.replaceChildren();
+
+  allConsults.forEach(c => {
+    const old = existingRows.get(c.id);
+    if (old && typeof old._dirty === "function" && old._dirty()) { tbody.append(old); return; }
+
+    const tr = document.createElement("tr");
+    tr.dataset.id = c.id;
+
+    const tdStudent = document.createElement("td");
+    const stName = document.createElement("strong");
+    stName.textContent = c.studentName || "طالب";
+    const stPhone = document.createElement("div");
+    stPhone.dir = "ltr";
+    stPhone.textContent = c.phone || "بدون رقم";
+    tdStudent.append(stName, stPhone);
+    if (c.phone) {
+      const wa = document.createElement("a");
+      wa.className = "wa-btn";
+      wa.href = `https://wa.me/${formatWaPhone(c.phone)}?text=${encodeURIComponent(`السلام عليكم، بخصوص استشارتك في دار الفرقان (${c.topic}): `)}`;
+      wa.target = "_blank";
+      wa.rel = "noopener";
+      wa.innerHTML = '<i class="fa-brands fa-whatsapp"></i>واتساب';
+      tdStudent.append(wa);
+    }
+
+    const tdTopic = document.createElement("td");
+    const bTopic = document.createElement("strong");
+    bTopic.textContent = c.topic || "";
+    const pNotes = document.createElement("p");
+    pNotes.style.margin = "4px 0 0";
+    pNotes.textContent = c.notes || "";
+    tdTopic.append(bTopic, pNotes);
+
+    const tdAudio = document.createElement("td");
+    const audioSrc = c.audioUrl || c.audioData;
+    if (audioSrc) {
+      const aud = document.createElement("audio");
+      aud.controls = true;
+      aud.preload = "none";
+      aud.src = audioSrc;
+      aud.style.maxWidth = "210px";
+      tdAudio.append(aud);
+    } else {
+      tdAudio.innerHTML = '<i class="fa-solid fa-align-right"></i>سؤال نصي فقط';
+    }
+
+    const tdReply = document.createElement("td");
+    const replyInput = document.createElement("textarea");
+    replyInput.rows = 2;
+    replyInput.maxLength = 3000;
+    replyInput.placeholder = "اكتب توجيه الشيخ للطالب هنا...";
+    replyInput.setAttribute("aria-label", "رد الشيخ");
+    replyInput.value = c.reply || "";
+
+    let teacherBlob = null;
+    let teacherRecorder = null;
+    let teacherChunks = [];
+    let teacherTimer = null;
+    let teacherSecs = 0;
+    let removeExistingAudio = false;
+
+    const recBar = document.createElement("div");
+    recBar.className = "teacher-rec-bar";
+
+    const recBtn = document.createElement("button");
+    recBtn.type = "button";
+    recBtn.className = "rec-mini-btn";
+    recBtn.innerHTML = '<i class="fa-solid fa-microphone"></i>تسجيل رد صوتي';
+
+    const recStatus = document.createElement("span");
+    recStatus.style.cssText = "font-size:.78rem;color:var(--text-muted)";
+
+    const clearRecBtn = document.createElement("button");
+    clearRecBtn.type = "button";
+    clearRecBtn.className = "rec-mini-clear hidden";
+    clearRecBtn.textContent = "مسح الصوت";
+
+    const teacherPreview = document.createElement("audio");
+    teacherPreview.controls = true;
+    teacherPreview.preload = "none";
+    teacherPreview.style.cssText = "width:100%;margin-top:6px;height:34px";
+
+    const existingTeacherAudio = c.teacherAudioUrl || c.teacherAudioData;
+    if (existingTeacherAudio) {
+      teacherPreview.src = existingTeacherAudio;
+      clearRecBtn.classList.remove("hidden");
+    } else {
+      teacherPreview.classList.add("hidden");
+    }
+
+    clearRecBtn.onclick = () => {
+      teacherBlob = null;
+      removeExistingAudio = true;
+      teacherPreview.removeAttribute("src");
+      teacherPreview.classList.add("hidden");
+      clearRecBtn.classList.add("hidden");
+      recStatus.textContent = "سيتم حذف الصوت عند الحفظ";
+    };
+
+    recBtn.onclick = async () => {
+      if (teacherRecorder && teacherRecorder.state === "recording") {
+        teacherRecorder.stop();
+        return;
+      }
+      if (!navigator.mediaDevices || typeof MediaRecorder === "undefined") {
+        return toast("المتصفح لا يدعم التسجيل الصوتي", "err");
+      }
+      let stream = null;
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({ audio: { channelCount: 1, echoCancellation: true, noiseSuppression: true, autoGainControl: true } });
+        const tType = ["audio/webm;codecs=opus", "audio/mp4", "audio/ogg;codecs=opus"].find(t => MediaRecorder.isTypeSupported(t)) || "";
+        const opts = tType ? { mimeType: tType, audioBitsPerSecond: 16000 } : { audioBitsPerSecond: 16000 };
+        teacherRecorder = new MediaRecorder(stream, opts);
+        teacherChunks = [];
+        teacherSecs = 0;
+        let teacherBytes = 0;
+
+        teacherRecorder.ondataavailable = ev => {
+          if (ev.data.size > 0) teacherChunks.push(ev.data);
+          teacherBytes += ev.data.size;
+          if (teacherBytes >= 380000 && teacherRecorder.state === "recording") teacherRecorder.stop();
+        };
+        teacherRecorder.onstop = () => {
+          clearInterval(teacherTimer);
+          stream.getTracks().forEach(t => t.stop());
+          recBtn.classList.remove("recording");
+          recBtn.innerHTML = '<i class="fa-solid fa-rotate-right"></i>إعادة التسجيل';
+          const b = new Blob(teacherChunks, { type: teacherRecorder.mimeType || "audio/webm" });
+          if (b.size > 0) {
+            teacherBlob = b;
+            removeExistingAudio = false;
+            if (teacherPreview.src && teacherPreview.src.startsWith("blob:")) URL.revokeObjectURL(teacherPreview.src);
+            teacherPreview.src = URL.createObjectURL(b);
+            teacherPreview.classList.remove("hidden");
+            clearRecBtn.classList.remove("hidden");
+            recStatus.textContent = `جاهز (${teacherSecs} ث)`;
+          }
+        };
+
+        teacherRecorder.start(1000);
+        recBtn.classList.add("recording");
+        recBtn.innerHTML = '<i class="fa-solid fa-stop"></i>إيقاف';
+        recStatus.textContent = "يسجل: 0 ث (الحد الأقصى 180 ث)";
+        teacherTimer = setInterval(() => {
+          teacherSecs++;
+          recStatus.textContent = `يسجل: ${teacherSecs} ث`;
+          if (teacherSecs >= 180 && teacherRecorder.state === "recording") teacherRecorder.stop();
+        }, 1000);
+      } catch (err) {
+        if (stream) stream.getTracks().forEach(t => t.stop());
+        toast("تعذر بدء التسجيل. تأكد من السماح باستخدام المايكروفون", "err");
+      }
+    };
+
+    recBar.append(recBtn, recStatus, clearRecBtn);
+
+    const saveReplyBtn = document.createElement("button");
+    saveReplyBtn.className = "primary";
+    saveReplyBtn.style.marginTop = "6px";
+    saveReplyBtn.style.padding = "6px 12px";
+    saveReplyBtn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i>حفظ وإرسال الرد';
+    saveReplyBtn.onclick = async () => {
+      if (teacherRecorder && teacherRecorder.state === "recording") {
+        return toast("أوقف التسجيل الصوتي أولاً قبل الحفظ", "err");
+      }
+      const replyText = replyInput.value.trim();
+      const keepsAudio = !!existingTeacherAudio && !removeExistingAudio;
+      if (!replyText && !teacherBlob && !keepsAudio) {
+        return toast("اكتب توجيه الشيخ أو سجّل رداً صوتياً أولاً", "err");
+      }
+      saveReplyBtn.disabled = true;
+      try {
+        const updates = {
+          reply: replyText,
+          status: "تم الرد"
+        };
+        if (removeExistingAudio) {
+          updates.teacherAudioUrl = "";
+          updates.teacherAudioData = "";
+          if (c.teacherAudioPath) await removeStorageFile(c.teacherAudioPath);
+          updates.teacherAudioPath = "";
+        }
+        if (teacherBlob) {
+          // التخزين داخل Firestore مباشرة (مجاني، ولا يحتاج Storage)
+          const dataUrl = await blobToDataUrl(teacherBlob);
+          const used = (c.audioData || "").length + (replyText || "").length;
+          if (dataUrl.length > 520000 || dataUrl.length + used > 950000) {
+            toast("التسجيل طويل جدًا لهذه الاستشارة. سجّل ردًا أقصر (حتى دقيقتين تقريبًا)", "err");
+            saveReplyBtn.disabled = false;
+            return;
+          }
+          if (c.teacherAudioPath) await removeStorageFile(c.teacherAudioPath);
+          updates.teacherAudioData = dataUrl;
+          updates.teacherAudioUrl = "";
+          updates.teacherAudioPath = "";
+        }
+        await updateDoc(doc(db, "consultations", c.id), updates);
+        teacherBlob = null;
+        removeExistingAudio = false;
+        tr._dirty = () => false; // تم الحفظ: يُعاد بناء الصف من البيانات الجديدة
+        toast("تم حفظ توجيه الشيخ وظهر في حساب الطالب");
+      } catch (err) {
+        console.error("save reply failed:", err);
+        toast(err && err.code === "permission-denied"
+          ? "ليس لديك صلاحية الحفظ. تأكد من تأكيد بريدك وقواعد Firestore."
+          : (err && /exceeds|size|too large/i.test(err.message || "") ? "حجم الاستشارة كبير. سجّل ردًا صوتيًا أقصر." : "تعذر حفظ الرد. حاول مرة أخرى."), "err");
+      }
+      saveReplyBtn.disabled = false;
+    };
+    tdReply.append(replyInput, recBar, teacherPreview, saveReplyBtn);
+
+    const tdAct = document.createElement("td");
+    const delBtn = document.createElement("button");
+    delBtn.className = "del-btn";
+    delBtn.innerHTML = '<i class="fa-solid fa-trash-can"></i>حذف';
+    delBtn.onclick = async () => {
+      if (!confirm("حذف هذه الاستشارة؟")) return;
+      try {
+        await deleteDoc(doc(db, "consultations", c.id));
+        await removeStorageFile(c.audioPath);
+        await removeStorageFile(c.teacherAudioPath);
+        toast("تم حذف الاستشارة");
+      } catch (err) { toast("تعذر حذف الاستشارة", "err"); }
+    };
+    tdAct.append(delBtn);
+
+    tr._dirty = () =>
+      (teacherRecorder && teacherRecorder.state === "recording") ||
+      !!teacherBlob ||
+      removeExistingAudio ||
+      replyInput.value.trim() !== (c.reply || "").trim();
+
+    tr.append(tdStudent, tdTopic, tdAudio, tdReply, tdAct);
+    tbody.append(tr);
+  });
+}
+
+/* ---------- جدول المكتبة والمعرض ---------- */
+function renderMedia() {
+  const tbody = $("mediaTableBody");
+  if (!allMedia.length) {
+    emptyRow(tbody, 6, "لم يتم إضافة صور أو كتب أو متون صوتية بعد.");
+    return;
+  }
+  tbody.replaceChildren();
+
+  allMedia.forEach(m => {
+    const tr = document.createElement("tr");
+    const tdType = document.createElement("td");
+    if (m.type === "image") {
+      tdType.innerHTML = '<i class="fa-solid fa-image"></i><b>معرض الصور</b>';
+    } else if (m.type === "audio") {
+      tdType.innerHTML = '<i class="fa-solid fa-headphones"></i><b>المتون الصوتية</b>';
+    } else {
+      tdType.innerHTML = '<i class="fa-solid fa-book"></i><b>مكتبة المتون</b>';
+    }
+
+    const tdCat = document.createElement("td");
+    tdCat.textContent = m.category || "";
+
+    const tdTitle = document.createElement("td");
+    const b = document.createElement("strong");
+    b.textContent = m.title || "";
+    const p = document.createElement("div");
+    p.style.fontSize = ".82rem";
+    p.style.color = "var(--text-muted)";
+    p.textContent = m.description || (m.textContent ? "يحتوي على نص أبيات قابل للتعديل" : "");
+    tdTitle.append(b, p);
+
+    const tdPrev = document.createElement("td");
+    if (m.type === "image") {
+      const img = document.createElement("img");
+      img.src = m.url;
+      img.alt = m.title || "";
+      img.loading = "lazy";
+      img.style.width = "64px";
+      img.style.height = "46px";
+      img.style.objectFit = "cover";
+      img.style.borderRadius = "6px";
+      tdPrev.append(img);
+    } else if (m.type === "audio") {
+      if (m.url) {
+        const aud = document.createElement("audio");
+        aud.controls = true;
+        aud.preload = "none";
+        aud.src = m.url;
+        aud.style.maxWidth = "200px";
+        tdPrev.append(aud);
+      } else {
+        tdPrev.textContent = "نص متن فقط";
+      }
+    } else if (isHttpUrl(m.url)) {
+      const a = document.createElement("a");
+      a.href = m.url;
+      a.target = "_blank";
+      a.rel = "noopener";
+      a.innerHTML = '<i class="fa-solid fa-arrow-up-right-from-square"></i>فتح رابط Drive';
+      tdPrev.append(a);
+    } else {
+      tdPrev.textContent = "رابط غير صالح";
+    }
+
+    const tdDate = document.createElement("td");
+    tdDate.textContent = m.createdAt ? m.createdAt.toDate().toLocaleDateString("ar-EG") : "";
+
+    const tdAct = document.createElement("td");
+    const editBtn = document.createElement("button");
+    editBtn.className = "btn-outline";
+    editBtn.style.padding = "5px 10px";
+    editBtn.style.marginInlineEnd = "6px";
+    editBtn.innerHTML = '<i class="fa-solid fa-pen-to-square"></i>تعديل';
+    editBtn.onclick = () => openEditMediaModal(m);
+
+    const delBtn = document.createElement("button");
+    delBtn.className = "del-btn";
+    delBtn.innerHTML = '<i class="fa-solid fa-trash-can"></i>حذف';
+    delBtn.onclick = async () => {
+      if (!confirm(`هل أنت متأكد من حذف "${m.title}"؟`)) return;
+      try { await deleteDoc(doc(db, "media", m.id)); await removeStorageFile(m.storagePath); toast("تم الحذف"); }
+      catch (err) { toast("تعذر الحذف", "err"); }
+    };
+    tdAct.append(editBtn, delBtn);
+
+    tr.append(tdType, tdCat, tdTitle, tdPrev, tdDate, tdAct);
+    tbody.append(tr);
+  });
+}
+
+/* ---------- سجل الحسابات ---------- */
+function renderUsers() {
+  const qRaw = ($("userSearchInput").value || "").trim();
+  const q = norm(qRaw);
+  const phoneByUid = {};
+  const nameByUid = {};
+  allRows.forEach(r => {
+    if (r.uid && r.phone && !phoneByUid[r.uid]) phoneByUid[r.uid] = r.phone;
+    if (r.uid && r.fullName && !nameByUid[r.uid]) nameByUid[r.uid] = r.fullName;
+  });
+
+  const mergedUsers = [...allUsers];
+  allRows.forEach(r => {
+    if (r.uid && !mergedUsers.some(u => u.id === r.uid)) {
+      mergedUsers.push({
+        id: r.uid,
+        uid: r.uid,
+        name: r.fullName || "طالب مسجل",
+        email: "حساب مسجل بالطلبات",
+        phone: r.phone || "",
+        createdAt: r.createdAt
+      });
+    }
+  });
+
+  $("usersCountBadge").textContent = mergedUsers.length;
+
+  const filtered = mergedUsers.filter(u => {
+    const ph = u.phone || phoneByUid[u.id] || "";
+    const nm = u.name || nameByUid[u.id] || "";
+    return !qRaw || norm(nm).includes(q) || (u.email || "").toLowerCase().includes(qRaw.toLowerCase()) || ph.includes(qRaw);
+  });
+
+  const tbody = $("usersTableBody");
+  if (!filtered.length) {
+    emptyRow(tbody, 5, "لا توجد حسابات مطابقة.");
+    return;
+  }
+  tbody.replaceChildren();
+
+  filtered.forEach(u => {
+    const tr = document.createElement("tr");
+    const phone = u.phone || phoneByUid[u.id] || "";
+    const name = u.name || nameByUid[u.id] || "بدون اسم";
+
+    const tdName = document.createElement("td");
+    tdName.style.fontWeight = "700";
+    tdName.textContent = name;
+
+    const tdEmail = document.createElement("td");
+    tdEmail.dir = "ltr";
+    tdEmail.textContent = u.email || "—";
+
+    const tdPhone = document.createElement("td");
+    if (phone) {
+      const phDiv = document.createElement("div");
+      phDiv.dir = "ltr";
+      phDiv.textContent = phone;
+      const waLink = document.createElement("a");
+      waLink.className = "wa-btn";
+      waLink.href = `https://wa.me/${formatWaPhone(phone)}`;
+      waLink.target = "_blank";
+      waLink.rel = "noopener";
+      waLink.innerHTML = '<i class="fa-brands fa-whatsapp"></i>واتساب';
+      tdPhone.append(phDiv, waLink);
+    } else {
+      tdPhone.textContent = "غير مسجل";
+    }
+
+    const tdDate = document.createElement("td");
+    tdDate.textContent = u.createdAt ? u.createdAt.toDate().toLocaleDateString("ar-EG") : "غير محدد";
+
+    const tdAct = document.createElement("td");
+    const delBtn = document.createElement("button");
+    delBtn.className = "del-btn";
+    delBtn.innerHTML = '<i class="fa-solid fa-user-xmark"></i>حذف الحساب';
+    delBtn.onclick = async () => {
+      if (!confirm(`هل أنت متأكد من حذف حساب "${name}" (${u.email || phone}) نهائياً ومنعه من الدخول؟`)) return;
+      delBtn.disabled = true;
+      try {
+        await setDoc(doc(db, "blocked_users", u.id), { blockedAt: serverTimestamp(), email: u.email || "" });
+        await deleteDoc(doc(db, "users", u.id));
+        const userRegs = allRows.filter(r => r.uid === u.id);
+        for (const reg of userRegs) {
+          await deleteDoc(doc(db, "registrations", reg.id));
+        }
+        toast("تم حذف الحساب ومنعه من الدخول");
+      } catch (err) {
+        toast("تعذر حذف الحساب. تأكد من تحديث قواعد Firestore Rules.", "err");
+        delBtn.disabled = false;
+      }
+    };
+    tdAct.append(delBtn);
+
+    tr.append(tdName, tdEmail, tdPhone, tdDate, tdAct);
+    tbody.append(tr);
+  });
+}
+
+/* ---------- لوحة الإحصائيات والرسوم البيانية (#34) ---------- */
+function renderStats() {
+  const totalStudents = allUsers.length;
+  const totalRegs = allRows.length;
+  const acceptedRegs = allRows.filter(r => r.status === "مقبول").length;
+  const contactedRegs = allRows.filter(r => r.status === "تم التواصل").length;
+  const newRegs = allRows.filter(r => (r.status || "جديد") === "جديد").length;
+  const acceptRate = totalRegs ? Math.round((acceptedRegs / totalRegs) * 100) : 0;
+
+  const totalConsults = allConsults.length;
+  const repliedConsults = allConsults.filter(c => c.reply || c.teacherAudioUrl || c.teacherAudioData).length;
+  const pendingConsults = totalConsults - repliedConsults;
+  const replyRate = totalConsults ? Math.round((repliedConsults / totalConsults) * 100) : 0;
+
+  const kpis = $("analyticsKpis");
+  kpis.replaceChildren();
+  const kpiItems = [
+    { icon: "fa-users", val: totalStudents, label: "إجمالي الحسابات المسجلة" },
+    { icon: "fa-user-check", val: `${acceptRate}%`, label: `نسبة الانتظام والقبول (${acceptedRegs}/${totalRegs})` },
+    { icon: "fa-microphone-lines", val: totalConsults, label: "إجمالي الاستشارات والتلاوات" },
+    { icon: "fa-circle-check", val: `${replyRate}%`, label: `نسبة إنجاز الردود (${repliedConsults}/${totalConsults})` },
+    { icon: "fa-book-open", val: allMedia.length, label: "محتويات المكتبة والمعرض" }
+  ];
+  kpiItems.forEach(k => {
+    const card = document.createElement("div");
+    card.className = "stat-card";
+    card.innerHTML = `<i class="fa-solid ${k.icon}"></i><strong>${k.val}</strong><span>${k.label}</span>`;
+    kpis.append(card);
+  });
+
+  const progContainer = $("programBars");
+  progContainer.replaceChildren();
+  const programs = ["تحفيظ القرآن", "إجازة", "التجويد", "القراءات"];
+  programs.forEach(prog => {
+    const count = allRows.filter(r => r.program === prog).length;
+    const pct = totalRegs ? Math.round((count / totalRegs) * 100) : 0;
+    const row = document.createElement("div");
+    row.className = "bar-row";
+    row.innerHTML = `
+      <div class="bar-label"><span>${prog}</span><span>${count} طالب (${pct}%)</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div>
+    `;
+    progContainer.append(row);
+  });
+
+  const donutContainer = $("statusDonuts");
+  donutContainer.replaceChildren();
+  const r = 42, circ = 2 * Math.PI * r;
+  const pAcc = totalRegs ? (acceptedRegs / totalRegs) * circ : 0;
+  const pCon = totalRegs ? (contactedRegs / totalRegs) * circ : 0;
+  const pNew = totalRegs ? (newRegs / totalRegs) * circ : 0;
+
+  donutContainer.innerHTML = `
+    <svg width="120" height="120" viewBox="0 0 110 110" aria-label="توزيع حالات الطلبات">
+      <circle cx="55" cy="55" r="${r}" fill="none" stroke="rgba(128,128,128,0.2)" stroke-width="14"/>
+      <circle cx="55" cy="55" r="${r}" fill="none" stroke="#1d5a14" stroke-width="14" stroke-dasharray="${pAcc} ${circ}" transform="rotate(-90 55 55)"/>
+      <circle cx="55" cy="55" r="${r}" fill="none" stroke="#FAC81B" stroke-width="14" stroke-dasharray="${pCon} ${circ}" stroke-dashoffset="-${pAcc}" transform="rotate(-90 55 55)"/>
+      <circle cx="55" cy="55" r="${r}" fill="none" stroke="#a4161a" stroke-width="14" stroke-dasharray="${pNew} ${circ}" stroke-dashoffset="-${pAcc + pCon}" transform="rotate(-90 55 55)"/>
+      <text x="55" y="59" text-anchor="middle" fill="currentColor" font-size="14" font-weight="bold">${totalRegs} طلب</text>
+    </svg>
+    <div class="donut-legend">
+      <div class="legend-item"><span class="legend-dot" style="background:#1d5a14"></span>مقبول / منتظم: <strong>${acceptedRegs}</strong></div>
+      <div class="legend-item"><span class="legend-dot" style="background:#FAC81B"></span>تم التواصل: <strong>${contactedRegs}</strong></div>
+      <div class="legend-item"><span class="legend-dot" style="background:#a4161a"></span>طلبات جديدة: <strong>${newRegs}</strong></div>
+      <hr style="width:100%;border:0;border-top:1px solid var(--line);margin:2px 0">
+      <div class="legend-item"><span class="legend-dot" style="background:#25D366"></span>استشارات مجابة: <strong>${repliedConsults}</strong></div>
+      <div class="legend-item"><span class="legend-dot" style="background:#888"></span>بانتظار رد الشيخ: <strong>${pendingConsults}</strong></div>
+    </div>
+  `;
+
+  const weekContainer = $("weeklyActivityChart");
+  weekContainer.replaceChildren();
+  const dayNames = ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"];
+  const dayOrder = [6, 0, 1, 2, 3, 4, 5];
+  const counts = [0, 0, 0, 0, 0, 0, 0];
+
+  [...allRows, ...allConsults].forEach(item => {
+    if (item.createdAt && typeof item.createdAt.toDate === "function") {
+      const d = item.createdAt.toDate().getDay();
+      counts[d]++;
+    }
+  });
+  const maxDay = Math.max(1, ...counts);
+
+  dayOrder.forEach(dayIdx => {
+    const val = counts[dayIdx];
+    const hPct = Math.round((val / maxDay) * 100);
+    const col = document.createElement("div");
+    col.className = "week-col";
+    col.innerHTML = `
+      <span class="week-val">${val}</span>
+      <div class="week-bar ${val === maxDay && val > 0 ? "peak" : ""}" style="height:${Math.max(6, hPct)}%"></div>
+      <span class="week-day">${dayNames[dayIdx]}</span>
+    `;
+    weekContainer.append(col);
+  });
+}
+
+$("searchInput").oninput = renderTable;
+$("filterProgram").onchange = renderTable;
+$("filterStatus").onchange = renderTable;
+$("userSearchInput").oninput = renderUsers;
+
+/* ---------- تصدير Excel (مع بديل CSV لو تعذّر تحميل المكتبة) ---------- */
+const XLSX_URL = "https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js";
+function loadXlsx() {
+  if (window.XLSX) return Promise.resolve(window.XLSX);
+  return new Promise((resolve, reject) => {
+    const sc = document.createElement("script");
+    sc.src = XLSX_URL;
+    sc.onload = () => window.XLSX ? resolve(window.XLSX) : reject(new Error("xlsx"));
+    sc.onerror = () => reject(new Error("xlsx"));
+    document.head.append(sc);
+  });
+}
+
+function regsToRows(list) {
+  return list.map((r, i) => ({
+    "م": i + 1,
+    "الاسم الكامل": r.fullName || "",
+    "رقم الهاتف": String(r.phone || ""),
+    "البرنامج": r.program || "",
+    "الحالة": r.status || "جديد",
+    "تاريخ الطلب": r.createdAt ? r.createdAt.toDate() : "",
+    "الملاحظات": (r.notes || "").replace(/\n/g, " ")
+  }));
+}
+
+function exportCsv(list) {
+  const rows = regsToRows(list);
+  const headers = Object.keys(rows[0]);
+  const csvRows = [headers.map(csvCell).join(",")];
+  rows.forEach(r => csvRows.push(headers.map(h => {
+    const v = r[h];
+    return csvCell(v instanceof Date ? v.toLocaleDateString("ar-EG") : v);
+  }).join(",")));
+  const blob = new Blob(["\uFEFF" + csvRows.join("\n")], { type: "text/csv;charset=utf-8;" });
+  downloadBlob(blob, "csv");
+}
+
+function downloadBlob(blob, ext) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `طلبات-دار-الفرقان-${new Date().toISOString().slice(0, 10)}.${ext}`;
+  document.body.append(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+$("exportBtn").onclick = async () => {
+  const list = filterRegs();
+  if (!list.length) return toast("لا توجد طلبات لتصديرها.", "err");
+  const btn = $("exportBtn");
+  btn.disabled = true;
+  try {
+    const X = await loadXlsx();
+    const ws = X.utils.json_to_sheet(regsToRows(list), { cellDates: true });
+    // تنسيق: عرض الأعمدة + تنسيق التاريخ + فلتر على العناوين
+    ws["!cols"] = [{ wch: 5 }, { wch: 28 }, { wch: 16 }, { wch: 16 }, { wch: 14 }, { wch: 14 }, { wch: 50 }];
+    const range = X.utils.decode_range(ws["!ref"]);
+    for (let r = 1; r <= range.e.r; r++) {
+      const c = ws[X.utils.encode_cell({ r, c: 5 })];
+      if (c && c.t === "d") c.z = "yyyy-mm-dd";
+    }
+    ws["!autofilter"] = { ref: ws["!ref"] };
+    const wb = X.utils.book_new();
+    wb.Workbook = { Views: [{ RTL: true }] };   // اتجاه الورقة من اليمين لليسار
+    X.utils.book_append_sheet(wb, ws, "طلبات التسجيل");
+    const out = X.write(wb, { bookType: "xlsx", type: "array", cellDates: true });
+    downloadBlob(new Blob([out], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" }), "xlsx");
+    toast(`تم تصدير ${list.length} طلب إلى Excel`);
+  } catch (e) {
+    exportCsv(list);
+    toast("تعذر تحميل مكتبة Excel، تم التصدير بصيغة CSV بدلًا منها.", "err");
+  }
+  btn.disabled = false;
+};
+
+/* ---------- حالة الدخول وتحميل البيانات ---------- */
+function loadError(tbodyId, cols) {
+  return () => emptyRow($(tbodyId), cols, "تعذر تحميل البيانات. تأكد من صلاحيات الحساب وقواعد Firestore.");
+}
+
+onAuthStateChanged(auth, user => {
+  [unsubRegs, unsubUsers, unsubMedia, unsubConsults, unsubTajweed, unsubProgress].forEach(u => u && u());
+  if (unsubLinks) { unsubLinks(); unsubLinks = null; }
+  if (unsubNews) { unsubNews(); unsubNews = null; }
+  if (unsubSettings) { unsubSettings(); unsubSettings = null; }
+  unsubRegs = unsubUsers = unsubMedia = unsubConsults = unsubTajweed = unsubProgress = null;
+  regsReady = consultsReady = false;
+  allRows = []; allUsers = []; allMedia = []; allConsults = []; allTajweed = []; allProgress = []; allLinks = [];
+  [["progTableBody", 7], ["tableBody", 7], ["consultTableBody", 5], ["mediaTableBody", 6], ["tajweedTableBody", 5], ["usersTableBody", 5]]
+    .forEach(([id, cols]) => emptyRow($(id), cols, "جاري التحميل..."));
+  $("loginView").classList.add("hidden");
+  $("deniedView").classList.add("hidden");
+  $("adminView").classList.add("hidden");
+
+  if (!user) {
+    $("loginView").classList.remove("hidden");
+    return;
+  }
+
+  const userEmail = (user.email || "").toLowerCase();
+  const isAdmin = ADMIN_EMAILS.map(e => e.toLowerCase()).includes(userEmail);
+
+  if (!isAdmin) {
+    $("currentUserEmail").textContent = user.email;
+    $("deniedView").classList.remove("hidden");
+    return;
+  }
+
+  $("adminEmailDisplay").textContent = user.email;
+  $("adminView").classList.remove("hidden");
+
+  $("verifyBox").classList.add("hidden");
+  (async () => {
+    // تجديد بيانات المستخدم والتوكن عشان حالة تأكيد الإيميل تبقى محدثة قبل قراءة Firestore
+    try { await user.reload(); await user.getIdToken(true); } catch (e) {}
+    if (auth.currentUser !== user) return;
+    $("verifyBox").classList.toggle("hidden", user.emailVerified);
+
+  unsubRegs = onSnapshot(collection(db, "registrations"), snap => {
+    snap.docChanges().forEach(ch => {
+      if (ch.type === "added" && regsReady) {
+        const d = ch.doc.data();
+        notifyNew("طلب تسجيل جديد", `${d.fullName || ""} — ${d.program || ""}`);
+      }
+    });
+    regsReady = true;
+    allRows = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+    renderTable();
+    renderUsers();
+    renderStats();
+  }, loadError("tableBody", 7));
+
+  unsubUsers = onSnapshot(collection(db, "users"), snap => {
+    allUsers = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+    fillStudentSelects();
+    renderUsers();
+    renderStats();
+  }, loadError("usersTableBody", 5));
+
+  unsubNews = onSnapshot(collection(db, "news"), snap => {
+    allNews = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((x, y) => (y.createdAt?.seconds || 0) - (x.createdAt?.seconds || 0));
+    renderNewsAdmin();
+  }, () => { $("newsAdminList").innerHTML = "<p>تعذر تحميل المنشورات. أضف قواعد news في Firestore.</p>"; });
+
+  unsubSettings = onSnapshot(doc(db, "site_settings", "main"), snap => {
+    if (!snap.exists()) return;
+    if ($("tabSettings").contains(document.activeElement)) return;
+    const s = snap.data();
+    $("setPhone").value = s.phone || ""; $("setWhatsapp").value = s.whatsapp || ""; $("setEmail").value = s.email || "";
+    $("setFacebook").value = s.facebook || ""; $("setAnnc").value = s.announcement || ""; $("setAnncLink").value = s.announcementLink || "";
+    $("setAnncOn").checked = !!s.announcementOn;
+  }, () => {});
+
+  unsubLinks = onSnapshot(collection(db, "guardian_links"), snap => {
+    allLinks = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((x, y) => (y.createdAt?.seconds || 0) - (x.createdAt?.seconds || 0));
+    renderLinks();
+  }, () => {});
+
+  unsubProgress = onSnapshot(collection(db, "progress"), snap => {
+    allProgress = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+    renderProgress();
+  }, loadError("progTableBody", 7));
+
+  unsubMedia = onSnapshot(collection(db, "media"), snap => {
+    allMedia = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+    renderMedia();
+    renderStats();
+  }, loadError("mediaTableBody", 6));
+
+  unsubTajweed = onSnapshot(collection(db, "tajweed_guide"), snap => {
+    allTajweed = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
+    if (!$("tajweedEditId").value) $("tajweedOrder").value = allTajweed.length + 1;
+    renderTajweedTable();
+  }, loadError("tajweedTableBody", 5));
+
+  unsubConsults = onSnapshot(collection(db, "consultations"), snap => {
+    snap.docChanges().forEach(ch => {
+      if (ch.type === "added" && consultsReady) {
+        const d = ch.doc.data();
+        notifyNew("استشارة / تلاوة جديدة", `${d.studentName || "طالب"} — ${d.topic || ""}`);
+      }
+    });
+    consultsReady = true;
+    allConsults = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+    renderConsults();
+    renderStats();
+  }, loadError("consultTableBody", 5));
+  })();
+});
+
+$("verifyBtn").addEventListener("click", async () => {
+  try { await sendEmailVerification(auth.currentUser); toast("تم إرسال رابط التأكيد، افتحه من إيميلك ثم حدّث الصفحة"); }
+  catch (e) { toast("تعذر الإرسال، حاول بعد قليل", "err"); }
+});
+$("verifyReloadBtn").addEventListener("click", () => location.reload());
+</script>
+</body>
+</html>

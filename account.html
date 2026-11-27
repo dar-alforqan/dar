@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>حسابي | دار الفرقان</title>
+
+<link rel="icon" type="image/png" sizes="96x96" href="icon-96.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#3A181E">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+<link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js">
+<link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js">
+<link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js">
+<link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js">
+<link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"></noscript>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&display=swap"></noscript>
+
+<style>
+:root{color-scheme:light}
+body.dark-mode{color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Cairo",Tahoma,"Segoe UI",Arial,sans-serif;background:var(--cream);color:var(--ink);line-height:1.7;transition:background .25s ease,color .25s ease}
+body.locked{overflow:hidden}
+.fa-solid,.fa-regular,.fa-brands{margin-inline-end:6px}
+.pw-btn .fa-solid{margin-inline-end:0}
+header{background:var(--header-bg);color:var(--header-text);padding:18px 20px;padding-top:calc(18px + env(safe-area-inset-top,0));border-bottom:5px solid var(--gold);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.brand-box{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit}
+.brand-box img{width:46px;height:46px;border-radius:50%;object-fit:cover;border:2px solid var(--gold)}
+header h1{font-family:"Amiri","Traditional Arabic",Georgia,serif;font-size:1.85rem;margin:0;color:var(--gold);line-height:1.3}
+header p{margin:2px 0 0;opacity:.85;font-size:.9rem}
+.header-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.theme-btn,.home-link{background:transparent;border:1px solid var(--gold);color:var(--gold);padding:6px 14px;border-radius:20px;cursor:pointer;font:inherit;font-size:.88rem;font-weight:bold;text-decoration:none;transition:filter .2s}
+.theme-btn:hover,.home-link:hover{filter:brightness(1.15)}
+main{max-width:620px;margin:0 auto;padding:24px 16px calc(80px + env(safe-area-inset-bottom,0))}
+.card{background:var(--card-bg);border:1px solid var(--line);border-radius:10px;padding:22px;margin-bottom:20px;transition:background .25s ease,border-color .25s ease}
+.tabs{display:flex;gap:8px;margin-bottom:18px}
+.tabs button{flex:1;padding:10px;border:1px solid var(--wine);background:transparent;color:var(--wine);border-radius:8px;font:inherit;font-weight:700;cursor:pointer;transition:background .2s}
+.tabs button:hover{background:rgba(250,200,27,.15)}
+.tabs button[aria-selected=true]{background:var(--wine);color:var(--on-wine)}
+label{display:block;font-weight:600;margin:14px 0 4px;font-size:.93rem}
+input,select,textarea{width:100%;padding:11px;border:1px solid var(--line);border-radius:8px;font:inherit;background:var(--input-bg);color:var(--ink)}
+input:focus,select:focus,textarea:focus,button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offset:1px}
+input:focus,select:focus,textarea:focus{border-color:var(--gold)}
+.pw{position:relative}
+.pw input{padding-right:46px}
+.pw-btn{position:absolute;right:4px;top:50%;transform:translateY(-50%);background:none;border:0;cursor:pointer;font-size:1.1rem;padding:6px 10px;color:var(--ink)}
+.primary{width:100%;margin-top:18px;padding:12px;background:var(--gold);color:#3A181E;border:0;border-radius:8px;font:inherit;font-weight:700;font-size:1.02rem;cursor:pointer;transition:filter .2s}
+.primary:hover{filter:brightness(1.06)}
+.primary:disabled{opacity:.6;cursor:wait}
+.link{background:none;border:0;color:var(--wine);text-decoration:underline;font:inherit;cursor:pointer;padding:0;margin-top:12px}
+.msg{margin-top:14px;padding:10px;border-radius:8px;display:none}
+.msg a{color:inherit;font-weight:700}
+.msg.err{display:block;background:#fbe3e3;color:var(--err)}
+.msg.ok{display:block;background:#e5f3e2;color:#1d5a14}
+body.dark-mode .msg.err{background:#3b1012;color:#ff9b9e}
+body.dark-mode .msg.ok{background:#0e2e13;color:#85e085}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;gap:10px;flex-wrap:wrap}
+.top strong{font-family:"Amiri","Traditional Arabic",Georgia,serif;font-size:1.45rem}
+h2{font-family:"Amiri","Traditional Arabic",Georgia,serif;margin:22px 0 10px;font-size:1.5rem;color:var(--wine)}
+h2 i{font-size:.85em}
+.section-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin:22px 0 10px}
+.section-head h2{margin:0}
+.export-pdf-btn{background:transparent;border:1px solid var(--wine);color:var(--wine);padding:6px 14px;border-radius:20px;cursor:pointer;font:inherit;font-size:.85rem;font-weight:700;transition:background .2s}
+.export-pdf-btn:hover{background:rgba(250,200,27,.15)}
+.item{border-right:4px solid var(--gold);background:var(--card-bg);border-top:1px solid var(--line);border-bottom:1px solid var(--line);border-left:1px solid var(--line);padding:12px 14px;margin-bottom:10px;border-radius:8px;break-inside:avoid}
+.item small{color:var(--text-muted)}
+.pill{display:inline-block;background:rgba(250,200,27,.22);color:var(--wine);border-radius:12px;padding:0 10px;font-size:.8rem;font-weight:700;margin-inline-start:6px}
+.reply-box{margin-top:10px;padding:10px 12px;background:rgba(250,200,27,.15);border-right:3px solid var(--wine);border-radius:6px;font-size:.92rem}
+.recorder-box{border:1px dashed var(--wine);padding:14px;border-radius:8px;margin-top:8px;text-align:center}
+.rec-btn{padding:8px 16px;border-radius:20px;border:0;font:inherit;font-weight:700;cursor:pointer;background:#a4161a;color:#fff}
+.rec-btn.recording{background:#1d5a14;animation:pulse 1.2s infinite}
+@keyframes pulse{0%{opacity:1}50%{opacity:.6}100%{opacity:1}}
+
+/* نافذة دليل التجويد السريع (#17) */
+.modal{position:fixed;inset:0;background:rgba(10,3,5,.82);z-index:120;display:none;align-items:center;justify-content:center;padding:16px}
+.modal.open{display:flex}
+.modal-box{background:var(--card-bg);color:var(--ink);width:100%;max-width:660px;max-height:86vh;border-radius:12px;border:2px solid var(--gold);display:flex;flex-direction:column;overflow:hidden}
+.modal-head{background:var(--header-bg);color:var(--gold);padding:14px 18px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.modal-head strong{font-family:"Amiri","Traditional Arabic",Georgia,serif;font-size:1.4rem}
+.modal-close{background:var(--gold);color:#3A181E;border:0;padding:6px 14px;border-radius:20px;font:inherit;font-size:.86rem;font-weight:700;cursor:pointer}
+.modal-body{padding:18px;overflow-y:auto}
+.tajweed-rule{border-right:4px solid var(--gold);background:rgba(250,200,27,.08);border-radius:8px;padding:12px 14px;margin-bottom:12px}
+.tajweed-rule h3{margin:0 0 6px;font-family:"Amiri","Traditional Arabic",Georgia,serif;font-size:1.25rem;color:var(--wine)}
+.tajweed-rule p{margin:4px 0;font-size:.92rem;white-space:pre-line}
+.tajweed-ex{display:inline-block;background:var(--card-bg);border:1px solid var(--line);padding:2px 8px;border-radius:6px;font-family:"Amiri",serif;font-size:1.05rem;margin-top:6px}
+
+/* شريط التنبيه عند انقطاع الإنترنت (#35) */
+.offline-bar{background:#a4161a;color:#fff;text-align:center;padding:6px 12px;font-size:.85rem;font-weight:700;display:none}
+.offline-bar.show{display:block}
+
+.print-only{display:none}
+.hidden{display:none !important}
+@media(max-width:600px){
+  header h1{font-size:1.5rem}
+  .tabs button{font-size:.88rem;padding:10px 6px}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* تنسيق خاص عند تصدير سجل الاستشارات PDF (#30) */
+@media print{
+  body{background:#fff !important;color:#000 !important}
+  header,.top,.tabs,#regSection,#consultFormCard,.export-pdf-btn,.offline-bar,.modal{display:none !important}
+  main{max-width:100%;padding:0}
+  #consultSection{display:block !important}
+  .print-only{display:block;border-bottom:3px solid #3A181E;padding-bottom:10px;margin-bottom:18px}
+  .print-only h1{font-family:"Amiri",serif;color:#3A181E;margin:0;font-size:1.6rem}
+  .print-only p{margin:4px 0 0;font-size:.9rem;color:#333}
+  .item{border:1px solid #bbb;border-right:4px solid #3A181E;background:#fff !important;color:#000 !important}
+  .reply-box{background:#f9f5f0 !important;border-right:3px solid #3A181E;color:#000 !important}
+  audio{display:none !important}
+}
+</style>
+<link rel="stylesheet" href="theme.css">
+</head>
+<body>
+<script>(function(){try{var o=localStorage.getItem("dar-theme-override");var d=o?o==="dark":matchMedia("(prefers-color-scheme: dark)").matches;document.body.classList.toggle("dark-mode",d);var f=parseInt(localStorage.getItem("dar-font-scale"),10);if(f>=85&&f<=150)document.documentElement.style.fontSize=f+"%"}catch(e){}})()</script>
+<script src="theme.js" defer></script>
+<script src="site-config.js" defer></script>
+<div id="offlineBar" class="offline-bar" role="status"><i class="fa-solid fa-wifi"></i>أنت تتصفح الآن في وضع عدم الاتصال بالإنترنت — يتم عرض البيانات المحفوظة</div>
+<header>
+  <a href="index.html" class="brand-box">
+    <img src="icon-96.png" alt="شعار دار الفرقان" width="48" height="48" decoding="async">
+    <div>
+      <h1>دار الفرقان</h1>
+      <p>حساب الطالب ومتابعة الطلبات والتلاوة</p>
+    </div>
+  </a>
+  <div class="header-actions">
+    <button id="tajweedGuideBtn" class="theme-btn" type="button"><i class="fa-solid fa-book-bookmark"></i>دليل التجويد</button>
+    <a href="index.html" class="home-link"><i class="fa-solid fa-house"></i>الرئيسية</a>
+    <a href="library.html" class="home-link"><i class="fa-solid fa-book-open"></i>المكتبة</a>
+    <a href="gallery.html" class="home-link"><i class="fa-solid fa-images"></i>المعرض</a>
+    <button id="themeToggle" class="theme-btn" type="button" aria-label="تبديل الوضع"><i class="fa-solid fa-moon"></i>ليلي</button>
+  </div>
+</header>
+<main>
+
+<section id="authView" class="card hidden">
+  <div class="tabs" role="tablist">
+    <button id="tabLogin" role="tab" aria-selected="true" type="button"><i class="fa-solid fa-right-to-bracket"></i>تسجيل الدخول</button>
+    <button id="tabSignup" role="tab" aria-selected="false" type="button"><i class="fa-solid fa-user-plus"></i>إنشاء حساب</button>
+  </div>
+  <form id="authForm" novalidate>
+    <div id="signupExtra" class="hidden">
+      <label for="name">الاسم الكامل</label>
+      <input id="name" autocomplete="name">
+      <label for="signupPhone">رقم الهاتف (واتساب)</label>
+      <input id="signupPhone" type="tel" dir="ltr" placeholder="01012345678 أو +966512345678" autocomplete="tel">
+      <small class="phone-help" style="display:block;color:var(--text-muted);font-size:.78rem;margin-top:4px"></small>
+      <label class="consent" for="consentSignup">
+        <input id="consentSignup" type="checkbox">
+        <span>أوافق على <a href="privacy.html" target="_blank" rel="noopener">سياسة الخصوصية</a>، وإن كان عمري أقل من 18 سنة فأقرّ بموافقة ولي أمري على تسجيلي.</span>
+      </label>
+    </div>
+    <label for="email">البريد الإلكتروني</label>
+    <input id="email" type="email" autocomplete="email" dir="ltr" required>
+    <label for="password">كلمة المرور</label>
+    <div class="pw">
+      <input id="password" type="password" autocomplete="current-password" dir="ltr" minlength="6" required>
+      <button class="pw-btn" id="pwToggle" type="button" aria-label="إظهار كلمة المرور"><i class="fa-solid fa-eye"></i></button>
+    </div>
+    <button class="primary" id="authBtn" type="submit"><i class="fa-solid fa-right-to-bracket"></i>دخول</button>
+    <button class="link" id="resetBtn" type="button"><i class="fa-solid fa-key"></i>نسيت كلمة المرور؟</button>
+    <div id="authMsg" class="msg" role="alert"></div>
+  </form>
+</section>
+
+<section id="verifyView" class="card hidden">
+  <h2 style="margin-top:0"><i class="fa-solid fa-envelope-circle-check"></i>أكّد بريدك الإلكتروني</h2>
+  <p>أرسلنا رابط التأكيد إلى <strong id="verifyEmail" dir="ltr"></strong>. افتح الرسالة واضغط على الرابط (ولا تنسَ مجلد الرسائل غير المرغوب فيها / Spam)، ثم ارجع هنا واضغط «أكدت بريدي».</p>
+  <button class="primary" id="verifyDoneBtn" type="button"><i class="fa-solid fa-check"></i>أكدت بريدي</button>
+  <button class="link" id="verifyResendBtn" type="button"><i class="fa-solid fa-paper-plane"></i>إعادة إرسال رابط التأكيد</button>
+  <button class="link" id="verifyLogoutBtn" type="button" style="margin-inline-start:14px"><i class="fa-solid fa-right-from-bracket"></i>تسجيل الخروج</button>
+  <div id="verifyMsg" class="msg" role="alert"></div>
+</section>
+
+<section id="appView" class="hidden">
+  <div class="top">
+    <strong id="hello"></strong>
+    <button class="link" id="logout" type="button"><i class="fa-solid fa-right-from-bracket"></i>تسجيل الخروج</button>
+  </div>
+
+  <div id="replyBanner" class="reply-banner hidden" role="status">
+    <span><i class="fa-solid fa-bell"></i><strong id="replyBannerText"></strong></span>
+    <button class="link" id="replyOpenBtn" type="button">عرض الردود</button>
+  </div>
+
+  <div class="tabs">
+    <button id="secRegBtn" type="button" aria-selected="true"><i class="fa-solid fa-pen-to-square"></i>التسجيل في البرامج</button>
+    <button id="secConsultBtn" type="button" aria-selected="false"><i class="fa-solid fa-microphone-lines"></i>استشارات الحفظ وتصحيح التلاوة <span id="replyTabBadge" class="pill hidden">0</span></button>
+    <button id="secProgressBtn" type="button" aria-selected="false"><i class="fa-solid fa-chart-line"></i>متابعة تقدّمي</button>
+  </div>
+
+  <div id="regSection">
+    <div class="card">
+      <h2 style="margin-top:0"><i class="fa-solid fa-file-pen"></i>تقديم طلب التحاق ببرنامج</h2>
+      <form id="regForm" novalidate>
+        <label for="fullName">الاسم الكامل</label><input id="fullName" required autocomplete="name">
+        <label for="phone">رقم الواتساب</label><input id="phone" type="tel" dir="ltr" required autocomplete="tel" placeholder="01012345678 أو +966512345678">
+        <small class="phone-help" style="display:block;color:var(--text-muted);font-size:.78rem;margin-top:4px"></small>
+        <label for="program">البرنامج المطلوب</label>
+        <select id="program"><option>تحفيظ القرآن</option><option>إجازة</option><option>التجويد</option><option>القراءات</option></select>
+        <label for="notes">ملاحظات (المستوى الحالي، المواعيد المناسبة)</label><textarea id="notes" rows="3" maxlength="1000"></textarea>
+        <button class="primary" id="regBtn" type="submit"><i class="fa-solid fa-paper-plane"></i>إرسال الطلب</button>
+        <div id="regMsg" class="msg" role="alert"></div>
+      </form>
+    </div>
+    <h2><i class="fa-solid fa-clock-rotate-left"></i>طلباتي السابقة</h2>
+    <div id="list"><div class='empty-state'><p>لا توجد طلبات سابقة بعد.</p></div></div>
+  </div>
+
+  <div id="progressSection" class="hidden">
+    <div class="card">
+      <h2 style="margin-top:0"><i class="fa-solid fa-chart-line"></i>متابعة تقدّمي</h2>
+      <p style="margin:0 0 12px;font-size:.92rem;color:var(--text-muted)">يسجّل الشيخ هنا ما وصلت إليه بعد كل جلسة: الحفظ والمراجعة وملاحظاته.</p>
+      <div id="progressSummary" class="prog-grid"></div>
+      <div id="progressReport"></div>
+      <div id="progressBadges" class="extras-box"></div>
+      <div id="progressMap" class="extras-box"></div>
+    </div>
+    <h2><i class="fa-solid fa-list-check"></i>سجل المتابعة</h2>
+    <div id="progressList"><div class='empty-state'><p>لا توجد متابعات مسجّلة بعد.</p></div></div>
+  </div>
+
+  <div id="consultSection" class="hidden">
+    <div id="printHeader" class="print-only">
+      <h1>دار الفرقان لتحفيظ القرآن الكريم</h1>
+      <p id="printMeta">سجل استشارات الحفظ وتصحيح التلاوة</p>
+    </div>
+
+    <div id="consultFormCard" class="card">
+      <h2 style="margin-top:0"><i class="fa-solid fa-microphone-lines"></i>نافذة استشارات الحفظ وتصحيح التلاوة</h2>
+      <p style="margin:0 0 12px;font-size:.92rem;color:var(--text-muted)">سجّل مقطعاً صوتياً قصيراً لتلاوتك (حتى 45 ثانية) أو اكتب سؤالك في الحفظ والتجويد ليقوم الشيخ المختص بسماعها وتوجيهك.</p>
+      <form id="consultForm" novalidate>
+        <label for="consultTopic">السورة / موضوع الاستشارة</label>
+        <input id="consultTopic" placeholder="مثال: تصحيح تلاوة سورة المزمل / خطة مراجعة 5 أجزاء" required>
+
+        <label>تسجيل صوتي للتلاوة (اختياري)</label>
+        <div class="recorder-box">
+          <button type="button" id="recordBtn" class="rec-btn"><i class="fa-solid fa-microphone"></i> اضغط لبدء تسجيل التلاوة</button>
+          <span id="recTimer" aria-live="polite" style="display:block;margin-top:6px;font-size:.85rem;color:var(--text-muted)"></span>
+          <audio id="audioPreview" controls class="hidden" style="width:100%;margin-top:10px"></audio>
+          <button type="button" id="clearAudioBtn" class="link hidden" style="color:var(--err);font-size:.85rem"><i class="fa-solid fa-trash-can"></i>مسح التسجيل الصوتي</button>
+        </div>
+
+        <label for="consultNotes">تفاصيل الاستشارة أو السؤال</label>
+        <textarea id="consultNotes" rows="3" maxlength="2000" placeholder="اكتب سؤالك أو الآيات التي تود الاستفسار عن حكمها..." required></textarea>
+
+        <label class="consent" id="consultConsentRow" for="consultConsent">
+          <input id="consultConsent" type="checkbox">
+          <span>أوافق على إرسال تسجيلي وسؤالي للشيخ المختص وحفظهما في سجل استشاراتي (<a href="privacy.html" target="_blank" rel="noopener">سياسة الخصوصية</a>)، وإن كان عمري أقل من 18 سنة فبموافقة ولي أمري.</span>
+        </label>
+        <button class="primary" id="consultBtn" type="submit"><i class="fa-solid fa-paper-plane"></i>إرسال للشيخ المختص</button>
+        <div id="consultMsg" class="msg" role="alert"></div>
+      </form>
+    </div>
+
+    <div class="section-head">
+      <h2><i class="fa-solid fa-comments"></i>استشاراتي وتوجيهات المشايخ</h2>
+      <button id="notifyEnableBtn" class="export-pdf-btn hidden" type="button"><i class="fa-regular fa-bell"></i>فعّل تنبيهات الردود</button>
+      <button id="exportConsultPdfBtn" class="export-pdf-btn" type="button"><i class="fa-solid fa-file-pdf"></i>تصدير السجل PDF</button>
+    </div>
+    <div id="consultList"><div class='empty-state'><p>لا توجد استشارات مرسلة بعد.</p></div></div>
+  </div>
+</section>
+
+</main>
+
+<!-- نافذة دليل أحكام التجويد السريع (#17) -->
+<div id="tajweedModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="tajweedModalTitle">
+  <div class="modal-box">
+    <div class="modal-head">
+      <strong id="tajweedModalTitle"><i class="fa-solid fa-book-bookmark"></i>دليل أحكام التجويد السريع</strong>
+      <button id="closeTajweedModal" class="modal-close" type="button"><i class="fa-solid fa-xmark"></i>إغلاق</button>
+    </div>
+    <div id="tajweedModalBody" class="modal-body"></div>
+  </div>
+</div>
+
+<script src="progress-extras.js" defer></script>
+<script type="module">
+import { firebaseConfig, initAppCheck } from "./firebase-config.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile, sendPasswordResetEmail, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, collection, doc, setDoc, getDoc, addDoc, query, where, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+
+const DEFAULT_TAJWEED_RULES = [
+  {
+    order: 1,
+    title: "1. أحكام النون الساكنة والتنوين",
+    content: "الإظهار الحلقي: عند حروف الحلق الستة (ء، هـ، ع، ح، غ، خ).\nالإدغام: في (يرملون) — بغنة في (ينمو)، وبغير غنة في (ل، ر).\nالإقلاب: قلب النون الساكنة أو التنوين ميماً مخفاة بغنة عند حرف (ب).\nالإخفاء الحقيقي: عند باقي الحروف (15 حرفاً) مع غنة بمقدار حركتين.",
+    examples: "مَنْ آمَنَ · مَن يَقُولُ · مِن رَّبِّهِمْ · مِن بَعْدِ · كُنتُمْ"
+  },
+  {
+    order: 2,
+    title: "2. أحكام الميم الساكنة والمشددتين",
+    content: "الإخفاء الشفوي: ميم ساكنة بعدها (ب) مع غنة حركتين.\nالإدغام الشفوي: ميم ساكنة بعدها (م) متحركة مع غنة.\nالإظهار الشفوي: عند باقي الحروف (أشد إظهاراً عند الواو والفاء).\nالنون والميم المشددتان: تُغَنّان بمقدار حركتين دائماً.",
+    examples: "تَرْمِيهِم بِحِجَارَةٍ · لَهُم مَّا يَشَاءُونَ · هُمْ فِيهَا · إِنَّ · ثُمَّ"
+  },
+  {
+    order: 3,
+    title: "3. القلقلة ومراتبها",
+    content: "حروفها خمسة مجموعة في (قُطْبُ جَدٍّ) وتُقلقل إذا كانت ساكنة سكوناً أصلياً أو عارضاً للوقف، وأقواها المشدد الموقوف عليه ثم الساكن الموقوف عليه ثم الساكن وسط الكلمة.",
+    examples: "الْفَلَقْ · يَدْخُلُونَ · الْحَقّْ"
+  },
+  {
+    order: 4,
+    title: "4. المدود ومقاديرها",
+    content: "المد الطبيعي: يمد بمقدار حركتين.\nالمد المتصل: حرف مد وبعده همزة في نفس الكلمة — 4 أو 5 حركات.\nالمد المنفصل: حرف مد آخر الكلمة وهمزة أول الكلمة التالية — 4 أو 5 حركات.\nالعارض للسكون: حرف مد قبل الحرف الموقوف عليه — 2 أو 4 أو 6 حركات.\nالمد اللازم: حرف مد بعده سكون أصلي — 6 حركات لزوماً.",
+    examples: "قَالَ · السَّمَاءُ · يَا أَيُّهَا · الْعَالَمِينَ · الضَّالِّينَ"
+  },
+  {
+    order: 5,
+    title: "5. التفخيم والترقيق",
+    content: "حروف التفخيم دائماً (الاستعلاء): مجموعة في (خُصَّ ضَغْطٍ قِظْ).\nالراء: تُفخّم إذا كانت مفتوحة أو مضمومة أو ساكنة قبلها فتح أو ضم، وتُرقّق إذا كانت مكسورة أو ساكنة قبلها كسر أصلي وليس بعدها حرف استعلاء.",
+    examples: "خَالِدِينَ · قُلْ · رَبَّنَا · فِرْعَوْنَ"
+  },
+  {
+    order: 6,
+    title: "6. مخارج الحروف العامة",
+    content: "الجوف (حروف المد الثلاثة) · الحلق (ء هـ / ع ح / غ خ) · اللسان (18 حرفاً) · الشفتان (ف، ب، م، و) · الخيشوم (مخرج الغنة).",
+    examples: "مخارج الحروف سبعة عشر على المختار"
+  }
+];
+
+/* ---------- تنبيه حالة الاتصال (#35) ---------- */
+const offlineBar = document.getElementById("offlineBar");
+function syncOnlineStatus() {
+  if (offlineBar) offlineBar.classList.toggle("show", !navigator.onLine);
+}
+window.addEventListener("online", syncOnlineStatus);
+window.addEventListener("offline", syncOnlineStatus);
+syncOnlineStatus();
+
+const app = initializeApp(firebaseConfig);
+initAppCheck(app);
+const auth = getAuth(app), db = getFirestore(app);
+auth.languageCode = "ar";
+
+/* ---------- دليل التجويد السريع من قاعدة البيانات (#17) ---------- */
+function renderTajweedModalRules(rules) {
+  const body = document.getElementById("tajweedModalBody");
+  body.replaceChildren();
+  rules.forEach((rule, idx) => {
+    const box = document.createElement("div");
+    box.className = "tajweed-rule";
+    if (idx === rules.length - 1) box.style.marginBottom = "0";
+
+    const h3 = document.createElement("h3");
+    h3.textContent = rule.title || "";
+
+    const p = document.createElement("p");
+    p.textContent = rule.content || "";
+
+    box.append(h3, p);
+    if (rule.examples) {
+      const ex = document.createElement("span");
+      ex.className = "tajweed-ex";
+      ex.textContent = rule.examples;
+      box.append(ex);
+    }
+    body.append(box);
+  });
+}
+
+renderTajweedModalRules(DEFAULT_TAJWEED_RULES);
+onSnapshot(collection(db, "tajweed_guide"), snap => {
+  if (snap.empty) {
+    renderTajweedModalRules(DEFAULT_TAJWEED_RULES);
+    return;
+  }
+  const rules = snap.docs.map(d => d.data()).sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
+  renderTajweedModalRules(rules);
+}, () => {
+  renderTajweedModalRules(DEFAULT_TAJWEED_RULES);
+});
+
+const tajweedModal = document.getElementById("tajweedModal");
+document.getElementById("tajweedGuideBtn").onclick = () => {
+  tajweedModal.classList.add("open");
+  document.body.classList.add("locked");
+};
+function closeTajweed() {
+  tajweedModal.classList.remove("open");
+  document.body.classList.remove("locked");
+}
+document.getElementById("closeTajweedModal").onclick = closeTajweed;
+tajweedModal.addEventListener("click", e => { if (e.target === tajweedModal) closeTajweed(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape" && tajweedModal.classList.contains("open")) closeTajweed(); });
+
+let storage = null;
+try { storage = getStorage(app); } catch (e) {}
+const $ = id => document.getElementById(id);
+let mode = "login", unsubReg = null, unsubConsult = null, unsubBlock = null, unsubProgress = null;
+let currentUserPhone = "";
+let regBaseline = null;
+let hasConsultations = false;
+
+const errors = {
+  "auth/invalid-email":"البريد الإلكتروني غير صحيح.",
+  "auth/email-already-in-use":"هذا البريد مسجّل مسبقًا. انتقل إلى تبويب «تسجيل الدخول»، وإن نسيت كلمة المرور فاضغط «نسيت كلمة المرور؟».",
+  "auth/user-disabled":"تم إيقاف هذا الحساب. تواصل مع إدارة الدار.",
+  "auth/weak-password":"يجب ألا تقل كلمة المرور عن 6 أحرف.",
+  "auth/invalid-credential":"البريد الإلكتروني أو كلمة المرور غير صحيحة (إذا نسيت كلمة المرور اضغط «نسيت كلمة المرور؟» بالأسفل).",
+  "auth/user-not-found":"لا يوجد حساب مسجّل بهذا البريد بعد. اضغط على تبويب «إنشاء حساب» بالأعلى لتسجيله.",
+  "auth/wrong-password":"كلمة المرور غير صحيحة.",
+  "auth/too-many-requests":"محاولات كثيرة. انتظر قليلًا ثم حاول مرة أخرى.",
+  "auth/network-request-failed":"مشكلة في الاتصال بالإنترنت. حاول مرة أخرى.",
+  "auth/operation-not-allowed":"تسجيل الدخول بالبريد غير مفعّل في لوحة تحكم Firebase (Authentication > Sign-in method)."
+};
+const show = (el, type, text) => { el.className = "msg " + type; el.textContent = text; };
+const clear = el => { el.className = "msg"; el.textContent = ""; };
+
+// الأرقام المقبولة:
+//  - مصري: 11 رقمًا مثل 01012345678 (يقبل +20 و0020 و20 ويحوّلها لهذه الصيغة)
+//  - دولي: + ثم رمز الدولة ثم الرقم، مثل +966512345678 أو +491512345678 (يقبل 00 بدل +)
+// يقبل أرقامًا عربية/هندية ومسافات وشرطات. يرجّع الرقم الموحّد أو "" لو غير صحيح.
+function normalizePhone(raw) {
+  let s = String(raw || "")
+    .replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d))
+    .replace(/[۰-۹]/g, d => "۰۱۲۳۴۵۶۷۸۹".indexOf(d))
+    .replace(/[\s\-().]/g, "");
+  let intl = false;
+  if (s.startsWith("+")) { intl = true; s = s.slice(1); }
+  else if (s.startsWith("00")) { intl = true; s = s.slice(2); }
+  if (intl) {
+    if (s.startsWith("200") && s.length === 13) s = "20" + s.slice(3);   // +20 0 10...
+    if (/^201[0125]\d{8}$/.test(s)) return "0" + s.slice(2);            // رقم مصري بصيغة دولية
+    return /^[1-9]\d{7,14}$/.test(s) ? "+" + s : "";
+  }
+  if (s.startsWith("20") && s.length === 12) s = "0" + s.slice(2);
+  else if (/^1[0125]\d{8}$/.test(s)) s = "0" + s;
+  return /^01[0125]\d{8}$/.test(s) ? s : "";
+}
+const PHONE_HINT = "اكتب رقم واتساب صحيحًا: مصري مثل 01012345678، أو من خارج مصر بالصيغة الدولية مثل +966512345678 (علامة + ثم رمز الدولة ثم الرقم).";
+const PHONE_HELP = "خارج مصر؟ ابدأ الرقم بـ + ورمز بلدك: السعودية +966 · الإمارات +971 · الكويت +965 · قطر +974 · البحرين +973 · عُمان +968 · أمريكا وكندا +1 · ألمانيا +49 · بريطانيا +44";
+
+function busy(btn, on, text) {
+  if (on) {
+    btn.dataset.label = btn.innerHTML;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>' + text;
+    btn.disabled = true;
+  } else {
+    btn.innerHTML = btn.dataset.label || btn.innerHTML;
+    btn.disabled = false;
+  }
+}
+
+$("pwToggle").onclick = () => {
+  const hidden = $("password").type === "password";
+  $("password").type = hidden ? "text" : "password";
+  $("pwToggle").innerHTML = hidden
+    ? '<i class="fa-solid fa-eye-slash"></i>'
+    : '<i class="fa-solid fa-eye"></i>';
+  $("pwToggle").setAttribute("aria-label", hidden ? "إخفاء كلمة المرور" : "إظهار كلمة المرور");
+};
+
+function setMode(m){
+  mode = m; const s = m === "signup";
+  $("tabLogin").setAttribute("aria-selected", !s);
+  $("tabSignup").setAttribute("aria-selected", s);
+  $("signupExtra").classList.toggle("hidden", !s);
+  $("authBtn").innerHTML = s
+    ? '<i class="fa-solid fa-user-plus"></i>إنشاء الحساب'
+    : '<i class="fa-solid fa-right-to-bracket"></i>دخول';
+  $("password").autocomplete = s ? "new-password" : "current-password";
+  $("resetBtn").classList.toggle("hidden", s);
+  clear($("authMsg"));
+}
+document.querySelectorAll(".phone-help").forEach(el => { el.textContent = PHONE_HELP; });
+["phone", "signupPhone"].forEach(id => $(id).addEventListener("blur", () => { const n = normalizePhone($(id).value); if (n) $(id).value = n; }));
+$("tabLogin").onclick = () => setMode("login");
+$("tabSignup").onclick = () => setMode("signup");
+
+function showAccountTab(tab) {
+  [["reg", "secRegBtn", "regSection"], ["consult", "secConsultBtn", "consultSection"], ["progress", "secProgressBtn", "progressSection"]]
+    .forEach(([k, b, sec]) => {
+      $(b).setAttribute("aria-selected", k === tab);
+      $(sec).classList.toggle("hidden", k !== tab);
+    });
+  if (tab === "consult") markRepliesSeen();
+}
+$("secRegBtn").onclick = () => showAccountTab("reg");
+$("secConsultBtn").onclick = () => showAccountTab("consult");
+$("secProgressBtn").onclick = () => showAccountTab("progress");
+$("replyOpenBtn").onclick = () => showAccountTab("consult");
+if (window.location.hash === "#consultSection") showAccountTab("consult");
+window.addEventListener("hashchange", () => {
+  if (window.location.hash === "#consultSection") showAccountTab("consult");
+});
+
+/* ---------- تصدير سجل الاستشارات PDF (#30) ---------- */
+$("exportConsultPdfBtn").onclick = () => {
+  if (!hasConsultations) {
+    show($("consultMsg"), "err", "لا توجد استشارات مسجلة لتصديرها بعد.");
+    return;
+  }
+  const student = $("fullName").value.trim() || auth.currentUser?.displayName || auth.currentUser?.email || "";
+  const dateStr = new Date().toLocaleDateString("ar-EG");
+  $("printMeta").textContent = `سجل استشارات الحفظ وتصحيح التلاوة · الطالب: ${student} · تاريخ التصدير: ${dateStr}`;
+  window.print();
+};
+
+if (window.darGuard) { darGuard.attach($("authForm")); darGuard.attach($("regForm")); darGuard.attach($("consultForm")); }
+$("authForm").onsubmit = async e => {
+  e.preventDefault(); clear($("authMsg"));
+  const email = $("email").value.trim(), pass = $("password").value;
+
+  if (!email || pass.length < 6) return show($("authMsg"), "err", "اكتب البريد الإلكتروني وكلمة مرور من 6 أحرف على الأقل.");
+  if (mode === "signup" && $("name").value.trim().length < 2) {
+    return show($("authMsg"), "err", "اكتب الاسم الكامل.");
+  }
+  if (mode === "signup" && !normalizePhone($("signupPhone").value)) {
+    return show($("authMsg"), "err", PHONE_HINT);
+  }
+  if (mode === "signup" && !$("consentSignup").checked) {
+    return show($("authMsg"), "err", "يلزم الموافقة على سياسة الخصوصية (وموافقة ولي الأمر لمن هم دون 18 سنة) لإنشاء الحساب.");
+  }
+  { const g = window.darGuard ? darGuard.check($("authForm"), mode === "signup" ? "signup" : "", 20) : ""; if (g) { if (g !== "__bot__") show($("authMsg"), "err", g); return; } }
+  busy($("authBtn"), true, "لحظة من فضلك...");
+  try {
+    if (mode === "signup") {
+      const cred = await createUserWithEmailAndPassword(auth, email, pass);
+      try { await sendEmailVerification(cred.user); } catch (verErr) { /* يقدر يعيد الإرسال من شاشة التأكيد */ }
+      const n = $("name").value.trim();
+      const ph = normalizePhone($("signupPhone").value);
+      try {
+        if (n) await updateProfile(cred.user, { displayName: n });
+        await setDoc(doc(db, "users", cred.user.uid), {
+          uid: cred.user.uid,
+          name: n,
+          email: cred.user.email,
+          phone: ph,
+          createdAt: serverTimestamp()
+        }, { merge: true });
+      } catch (profileErr) {
+        // الحساب أُنشئ بنجاح؛ سيُستكمل ملف المستخدم تلقائيًا عند تحميل الصفحة
+      }
+    } else {
+      await signInWithEmailAndPassword(auth, email, pass);
+    }
+  } catch (err) {
+    show($("authMsg"), "err", errors[err.code] || ("حدث خطأ أثناء الدخول (" + (err.code || "غير معروف") + ")."));
+  }
+  busy($("authBtn"), false);
+};
+
+$("resetBtn").onclick = async () => {
+  const email = $("email").value.trim();
+  if (!email) return show($("authMsg"), "err", "اكتب بريدك الإلكتروني في الخانة أولًا ثم اضغط «نسيت كلمة المرور؟».");
+  try {
+    await sendPasswordResetEmail(auth, email);
+    show($("authMsg"), "ok", "تم إرسال رابط إعادة تعيين كلمة المرور إلى (" + email + "). هام جداً: افتح البريد وابحث في مجلد «الرسائل غير المرغوب فيها / Spam» أو ابحث عن كلمة noreply.");
+  } catch (err) {
+    show($("authMsg"), "err", errors[err.code] || ("تعذر إرسال الرسالة (" + (err.code || "خطأ") + ")."));
+  }
+};
+
+$("logout").onclick = () => signOut(auth);
+$("verifyLogoutBtn").onclick = () => signOut(auth);
+
+$("verifyDoneBtn").onclick = async () => {
+  clear($("verifyMsg"));
+  try {
+    await auth.currentUser.reload();
+    if (auth.currentUser.emailVerified) {
+      await auth.currentUser.getIdToken(true);
+      location.reload();
+    } else {
+      show($("verifyMsg"), "err", "لسه الإيميل غير مؤكد. افتح الرابط في الرسالة أولًا ثم أعد المحاولة.");
+    }
+  } catch (err) {
+    show($("verifyMsg"), "err", "تعذر التحقق الآن، حاول بعد لحظات.");
+  }
+};
+
+let verifyCooldown = false;
+$("verifyResendBtn").onclick = async () => {
+  clear($("verifyMsg"));
+  if (verifyCooldown) return show($("verifyMsg"), "err", "انتظر دقيقة قبل إعادة الإرسال.");
+  try {
+    await sendEmailVerification(auth.currentUser);
+    show($("verifyMsg"), "ok", "تم إرسال رابط جديد إلى بريدك. افحص Spam كذلك.");
+    verifyCooldown = true; setTimeout(() => { verifyCooldown = false; }, 60000);
+  } catch (err) {
+    show($("verifyMsg"), "err", err.code === "auth/too-many-requests" ? "محاولات كثيرة، انتظر قليلًا ثم أعد المحاولة." : "تعذر إرسال الرسالة، حاول لاحقًا.");
+  }
+};
+
+$("regForm").onsubmit = async e => {
+  e.preventDefault(); clear($("regMsg"));
+  const fullName = $("fullName").value.trim(), phone = normalizePhone($("phone").value);
+  const program = $("program").value, notes = $("notes").value.trim();
+
+  if (fullName.length < 2) return show($("regMsg"), "err", "اكتب الاسم الكامل.");
+  if (!phone) return show($("regMsg"), "err", PHONE_HINT);
+  { const g = window.darGuard ? darGuard.check($("regForm"), "reg", 30) : ""; if (g) { if (g !== "__bot__") show($("regMsg"), "err", g); return; } }
+  busy($("regBtn"), true, "جاري الإرسال...");
+
+  try {
+    await addDoc(collection(db, "registrations"), {
+      uid: auth.currentUser.uid,
+      fullName,
+      phone,
+      program,
+      notes,
+      createdAt: serverTimestamp()
+    });
+    try {
+      await setDoc(doc(db, "users", auth.currentUser.uid), {
+        uid: auth.currentUser.uid,
+        name: fullName,
+        email: auth.currentUser.email,
+        phone: phone
+      }, { merge: true });
+    } catch (e) { /* الطلب نفسه حُفظ؛ لا نعرض خطأ للطالب */ }
+    currentUserPhone = phone;
+
+    const waText = `السلام عليكم ورحمة الله وبركاته\n*طلب تسجيل جديد - دار الفرقان*\n• *الاسم:* ${fullName}\n• *الهاتف:* ${phone}\n• *البرنامج:* ${program}\n• *ملاحظات:* ${notes || 'لا توجد'}`;
+    const waUrl = `https://wa.me/${window.darWaNumber ? darWaNumber() : "201099262489"}?text=${encodeURIComponent(waText)}`;
+
+    show($("regMsg"), "ok", "تم إرسال الطلب بنجاح. ");
+    const a = document.createElement("a");
+    a.href = waUrl; a.target = "_blank"; a.rel = "noopener";
+    a.innerHTML = '<i class="fa-brands fa-whatsapp"></i>اضغط هنا لإرسال تفاصيل الطلب على واتساب';
+    $("regMsg").append(a);
+    window.open(waUrl, "_blank");
+    $("notes").value = "";
+  } catch (err) {
+    show($("regMsg"), "err", "تعذر إرسال الطلب. حاول مرة أخرى.");
+  }
+  busy($("regBtn"), false);
+};
+
+/* ---------- التسجيل الصوتي والاستشارة ---------- */
+const MAX_AUDIO_CHARS = 440000;      // أقل من حد القواعد (450000)
+const MAX_REC_SECONDS = 90;          // أقصى مدة تسجيل للطالب
+const MAX_REC_BYTES = 250000;        // أقصى حجم خام (يضمن بقاء الوثيقة أقل من 1 ميجا)
+let recBytes = 0, recStopReason = "";
+function pickAudioType() {
+  const list = ["audio/webm;codecs=opus", "audio/mp4", "audio/ogg;codecs=opus"];
+  return list.find(t => window.MediaRecorder && MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(t)) || "";
+}
+let mediaRecorder = null;
+let audioChunks = [];
+let recordedBlob = null;
+let recordedPreviewUrl = "";
+let recInterval = null;
+let recSeconds = 0;
+
+function resetAudioUI() {
+  recordedBlob = null;
+  if (recordedPreviewUrl) { URL.revokeObjectURL(recordedPreviewUrl); recordedPreviewUrl = ""; }
+  $("audioPreview").removeAttribute("src");
+  $("audioPreview").classList.add("hidden");
+  $("clearAudioBtn").classList.add("hidden");
+  $("recTimer").textContent = "";
+  $("recordBtn").innerHTML = '<i class="fa-solid fa-microphone"></i> اضغط لبدء تسجيل التلاوة';
+}
+
+function blobToDataUrl(blob) {
+  return new Promise((resolve, reject) => {
+    const r = new FileReader();
+    r.onloadend = () => resolve(r.result);
+    r.onerror = reject;
+    r.readAsDataURL(blob);
+  });
+}
+
+$("recordBtn").onclick = async () => {
+  if (mediaRecorder && mediaRecorder.state === "recording") {
+    mediaRecorder.stop();
+    return;
+  }
+  if (!navigator.mediaDevices || typeof MediaRecorder === "undefined") {
+    return show($("consultMsg"), "err", "متصفحك لا يدعم التسجيل الصوتي. جرّب متصفحًا آخر أو اكتب سؤالك نصًا.");
+  }
+  clear($("consultMsg"));
+  let stream = null;
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({ audio: { channelCount: 1, echoCancellation: true, noiseSuppression: true, autoGainControl: true } });
+    const type = pickAudioType();
+    const options = type ? { mimeType: type, audioBitsPerSecond: 16000 } : { audioBitsPerSecond: 16000 };
+    mediaRecorder = new MediaRecorder(stream, options);
+    audioChunks = [];
+    recSeconds = 0; recBytes = 0; recStopReason = "";
+
+    mediaRecorder.ondataavailable = e => {
+      if (e.data.size > 0) audioChunks.push(e.data);
+      recBytes += e.data.size;
+      if (recBytes >= MAX_REC_BYTES && mediaRecorder.state === "recording") { recStopReason = "size"; mediaRecorder.stop(); }
+    };
+    mediaRecorder.onstop = () => {
+      clearInterval(recInterval);
+      stream.getTracks().forEach(t => t.stop());
+      $("recordBtn").classList.remove("recording");
+      $("recordBtn").innerHTML = '<i class="fa-solid fa-rotate-right"></i> إعادة تسجيل التلاوة';
+      const blob = new Blob(audioChunks, { type: mediaRecorder.mimeType || "audio/webm" });
+      if (!blob.size) {
+        resetAudioUI();
+        show($("consultMsg"), "err", "لم يتم التقاط أي صوت. حاول التسجيل مرة أخرى.");
+        return;
+      }
+      if (recordedPreviewUrl) URL.revokeObjectURL(recordedPreviewUrl);
+      recordedBlob = blob;
+      recordedPreviewUrl = URL.createObjectURL(blob);
+      $("audioPreview").src = recordedPreviewUrl;
+      $("audioPreview").classList.remove("hidden");
+      $("clearAudioBtn").classList.remove("hidden");
+      $("recTimer").textContent = `تم تجهيز التسجيل (${recSeconds} ثانية)`;
+      if (recStopReason) show($("consultMsg"), "ok", "وصل التسجيل إلى الحد الأقصى فتوقّف تلقائيًا. يمكنك إرساله كما هو أو إعادة تسجيل مقطع أقصر.");
+    };
+
+    mediaRecorder.start(1000);
+    $("recordBtn").classList.add("recording");
+    $("recordBtn").innerHTML = '<i class="fa-solid fa-stop"></i> إيقاف التسجيل الآن';
+    $("recTimer").textContent = "جاري التسجيل: 0 ثانية (الحد الأقصى 90 ثانية)";
+    recInterval = setInterval(() => {
+      recSeconds++;
+      $("recTimer").textContent = `جاري التسجيل: ${recSeconds} ثانية`;
+      if (recSeconds >= MAX_REC_SECONDS && mediaRecorder.state === "recording") { recStopReason = "time"; mediaRecorder.stop(); }
+    }, 1000);
+  } catch (err) {
+    if (stream) stream.getTracks().forEach(t => t.stop());
+    show($("consultMsg"), "err", "تعذر بدء التسجيل. تأكد من السماح للمتصفح باستخدام المايكروفون.");
+  }
+};
+
+$("clearAudioBtn").onclick = resetAudioUI;
+
+$("consultForm").onsubmit = async e => {
+  e.preventDefault(); clear($("consultMsg"));
+  if (mediaRecorder && mediaRecorder.state === "recording") {
+    return show($("consultMsg"), "err", "أوقف التسجيل أولًا ثم أرسل الاستشارة.");
+  }
+  const topic = $("consultTopic").value.trim();
+  const notes = $("consultNotes").value.trim();
+  if (!topic || !notes) return show($("consultMsg"), "err", "يرجى كتابة موضوع الاستشارة وتفاصيلها.");
+  if (!$("consultConsent").checked) return show($("consultMsg"), "err", "يلزم الموافقة على إرسال الاستشارة وحفظها (وموافقة ولي الأمر لمن هم دون 18 سنة).");
+
+  { const g = window.darGuard ? darGuard.check($("consultForm"), "consult", 30) : ""; if (g) { if (g !== "__bot__") show($("consultMsg"), "err", g); return; } }
+  busy($("consultBtn"), true, "جاري الإرسال...");
+  try {
+    let audioData = "";
+    if (recordedBlob) {
+      audioData = await blobToDataUrl(recordedBlob);
+      if (audioData.length > MAX_AUDIO_CHARS) {
+        show($("consultMsg"), "err", "حجم التسجيل كبير جداً. سجّل مقطعًا أقصر وحاول مرة أخرى.");
+        busy($("consultBtn"), false);
+        return;
+      }
+    }
+
+    const studentName = $("fullName").value.trim() || auth.currentUser.displayName || auth.currentUser.email;
+    const studentPhone = normalizePhone(currentUserPhone || $("phone").value) || (currentUserPhone || $("phone").value.trim() || "");
+    
+    await addDoc(collection(db, "consultations"), {
+      uid: auth.currentUser.uid,
+      studentName,
+      phone: studentPhone,
+      topic,
+      notes,
+      audioData,
+      reply: "",
+      status: "بانتظار رد الشيخ",
+      createdAt: serverTimestamp()
+    });
+
+    $("consultForm").reset();
+    resetAudioUI();
+    show($("consultMsg"), "ok", "تم إرسال تلاوتك/استشارتك بنجاح! سيظهر رد الشيخ هنا فور مراجعتها.");
+
+    const waText = `السلام عليكم ورحمة الله وبركاته\n*استشارة / تلاوة جديدة - دار الفرقان*\n• *الطالب:* ${studentName}\n• *الموضوع:* ${topic}`;
+    const waUrl = `https://wa.me/${window.darWaNumber ? darWaNumber() : "201099262489"}?text=${encodeURIComponent(waText)}`;
+    const a = document.createElement("a");
+    a.href = waUrl; a.target = "_blank"; a.rel = "noopener";
+    a.style.display = "block";
+    a.style.marginTop = "8px";
+    a.innerHTML = '<i class="fa-brands fa-whatsapp"></i> اضغط هنا لإبلاغ الشيخ عبر واتساب';
+    $("consultMsg").append(a);
+    try { localStorage.setItem("dar-consult-consent-" + auth.currentUser.uid, "1"); } catch (e) {}
+    $("consultConsentRow").classList.add("hidden");
+
+  } catch (err) {
+    show($("consultMsg"), "err", "تعذر إرسال الاستشارة. تأكد من اتصالك بالإنترنت وأن قواعد البيانات محدثة.");
+  }
+  busy($("consultBtn"), false);
+};
+
+/* ---------- تنبيهات الردود الجديدة (#7) ---------- */
+const seenKey = uid => "dar-seen-replies-" + uid;
+const readSeen = uid => { try { return new Set(JSON.parse(localStorage.getItem(seenKey(uid)) || "[]")); } catch (e) { return new Set(); } };
+const writeSeen = (uid, set) => { try { localStorage.setItem(seenKey(uid), JSON.stringify([...set].slice(-300))); } catch (e) {} };
+const hasReply = c => !!(c.reply || c.teacherAudioUrl || c.teacherAudioData);
+const replySig = c => c.id + ":" + (c.reply || "").length + ":" + ((c.teacherAudioUrl || c.teacherAudioData) ? 1 : 0);
+let unseenSigs = [], consultFirstLoad = true;
+
+function updateReplyUi() {
+  const n = unseenSigs.length;
+  $("replyBanner").classList.toggle("hidden", n === 0);
+  $("replyBannerText").textContent = n === 1 ? "لديك رد جديد من الشيخ" : `لديك ${n} ردود جديدة من الشيخ`;
+  $("replyTabBadge").textContent = n;
+  $("replyTabBadge").classList.toggle("hidden", n === 0);
+  document.title = (n ? `(${n}) ` : "") + document.title.replace(/^\(\d+\)\s/, "");
+}
+function markRepliesSeen() {
+  const u = auth.currentUser;
+  if (!u || !unseenSigs.length) return;
+  const seen = readSeen(u.uid);
+  unseenSigs.forEach(sig => seen.add(sig));
+  writeSeen(u.uid, seen);
+  unseenSigs = [];
+  updateReplyUi();
+}
+function refreshNotifyBtn() {
+  $("notifyEnableBtn").classList.toggle("hidden", !("Notification" in window) || Notification.permission !== "default");
+}
+$("notifyEnableBtn").onclick = async () => {
+  try { await Notification.requestPermission(); } catch (e) {}
+  refreshNotifyBtn();
+};
+
+/* ---------- متابعة التقدّم (#6) ---------- */
+function renderProgressExtras(rows) {
+  if (!window.DarProgress) return;
+  const nm = (auth.currentUser && (auth.currentUser.displayName || auth.currentUser.email)) || "الطالب";
+  const cov = DarProgress.renderMap($("progressMap"), rows);
+  DarProgress.renderBadges($("progressBadges"), rows, cov);
+  DarProgress.renderReportBar($("progressReport"), rows, nm);
+}
+
+function renderProgress(rows) {
+  renderProgressExtras(rows);
+  const sum = $("progressSummary"), list = $("progressList");
+  sum.replaceChildren(); list.replaceChildren();
+  if (!rows.length) { list.innerHTML = "<div class='empty-state'><p>لا توجد متابعات مسجّلة بعد. سيضيف الشيخ تقدّمك هنا بعد كل جلسة.</p></div>"; return; }
+  const fmt = r => r.createdAt ? r.createdAt.toDate().toLocaleDateString("ar-EG") : "";
+  const last = t => rows.find(r => r.type === t);
+  const RATING_PCT = { "ممتاز": 100, "جيد جدًا": 80, "جيد": 60, "يحتاج مراجعة": 40 };
+  const tile = (label, main, sub, pct) => {
+    const d = document.createElement("div"); d.className = "prog-tile";
+    const l = document.createElement("small"); l.textContent = label;
+    const m = document.createElement("strong"); m.textContent = main || "—";
+    d.append(l, m);
+    if (sub) { const x = document.createElement("span"); x.textContent = sub; d.append(x); }
+    if (typeof pct === "number") { d.classList.add("has-ring"); const rg = document.createElement("div"); rg.className = "ring"; rg.style.setProperty("--p", pct); d.append(rg); }
+    sum.append(d);
+  };
+  const lh = last("حفظ جديد"), lm = last("مراجعة"), lr = rows.find(r => r.rating);
+  tile("آخر حفظ", lh ? lh.surah : "", lh ? [lh.range, fmt(lh)].filter(Boolean).join(" · ") : "");
+  tile("آخر مراجعة", lm ? lm.surah : "", lm ? [lm.range, fmt(lm)].filter(Boolean).join(" · ") : "");
+  tile("آخر تقييم", lr ? lr.rating : "", lr ? fmt(lr) : "", lr ? RATING_PCT[lr.rating] : undefined);
+  const inCycle = ((rows.length - 1) % 10) + 1;
+  tile("عدد الجلسات المسجّلة", String(rows.length), inCycle + " / 10 في هذه الدورة", inCycle * 10);
+  rows.forEach(r => {
+    const div = document.createElement("div"); div.className = "item";
+    const b = document.createElement("strong"); b.textContent = r.type + " — سورة " + r.surah;
+    const s = document.createElement("small"); s.textContent = " · " + fmt(r);
+    div.append(b, s);
+    if (r.rating) { const p = document.createElement("span"); p.className = "pill"; p.textContent = r.rating; div.append(p); }
+    if (r.range) { const p = document.createElement("p"); p.style.margin = "4px 0 0"; p.textContent = r.range; div.append(p); }
+    if (r.note) {
+      const n = document.createElement("div"); n.className = "reply-box";
+      n.innerHTML = '<i class="fa-solid fa-comment-dots"></i> ';
+      const t = document.createElement("span"); t.style.whiteSpace = "pre-wrap"; t.textContent = r.note;
+      n.append(t); div.append(n);
+    }
+    list.append(div);
+  });
+}
+
+/* ---------- حالة الدخول والقوائم ---------- */
+// يمنع تسرّب بيانات مستخدم سابق (الاسم/الهاتف/القوائم) إلى مستخدم جديد على نفس الجهاز
+function resetUserState() {
+  currentUserPhone = "";
+  regBaseline = null;
+  hasConsultations = false;
+  unseenSigs = []; consultFirstLoad = true;
+  $("replyBanner").classList.add("hidden"); $("replyTabBadge").classList.add("hidden");
+  $("progressSummary").replaceChildren(); $("progressList").innerHTML = "<div class='empty-state'><p>لا توجد متابعات مسجّلة بعد.</p></div>";
+  $("hello").textContent = "";
+  ["fullName", "phone", "notes", "consultTopic", "consultNotes"].forEach(id => { $(id).value = ""; });
+  $("list").innerHTML = "<div class='empty-state'><p>لا توجد طلبات سابقة بعد.</p></div>";
+  $("consultList").innerHTML = "<div class='empty-state'><p>لا توجد استشارات مرسلة بعد.</p></div>";
+  clear($("regMsg"));
+  clear($("consultMsg"));
+  if (mediaRecorder && mediaRecorder.state === "recording") {
+    clearInterval(recInterval);
+    try { mediaRecorder.stream.getTracks().forEach(t => t.stop()); } catch (e) {}
+    mediaRecorder.onstop = null;
+    try { mediaRecorder.stop(); } catch (e) {}
+    $("recordBtn").classList.remove("recording");
+  }
+  resetAudioUI();
+}
+
+onAuthStateChanged(auth, async user => {
+  if (unsubReg) { unsubReg(); unsubReg = null; }
+  if (unsubConsult) { unsubConsult(); unsubConsult = null; }
+  if (unsubProgress) { unsubProgress(); unsubProgress = null; }
+  if (unsubBlock) { unsubBlock(); unsubBlock = null; }
+  resetUserState();
+
+  const verified = !!(user && user.emailVerified);
+  $("authView").classList.toggle("hidden", !!user);
+  $("appView").classList.toggle("hidden", !user || !verified);
+  $("verifyView").classList.toggle("hidden", !user || verified);
+  if (!user) return;
+  if (!verified) { $("verifyEmail").textContent = user.email; return; }
+
+  unsubBlock = onSnapshot(doc(db, "blocked_users", user.uid), snap => {
+    if (snap.exists()) {
+      signOut(auth);
+      show($("authMsg"), "err", "تم حذف أو إيقاف هذا الحساب من قِبل إدارة الدار.");
+    }
+  });
+
+  $("hello").textContent = "أهلاً " + (user.displayName || user.email);
+  $("fullName").value = user.displayName || "";
+
+  try {
+    const userRef = doc(db, "users", user.uid);
+    const userSnap = await getDoc(userRef);
+    if (!userSnap.exists()) {
+      // لا نكتب phone/name فارغين حتى لا نمسح ما حفظه نموذج إنشاء الحساب في نفس اللحظة
+      await setDoc(userRef, {
+        uid: user.uid,
+        email: user.email,
+        ...(user.displayName ? { name: user.displayName } : {}),
+        createdAt: serverTimestamp()
+      }, { merge: true });
+    } else {
+      const uData = userSnap.data();
+      if (uData.phone) {
+        currentUserPhone = uData.phone;
+        $("phone").value = normalizePhone(uData.phone) || uData.phone;
+      }
+      if (uData.name && !$("fullName").value) $("fullName").value = uData.name;
+    }
+  } catch (e) {}
+
+  // لو خرج المستخدم أو تغيّر الحساب أثناء التحميل لا نربط مستمعين لحساب قديم
+  if (!auth.currentUser || auth.currentUser.uid !== user.uid) return;
+
+  const listError = el => () => { el.replaceChildren(); const p = document.createElement("p"); p.textContent = "تعذر تحميل البيانات. تأكد من الاتصال بالإنترنت ثم أعد تحميل الصفحة."; el.append(p); };
+
+  unsubReg = onSnapshot(query(collection(db, "registrations"), where("uid", "==", user.uid)), snap => {
+    const rows = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+    const list = $("list"); list.replaceChildren();
+    if (!rows.length) { list.innerHTML = "<div class='empty-state'><p>لا توجد طلبات سابقة بعد.</p></div>"; return; }
+    if (rows[0].phone && !currentUserPhone) {
+      currentUserPhone = rows[0].phone;
+      $("phone").value = normalizePhone(rows[0].phone) || rows[0].phone;
+      setDoc(doc(db, "users", user.uid), { phone: rows[0].phone, name: rows[0].fullName || user.displayName || "" }, { merge: true }).catch(()=>{});
+    }
+    // تمييز الطلبات التي تغيّرت حالتها أو أُضيفت لها ملاحظة منذ آخر زيارة
+    const sigOf = r => (r.status || "جديد") + "|" + (r.adminNote || "");
+    const seenKey = "dar-seen-reg-" + user.uid;
+    if (regBaseline === null) {
+      try { regBaseline = JSON.parse(localStorage.getItem(seenKey) || "null"); } catch (e) { regBaseline = null; }
+      if (!regBaseline) regBaseline = Object.fromEntries(rows.map(r => [r.id, sigOf(r)]));
+    }
+    try { localStorage.setItem(seenKey, JSON.stringify(Object.fromEntries(rows.map(r => [r.id, sigOf(r)])))); } catch (e) {}
+    const stClass = { "تم التواصل": "st-contact", "مقبول": "st-ok", "مرفوض": "st-no" };
+    rows.forEach(r => {
+      const div = document.createElement("div"); div.className = "item";
+      const b = document.createElement("strong"); b.textContent = r.program;
+      const status = r.status || "جديد";
+      const pill = document.createElement("span"); pill.className = "pill " + (stClass[status] || ""); pill.textContent = status;
+      const s = document.createElement("small");
+      s.textContent = " · " + (r.createdAt ? r.createdAt.toDate().toLocaleDateString("ar-EG") : "جاري الإرسال");
+      div.append(b, pill);
+      if (regBaseline[r.id] !== undefined && regBaseline[r.id] !== sigOf(r)) {
+        const t = document.createElement("span"); t.className = "upd-tag"; t.textContent = "تحديث جديد"; div.append(t);
+      }
+      div.append(s);
+      const p = document.createElement("p"); p.style.margin = "4px 0 0"; p.textContent = r.notes || "";
+      div.append(p);
+      if (r.adminNote) {
+        const n = document.createElement("div"); n.className = "reply-box";
+        n.innerHTML = '<i class="fa-solid fa-comment-dots"></i> ملاحظة من الإدارة: ';
+        const t = document.createElement("span"); t.style.whiteSpace = "pre-wrap"; t.textContent = r.adminNote;
+        n.append(t); div.append(n);
+      }
+      list.append(div);
+    });
+  }, listError($("list")));
+
+  if (localStorage.getItem("dar-consult-consent-" + user.uid) === "1") $("consultConsentRow").classList.add("hidden");
+  else $("consultConsentRow").classList.remove("hidden");
+  refreshNotifyBtn();
+
+  unsubProgress = onSnapshot(query(collection(db, "progress"), where("uid", "==", user.uid)), snap => {
+    const rows = snap.docs.map(d => d.data()).sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+    renderProgress(rows);
+  }, listError($("progressList")));
+
+  unsubConsult = onSnapshot(query(collection(db, "consultations"), where("uid", "==", user.uid)), snap => {
+    const rows = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+    hasConsultations = rows.length > 0;
+
+    // الردود الجديدة: أول مرة نعتبر الردود الحالية مقروءة حتى لا نزعج الطالب بردود قديمة
+    const firstEver = localStorage.getItem(seenKey(user.uid)) === null;
+    const seen = readSeen(user.uid);
+    if (firstEver) { rows.filter(hasReply).forEach(c => seen.add(replySig(c))); writeSeen(user.uid, seen); }
+    unseenSigs = rows.filter(c => hasReply(c) && !seen.has(replySig(c))).map(replySig);
+    if (!consultFirstLoad && "Notification" in window && Notification.permission === "granted") {
+      snap.docChanges().forEach(ch => {
+        const c = { id: ch.doc.id, ...ch.doc.data() };
+        if (ch.type !== "removed" && hasReply(c) && !seen.has(replySig(c))) {
+          try { new Notification("رد جديد من الشيخ", { body: c.topic || "", icon: "icon-192.png", dir: "rtl", lang: "ar", tag: c.id }); } catch (e) {}
+        }
+      });
+    }
+    consultFirstLoad = false;
+    const newSet = new Set(unseenSigs);
+    updateReplyUi();
+    if (!$("consultSection").classList.contains("hidden")) markRepliesSeen();
+    const cList = $("consultList"); cList.replaceChildren();
+    if (!rows.length) { cList.innerHTML = "<div class='empty-state'><p>لا توجد استشارات مرسلة بعد.</p></div>"; return; }
+    rows.forEach(c => {
+      const div = document.createElement("div"); div.className = "item";
+      const b = document.createElement("strong"); b.textContent = c.topic;
+      if (newSet.has(replySig(c))) { const nb = document.createElement("span"); nb.className = "pill"; nb.textContent = "رد جديد"; b.after(nb); }
+      const s = document.createElement("small");
+      s.textContent = " · " + (c.createdAt ? c.createdAt.toDate().toLocaleDateString("ar-EG") : "");
+      const p = document.createElement("p"); p.style.margin = "6px 0"; p.textContent = c.notes;
+      div.append(b, s, p);
+
+      const audioSrc = c.audioUrl || c.audioData;
+      if (audioSrc) {
+        const aud = document.createElement("audio");
+        aud.controls = true;
+        aud.preload = "none";
+        aud.src = audioSrc;
+        aud.style.width = "100%";
+        div.append(aud);
+      }
+
+      const replyDiv = document.createElement("div");
+      replyDiv.className = "reply-box";
+      const teacherAudioSrc = c.teacherAudioUrl || c.teacherAudioData;
+      if (c.reply || teacherAudioSrc) {
+        const label = document.createElement("strong");
+        label.innerHTML = '<i class="fa-solid fa-circle-check"></i>توجيه الشيخ:';
+        replyDiv.append(label);
+        if (c.reply) {
+          const span = document.createElement("span");
+          span.style.whiteSpace = "pre-wrap";
+          span.textContent = c.reply;
+          replyDiv.append(document.createElement("br"), span);
+        }
+        if (teacherAudioSrc) {
+          const tLabel = document.createElement("div");
+          tLabel.style.cssText = "margin-top:8px;font-size:.85rem;font-weight:700;color:var(--wine)";
+          tLabel.innerHTML = '<i class="fa-solid fa-volume-high"></i>التسجيل الصوتي لتوجيه الشيخ:';
+          const tAud = document.createElement("audio");
+          tAud.controls = true;
+          tAud.preload = "none";
+          tAud.src = teacherAudioSrc;
+          tAud.style.cssText = "width:100%;margin-top:4px";
+          replyDiv.append(tLabel, tAud);
+        }
+      } else {
+        replyDiv.innerHTML = '<i class="fa-solid fa-clock"></i>بانتظار سماع الشيخ والرد...';
+      }
+      div.append(replyDiv);
+      cList.append(div);
+    });
+  }, listError($("consultList")));
+});
+setMode("login");
+</script>
+</body>
+</html>

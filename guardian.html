@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>بوابة ولي الأمر | دار الفرقان</title>
+
+<link rel="icon" type="image/png" sizes="96x96" href="icon-96.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#3A181E">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+<link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js">
+<link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js">
+<link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js">
+<link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"></noscript>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&display=swap"></noscript>
+
+<style>
+:root{color-scheme:light}
+body.dark-mode{color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Cairo",Tahoma,"Segoe UI",Arial,sans-serif;background:var(--cream);color:var(--ink);line-height:1.7;transition:background .25s ease,color .25s ease}
+body.locked{overflow:hidden}
+.fa-solid,.fa-regular,.fa-brands{margin-inline-end:6px}
+.pw-btn .fa-solid{margin-inline-end:0}
+header{background:var(--header-bg);color:var(--header-text);padding:18px 20px;padding-top:calc(18px + env(safe-area-inset-top,0));border-bottom:5px solid var(--gold);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.brand-box{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit}
+.brand-box img{width:46px;height:46px;border-radius:50%;object-fit:cover;border:2px solid var(--gold)}
+header h1{font-family:"Amiri","Traditional Arabic",Georgia,serif;font-size:1.85rem;margin:0;color:var(--gold);line-height:1.3}
+header p{margin:2px 0 0;opacity:.85;font-size:.9rem}
+.header-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.theme-btn,.home-link{background:transparent;border:1px solid var(--gold);color:var(--gold);padding:6px 14px;border-radius:20px;cursor:pointer;font:inherit;font-size:.88rem;font-weight:bold;text-decoration:none;transition:filter .2s}
+.theme-btn:hover,.home-link:hover{filter:brightness(1.15)}
+main{max-width:620px;margin:0 auto;padding:24px 16px calc(80px + env(safe-area-inset-bottom,0))}
+.card{background:var(--card-bg);border:1px solid var(--line);border-radius:10px;padding:22px;margin-bottom:20px;transition:background .25s ease,border-color .25s ease}
+.tabs{display:flex;gap:8px;margin-bottom:18px}
+.tabs button{flex:1;padding:10px;border:1px solid var(--wine);background:transparent;color:var(--wine);border-radius:8px;font:inherit;font-weight:700;cursor:pointer;transition:background .2s}
+.tabs button:hover{background:rgba(250,200,27,.15)}
+.tabs button[aria-selected=true]{background:var(--wine);color:var(--on-wine)}
+label{display:block;font-weight:600;margin:14px 0 4px;font-size:.93rem}
+input,select,textarea{width:100%;padding:11px;border:1px solid var(--line);border-radius:8px;font:inherit;background:var(--input-bg);color:var(--ink)}
+input:focus,select:focus,textarea:focus,button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offset:1px}
+input:focus,select:focus,textarea:focus{border-color:var(--gold)}
+.pw{position:relative}
+.pw input{padding-right:46px}
+.pw-btn{position:absolute;right:4px;top:50%;transform:translateY(-50%);background:none;border:0;cursor:pointer;font-size:1.1rem;padding:6px 10px;color:var(--ink)}
+.primary{width:100%;margin-top:18px;padding:12px;background:var(--gold);color:#3A181E;border:0;border-radius:8px;font:inherit;font-weight:700;font-size:1.02rem;cursor:pointer;transition:filter .2s}
+.primary:hover{filter:brightness(1.06)}
+.primary:disabled{opacity:.6;cursor:wait}
+.link{background:none;border:0;color:var(--wine);text-decoration:underline;font:inherit;cursor:pointer;padding:0;margin-top:12px}
+.msg{margin-top:14px;padding:10px;border-radius:8px;display:none}
+.msg a{color:inherit;font-weight:700}
+.msg.err{display:block;background:#fbe3e3;color:var(--err)}
+.msg.ok{display:block;background:#e5f3e2;color:#1d5a14}
+body.dark-mode .msg.err{background:#3b1012;color:#ff9b9e}
+body.dark-mode .msg.ok{background:#0e2e13;color:#85e085}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;gap:10px;flex-wrap:wrap}
+.top strong{font-family:"Amiri","Traditional Arabic",Georgia,serif;font-size:1.45rem}
+h2{font-family:"Amiri","Traditional Arabic",Georgia,serif;margin:22px 0 10px;font-size:1.5rem;color:var(--wine)}
+h2 i{font-size:.85em}
+.section-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin:22px 0 10px}
+.section-head h2{margin:0}
+.export-pdf-btn{background:transparent;border:1px solid var(--wine);color:var(--wine);padding:6px 14px;border-radius:20px;cursor:pointer;font:inherit;font-size:.85rem;font-weight:700;transition:background .2s}
+.export-pdf-btn:hover{background:rgba(250,200,27,.15)}
+.item{border-right:4px solid var(--gold);background:var(--card-bg);border-top:1px solid var(--line);border-bottom:1px solid var(--line);border-left:1px solid var(--line);padding:12px 14px;margin-bottom:10px;border-radius:8px;break-inside:avoid}
+.item small{color:var(--text-muted)}
+.pill{display:inline-block;background:rgba(250,200,27,.22);color:var(--wine);border-radius:12px;padding:0 10px;font-size:.8rem;font-weight:700;margin-inline-start:6px}
+.reply-box{margin-top:10px;padding:10px 12px;background:rgba(250,200,27,.15);border-right:3px solid var(--wine);border-radius:6px;font-size:.92rem}
+.recorder-box{border:1px dashed var(--wine);padding:14px;border-radius:8px;margin-top:8px;text-align:center}
+.rec-btn{padding:8px 16px;border-radius:20px;border:0;font:inherit;font-weight:700;cursor:pointer;background:#a4161a;color:#fff}
+.rec-btn.recording{background:#1d5a14;animation:pulse 1.2s infinite}
+@keyframes pulse{0%{opacity:1}50%{opacity:.6}100%{opacity:1}}
+
+/* نافذة دليل التجويد السريع (#17) */
+.modal{position:fixed;inset:0;background:rgba(10,3,5,.82);z-index:120;display:none;align-items:center;justify-content:center;padding:16px}
+.modal.open{display:flex}
+.modal-box{background:var(--card-bg);color:var(--ink);width:100%;max-width:660px;max-height:86vh;border-radius:12px;border:2px solid var(--gold);display:flex;flex-direction:column;overflow:hidden}
+.modal-head{background:var(--header-bg);color:var(--gold);padding:14px 18px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.modal-head strong{font-family:"Amiri","Traditional Arabic",Georgia,serif;font-size:1.4rem}
+.modal-close{background:var(--gold);color:#3A181E;border:0;padding:6px 14px;border-radius:20px;font:inherit;font-size:.86rem;font-weight:700;cursor:pointer}
+.modal-body{padding:18px;overflow-y:auto}
+.tajweed-rule{border-right:4px solid var(--gold);background:rgba(250,200,27,.08);border-radius:8px;padding:12px 14px;margin-bottom:12px}
+.tajweed-rule h3{margin:0 0 6px;font-family:"Amiri","Traditional Arabic",Georgia,serif;font-size:1.25rem;color:var(--wine)}
+.tajweed-rule p{margin:4px 0;font-size:.92rem;white-space:pre-line}
+.tajweed-ex{display:inline-block;background:var(--card-bg);border:1px solid var(--line);padding:2px 8px;border-radius:6px;font-family:"Amiri",serif;font-size:1.05rem;margin-top:6px}
+
+/* شريط التنبيه عند انقطاع الإنترنت (#35) */
+.offline-bar{background:#a4161a;color:#fff;text-align:center;padding:6px 12px;font-size:.85rem;font-weight:700;display:none}
+.offline-bar.show{display:block}
+
+.print-only{display:none}
+.hidden{display:none !important}
+@media(max-width:600px){
+  header h1{font-size:1.5rem}
+  .tabs button{font-size:.88rem;padding:10px 6px}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* تنسيق خاص عند تصدير سجل الاستشارات PDF (#30) */
+@media print{
+  body{background:#fff !important;color:#000 !important}
+  header,.top,.tabs,#regSection,#consultFormCard,.export-pdf-btn,.offline-bar,.modal{display:none !important}
+  main{max-width:100%;padding:0}
+  #consultSection{display:block !important}
+  .print-only{display:block;border-bottom:3px solid #3A181E;padding-bottom:10px;margin-bottom:18px}
+  .print-only h1{font-family:"Amiri",serif;color:#3A181E;margin:0;font-size:1.6rem}
+  .print-only p{margin:4px 0 0;font-size:.9rem;color:#333}
+  .item{border:1px solid #bbb;border-right:4px solid #3A181E;background:#fff !important;color:#000 !important}
+  .reply-box{background:#f9f5f0 !important;border-right:3px solid #3A181E;color:#000 !important}
+  audio{display:none !important}
+}
+.child{margin-bottom:26px}
+.child h2{margin:0 0 4px}
+.child .sub{color:var(--text-muted);font-size:.85rem;margin:0 0 14px}
+.ro{display:inline-block;background:rgba(250,200,27,.2);color:var(--wine);border-radius:12px;padding:0 10px;font-size:.78rem;font-weight:700;margin-inline-start:6px}
+.who{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:18px}
+</style>
+<link rel="stylesheet" href="theme.css">
+</head>
+<body>
+<script>(function(){try{var o=localStorage.getItem("dar-theme-override");var d=o?o==="dark":matchMedia("(prefers-color-scheme: dark)").matches;document.body.classList.toggle("dark-mode",d);var f=parseInt(localStorage.getItem("dar-font-scale"),10);if(f>=85&&f<=150)document.documentElement.style.fontSize=f+"%"}catch(e){}})()</script>
+<script src="theme.js" defer></script>
+<script src="site-config.js" defer></script>
+<header>
+  <a href="index.html" class="brand-box">
+    <img src="icon-96.png" alt="شعار دار الفرقان" width="48" height="48" decoding="async">
+    <div>
+      <h1>دار الفرقان</h1>
+      <p>بوابة ولي الأمر — متابعة تقدّم الأبناء</p>
+    </div>
+  </a>
+  <div class="header-actions">
+    <a href="index.html" class="home-link"><i class="fa-solid fa-house"></i>الرئيسية</a>
+    <button id="themeToggle" class="theme-btn" type="button" aria-label="تبديل الوضع"><i class="fa-solid fa-moon"></i>ليلي</button>
+  </div>
+</header>
+<main>
+
+<section id="authView" class="card hidden">
+  <p style="margin-top:0">هذه البوابة مخصّصة لأولياء الأمور للاطلاع على سجل تقدّم الأبناء (قراءة فقط). يتم الربط بحساب الابن من قِبل إدارة الدار بعد التواصل معها ببريدك الإلكتروني.</p>
+  <div class="tabs" role="tablist">
+    <button id="tabLogin" role="tab" aria-selected="true" type="button"><i class="fa-solid fa-right-to-bracket"></i>تسجيل الدخول</button>
+    <button id="tabSignup" role="tab" aria-selected="false" type="button"><i class="fa-solid fa-user-plus"></i>إنشاء حساب</button>
+  </div>
+  <form id="authForm" novalidate>
+    <div id="signupExtra" class="hidden">
+      <label for="name">الاسم الكامل</label>
+      <input id="name" autocomplete="name">
+      <label class="consent" for="consentSignup">
+        <input id="consentSignup" type="checkbox">
+        <span>أوافق على <a href="privacy.html" target="_blank" rel="noopener">سياسة الخصوصية</a>.</span>
+      </label>
+    </div>
+    <label for="email">البريد الإلكتروني</label>
+    <input id="email" type="email" autocomplete="email" dir="ltr" required>
+    <label for="password">كلمة المرور</label>
+    <div class="pw">
+      <input id="password" type="password" autocomplete="current-password" dir="ltr" minlength="6" required>
+      <button class="pw-btn" id="pwToggle" type="button" aria-label="إظهار كلمة المرور"><i class="fa-solid fa-eye"></i></button>
+    </div>
+    <button class="primary" id="authBtn" type="submit"><i class="fa-solid fa-right-to-bracket"></i>دخول</button>
+    <button class="link" id="resetBtn" type="button"><i class="fa-solid fa-key"></i>نسيت كلمة المرور؟</button>
+    <div id="authMsg" class="msg" role="alert"></div>
+  </form>
+</section>
+
+<section id="verifyView" class="card hidden">
+  <h2 style="margin-top:0"><i class="fa-solid fa-envelope-circle-check"></i>أكّد بريدك الإلكتروني</h2>
+  <p>أرسلنا رابط التأكيد إلى <strong id="verifyEmail" dir="ltr"></strong>. افتح الرسالة واضغط على الرابط (وافحص مجلد Spam)، ثم ارجع هنا واضغط «أكدت بريدي». التأكيد شرط لحماية بيانات الأبناء.</p>
+  <button class="primary" id="verifyDoneBtn" type="button"><i class="fa-solid fa-check"></i>أكدت بريدي</button>
+  <button class="link" id="verifyResendBtn" type="button"><i class="fa-solid fa-paper-plane"></i>إعادة إرسال رابط التأكيد</button>
+  <button class="link" id="verifyLogoutBtn" type="button" style="margin-inline-start:14px"><i class="fa-solid fa-right-from-bracket"></i>تسجيل الخروج</button>
+  <div id="verifyMsg" class="msg" role="alert"></div>
+</section>
+
+<section id="appView" class="hidden">
+  <div class="who">
+    <div><i class="fa-solid fa-user-shield"></i>مرحبًا بك، <strong id="hello" dir="ltr"></strong></div>
+    <button class="link" id="logoutBtn" type="button"><i class="fa-solid fa-right-from-bracket"></i>تسجيل الخروج</button>
+  </div>
+  <div id="children"></div>
+  <div id="emptyBox" class="card hidden">
+    <h2 style="margin-top:0"><i class="fa-solid fa-link-slash"></i>لا يوجد أبناء مرتبطون بحسابك بعد</h2>
+    <p>اطلب من إدارة الدار ربط بريدك الإلكتروني (<strong id="emptyEmail" dir="ltr"></strong>) بحساب ابنك، وبعدها يظهر سجل تقدّمه هنا تلقائيًا.</p>
+    <a class="link" href="https://wa.me/201099262489" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i>تواصل مع الإدارة</a>
+  </div>
+  <div id="loadMsg" class="msg" role="alert"></div>
+</section>
+
+</main>
+<script src="progress-extras.js" defer></script>
+<script type="module">
+import { firebaseConfig, initAppCheck } from "./firebase-config.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile, sendPasswordResetEmail, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, collection, query, where, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const app = initializeApp(firebaseConfig);
+initAppCheck(app);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const $ = id => document.getElementById(id);
+const show = (el, type, text) => { el.className = "msg " + type; el.textContent = text; };
+const clear = el => { el.className = "msg"; el.textContent = ""; };
+const errors = {
+  "auth/invalid-email":"البريد الإلكتروني غير صحيح.",
+  "auth/email-already-in-use":"هذا البريد مسجّل مسبقًا. انتقل إلى «تسجيل الدخول»، وإن نسيت كلمة المرور فاضغط «نسيت كلمة المرور؟».",
+  "auth/user-disabled":"تم إيقاف هذا الحساب. تواصل مع إدارة الدار.",
+  "auth/weak-password":"يجب ألا تقل كلمة المرور عن 6 أحرف.",
+  "auth/invalid-credential":"البريد الإلكتروني أو كلمة المرور غير صحيحة.",
+  "auth/user-not-found":"لا يوجد حساب بهذا البريد. اضغط «إنشاء حساب» لتسجيله.",
+  "auth/wrong-password":"كلمة المرور غير صحيحة.",
+  "auth/too-many-requests":"محاولات كثيرة. انتظر قليلًا ثم حاول مرة أخرى.",
+  "auth/network-request-failed":"مشكلة في الاتصال بالإنترنت. حاول مرة أخرى."
+};
+let mode = "login", unsubLinks = null, unsubKids = [];
+
+function setMode(m) {
+  mode = m; const s = m === "signup";
+  $("tabLogin").setAttribute("aria-selected", !s);
+  $("tabSignup").setAttribute("aria-selected", s);
+  $("signupExtra").classList.toggle("hidden", !s);
+  $("authBtn").innerHTML = s ? '<i class="fa-solid fa-user-plus"></i>إنشاء الحساب' : '<i class="fa-solid fa-right-to-bracket"></i>دخول';
+  $("password").autocomplete = s ? "new-password" : "current-password";
+  $("resetBtn").classList.toggle("hidden", s);
+  clear($("authMsg"));
+}
+$("tabLogin").onclick = () => setMode("login");
+$("tabSignup").onclick = () => setMode("signup");
+$("pwToggle").onclick = () => {
+  const p = $("password"); const on = p.type === "password";
+  p.type = on ? "text" : "password";
+  $("pwToggle").innerHTML = on ? '<i class="fa-solid fa-eye-slash"></i>' : '<i class="fa-solid fa-eye"></i>';
+};
+
+if (window.darGuard) darGuard.attach($("authForm"));
+$("authForm").onsubmit = async e => {
+  e.preventDefault(); clear($("authMsg"));
+  const email = $("email").value.trim(), pass = $("password").value;
+  if (!email || pass.length < 6) return show($("authMsg"), "err", "اكتب البريد الإلكتروني وكلمة مرور من 6 أحرف على الأقل.");
+  if (mode === "signup" && $("name").value.trim().length < 2) return show($("authMsg"), "err", "اكتب الاسم الكامل.");
+  if (mode === "signup" && !$("consentSignup").checked) return show($("authMsg"), "err", "يلزم الموافقة على سياسة الخصوصية لإنشاء الحساب.");
+  { const gg = window.darGuard ? darGuard.check($("authForm"), mode === "signup" ? "gsignup" : "", 20) : ""; if (gg) { if (gg !== "__bot__") show($("authMsg"), "err", gg); return; } }
+  const btn = $("authBtn"); btn.disabled = true;
+  try {
+    if (mode === "signup") {
+      const cred = await createUserWithEmailAndPassword(auth, email, pass);
+      try { await sendEmailVerification(cred.user); } catch (x) {}
+      try { await updateProfile(cred.user, { displayName: $("name").value.trim() }); } catch (x) {}
+    } else {
+      await signInWithEmailAndPassword(auth, email, pass);
+    }
+  } catch (err) {
+    show($("authMsg"), "err", errors[err.code] || ("حدث خطأ أثناء الدخول (" + (err.code || "غير معروف") + ")."));
+  }
+  btn.disabled = false;
+};
+
+$("resetBtn").onclick = async () => {
+  clear($("authMsg"));
+  const email = $("email").value.trim();
+  if (!email) return show($("authMsg"), "err", "اكتب بريدك الإلكتروني أولًا ثم اضغط «نسيت كلمة المرور؟».");
+  try { await sendPasswordResetEmail(auth, email); show($("authMsg"), "ok", "إذا كان البريد مسجّلًا فقد أرسلنا إليه رابط إعادة تعيين كلمة المرور. افحص Spam أيضًا."); }
+  catch (err) { show($("authMsg"), "err", errors[err.code] || "تعذر إرسال الرسالة، حاول لاحقًا."); }
+};
+
+$("logoutBtn").onclick = () => signOut(auth);
+$("verifyLogoutBtn").onclick = () => signOut(auth);
+$("verifyDoneBtn").onclick = async () => {
+  clear($("verifyMsg"));
+  try {
+    await auth.currentUser.reload();
+    if (auth.currentUser.emailVerified) { await auth.currentUser.getIdToken(true); location.reload(); }
+    else show($("verifyMsg"), "err", "لسه الإيميل غير مؤكد. افتح الرابط في الرسالة أولًا ثم أعد المحاولة.");
+  } catch (err) { show($("verifyMsg"), "err", "تعذر التحقق الآن، حاول بعد لحظات."); }
+};
+let cooldown = false;
+$("verifyResendBtn").onclick = async () => {
+  clear($("verifyMsg"));
+  if (cooldown) return show($("verifyMsg"), "err", "انتظر دقيقة قبل إعادة الإرسال.");
+  try {
+    await sendEmailVerification(auth.currentUser);
+    show($("verifyMsg"), "ok", "تم إرسال رابط جديد إلى بريدك. افحص Spam كذلك.");
+    cooldown = true; setTimeout(() => { cooldown = false; }, 60000);
+  } catch (err) { show($("verifyMsg"), "err", err.code === "auth/too-many-requests" ? "محاولات كثيرة، انتظر قليلًا." : "تعذر إرسال الرسالة، حاول لاحقًا."); }
+};
+
+/* ---------- عرض تقدّم الابن (قراءة فقط) ---------- */
+function renderChild(box, rows) {
+  const ex = box.querySelector(".extras");
+  if (ex && window.DarProgress) {
+    ex.replaceChildren();
+    const rep = document.createElement("div"), bd = document.createElement("div"), mp = document.createElement("div");
+    bd.className = "extras-box"; mp.className = "extras-box";
+    ex.append(rep, bd, mp);
+    const cov = DarProgress.renderMap(mp, rows);
+    DarProgress.renderBadges(bd, rows, cov);
+    DarProgress.renderReportBar(rep, rows, box.dataset.name || "الطالب");
+  }
+  const sum = box.querySelector(".prog-grid"), list = box.querySelector(".plist");
+  sum.replaceChildren(); list.replaceChildren();
+  if (!rows.length) { list.innerHTML = "<div class='empty-state'><p>لم يُسجَّل تقدّم بعد. سيظهر هنا بعد أول جلسة.</p></div>"; return; }
+  const fmt = r => r.createdAt ? r.createdAt.toDate().toLocaleDateString("ar-EG") : "";
+  const last = t => rows.find(r => r.type === t);
+  const RATING_PCT = { "ممتاز": 100, "جيد جدًا": 80, "جيد": 60, "يحتاج مراجعة": 40 };
+  const tile = (label, main, sub, pct) => {
+    const d = document.createElement("div"); d.className = "prog-tile";
+    const l = document.createElement("small"); l.textContent = label;
+    const m = document.createElement("strong"); m.textContent = main || "—";
+    d.append(l, m);
+    if (sub) { const x = document.createElement("span"); x.textContent = sub; d.append(x); }
+    if (typeof pct === "number") { d.classList.add("has-ring"); const rg = document.createElement("div"); rg.className = "ring"; rg.style.setProperty("--p", pct); d.append(rg); }
+    sum.append(d);
+  };
+  const lh = last("حفظ جديد"), lm = last("مراجعة"), lr = rows.find(r => r.rating);
+  tile("آخر حفظ", lh ? lh.surah : "", lh ? [lh.range, fmt(lh)].filter(Boolean).join(" · ") : "");
+  tile("آخر مراجعة", lm ? lm.surah : "", lm ? [lm.range, fmt(lm)].filter(Boolean).join(" · ") : "");
+  tile("آخر تقييم", lr ? lr.rating : "", lr ? fmt(lr) : "", lr ? RATING_PCT[lr.rating] : undefined);
+  const inCycle = ((rows.length - 1) % 10) + 1;
+  tile("عدد الجلسات المسجّلة", String(rows.length), inCycle + " / 10 في هذه الدورة", inCycle * 10);
+  rows.slice(0, 40).forEach(r => {
+    const div = document.createElement("div"); div.className = "item";
+    const b = document.createElement("strong"); b.textContent = r.type + " — سورة " + r.surah;
+    const s = document.createElement("small"); s.textContent = " · " + fmt(r);
+    div.append(b, s);
+    if (r.rating) { const p = document.createElement("span"); p.className = "pill"; p.textContent = r.rating; div.append(p); }
+    if (r.range) { const p = document.createElement("p"); p.style.margin = "4px 0 0"; p.textContent = r.range; div.append(p); }
+    if (r.note) {
+      const n = document.createElement("div"); n.className = "reply-box";
+      n.innerHTML = '<i class="fa-solid fa-comment-dots"></i> ';
+      const t = document.createElement("span"); t.style.whiteSpace = "pre-wrap"; t.textContent = r.note;
+      n.append(t); div.append(n);
+    }
+    list.append(div);
+  });
+}
+
+function stopAll() {
+  if (unsubLinks) { unsubLinks(); unsubLinks = null; }
+  unsubKids.forEach(u => u()); unsubKids = [];
+  $("children").replaceChildren(); $("emptyBox").classList.add("hidden"); clear($("loadMsg"));
+}
+
+function startFor(user) {
+  stopAll();
+  const email = (user.email || "").toLowerCase();
+  $("emptyEmail").textContent = email;
+  const fail = () => show($("loadMsg"), "err", "تعذر تحميل البيانات. تأكد من الاتصال بالإنترنت ومن تأكيد بريدك الإلكتروني، ثم أعد تحميل الصفحة.");
+  unsubLinks = onSnapshot(query(collection(db, "guardian_links"), where("guardianEmail", "==", email)), snap => {
+    clear($("loadMsg"));
+    unsubKids.forEach(u => u()); unsubKids = [];
+    $("children").replaceChildren();
+    $("emptyBox").classList.toggle("hidden", !snap.empty);
+    snap.docs.map(d => d.data()).forEach(link => {
+      const box = document.createElement("div"); box.className = "card child";
+      const h = document.createElement("h2");
+      h.innerHTML = '<i class="fa-solid fa-user-graduate"></i>';
+      h.append(document.createTextNode(link.studentName || "الطالب"));
+      const ro = document.createElement("span"); ro.className = "ro"; ro.textContent = "للاطلاع فقط"; h.append(ro);
+      const sub = document.createElement("p"); sub.className = "sub"; sub.textContent = "آخر ما سجّله الشيخ من حفظ ومراجعة وتقييم.";
+      const grid = document.createElement("div"); grid.className = "prog-grid"; grid.style.marginBottom = "14px";
+      const list = document.createElement("div"); list.className = "plist";
+      list.innerHTML = "<p>جاري التحميل...</p>";
+      const extras = document.createElement("div"); extras.className = "extras";
+      box.dataset.name = link.studentName || "الطالب";
+      box.append(h, sub, grid, extras, list);
+      $("children").append(box);
+      unsubKids.push(onSnapshot(query(collection(db, "progress"), where("uid", "==", link.studentUid)), s => {
+        const rows = s.docs.map(d => d.data()).sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+        renderChild(box, rows);
+      }, () => { list.innerHTML = "<p>تعذر تحميل سجل التقدّم.</p>"; }));
+    });
+  }, fail);
+}
+
+onAuthStateChanged(auth, user => {
+  const verified = !!(user && user.emailVerified);
+  $("authView").classList.toggle("hidden", !!user);
+  $("appView").classList.toggle("hidden", !user || !verified);
+  $("verifyView").classList.toggle("hidden", !user || verified);
+  stopAll();
+  if (!user) return;
+  if (!verified) { $("verifyEmail").textContent = user.email; return; }
+  $("hello").textContent = user.displayName || user.email;
+  startFor(user);
+});
+setMode("login");
+</script>
+</body>
+</html>

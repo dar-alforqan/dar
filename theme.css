@@ -1,0 +1,474 @@
+/* ==========================================================
+   دار الفرقان — ثيم موحّد لكل الصفحات
+   الألوان مأخوذة من الشعار:
+     نبيذي غامق  #3A181E   (خلفية الشعار)
+     ذهبي ساطع   #FAC81B   (الكتابة)
+     ذهبي ناعم   #E4C060   (أوراق الزينة)
+     ذهبي ترابي  #A89054   (حامل المصحف)
+     كريمي       #F6E7DD   (صفحات المصحف)
+   الوضع الليلي: body.dark-mode
+   ========================================================== */
+
+:root{
+  color-scheme:light;
+
+  /* الألوان الأساسية (نفس الأسماء المستخدمة في كل الصفحات) */
+  --wine:#3A181E;            /* لون العناوين والحدود */
+  --cream:#F6E7DD;           /* خلفية الصفحة */
+  --gold:#FAC81B;
+  --gold-soft:#E4C060;
+  --gold-earth:#A89054;
+  --ink:#2B1015;             /* لون النص */
+  --text-muted:#6B4A47;
+  --on-wine:#F6E7DD;         /* نص فوق اللون الأساسي */
+  --err:#A4161A;
+  --line:rgba(88,52,40,.20);
+  --row-hover:rgba(250,200,27,.14);
+
+  /* أسطح عادية (حقول الإدخال تظل صلبة لسهولة القراءة) */
+  --card-bg:#FFFFFF;
+  --input-bg:#FFFCF9;
+
+  /* الشريط العلوي والتذييل (زجاج نبيذي) */
+  --header-bg:rgba(58,24,30,.93);
+  --header-text:#F6E7DD;
+  --nav-bg:rgba(58,24,30,.93);
+  --footer-bg:#2B1015;
+  --hero-top:#4A2129;
+  --hero-bottom:#2B1015;
+
+  /* أقسام بديلة وخطوات */
+  --alt-bg:rgba(255,255,255,.38);
+  --step-num-bg:#3A181E;
+  --step-num-color:#FAC81B;
+
+  /* ===== الزجاج المصنفر ===== */
+  --blur:14px;
+  --glass-bg:linear-gradient(145deg,rgba(255,255,255,.78) 0%,rgba(255,255,255,.46) 100%);
+  --glass-strong:linear-gradient(145deg,rgba(255,255,255,.90) 0%,rgba(255,252,249,.70) 100%);
+  --glass-edge:rgba(255,255,255,.75);                 /* لمعة الحافة العلوية */
+  --glass-shadow:0 8px 28px rgba(58,24,30,.10),0 1px 2px rgba(58,24,30,.06);
+  --glass-shadow-hover:0 14px 34px rgba(58,24,30,.16),0 2px 4px rgba(58,24,30,.08);
+  --glass-dark:rgba(58,24,30,.62);                    /* أزرار عائمة فوق المحتوى */
+  --overlay:rgba(30,10,15,.55);
+
+  /* توهّج الخلفية (يعطي الزجاج شيئًا يتغبّش خلفه) */
+  --pattern:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cdefs%3E%3Cg id='s' fill='none' stroke='rgba(120,84,60,0.17)' stroke-width='1'%3E%3Crect x='-18' y='-18' width='36' height='36'/%3E%3Crect x='-18' y='-18' width='36' height='36' transform='rotate(45)'/%3E%3Ccircle r='7'/%3E%3C/g%3E%3C/defs%3E%3Cuse href='%23s' x='40' y='40'/%3E%3Cuse href='%23s' x='0' y='0'/%3E%3Cuse href='%23s' x='80' y='0'/%3E%3Cuse href='%23s' x='0' y='80'/%3E%3Cuse href='%23s' x='80' y='80'/%3E%3C/svg%3E");
+  --pattern-gold:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cdefs%3E%3Cg id='s' fill='none' stroke='rgba(250,200,27,0.10)' stroke-width='1'%3E%3Crect x='-18' y='-18' width='36' height='36'/%3E%3Crect x='-18' y='-18' width='36' height='36' transform='rotate(45)'/%3E%3Ccircle r='7'/%3E%3C/g%3E%3C/defs%3E%3Cuse href='%23s' x='40' y='40'/%3E%3Cuse href='%23s' x='0' y='0'/%3E%3Cuse href='%23s' x='80' y='0'/%3E%3Cuse href='%23s' x='0' y='80'/%3E%3Cuse href='%23s' x='80' y='80'/%3E%3C/svg%3E");
+  --bg-glow:
+    radial-gradient(520px 420px at 92% -4%,rgba(250,200,27,.30),transparent 70%),
+    radial-gradient(560px 460px at 4% 18%,rgba(252,216,204,.95),transparent 70%),
+    radial-gradient(640px 520px at 78% 105%,rgba(168,144,84,.22),transparent 70%);
+}
+
+body.dark-mode{
+  color-scheme:dark;
+
+  --wine:#FAC81B;            /* في الليلي العناوين تصير ذهبية */
+  --cream:#1C0A0E;
+  --ink:#F6E7DD;
+  --text-muted:#C7AFA2;
+  --on-wine:#2B1015;
+  --err:#FF9B9E;
+  --line:rgba(250,200,27,.16);
+  --row-hover:rgba(250,200,27,.08);
+
+  --card-bg:#2E1319;
+  --input-bg:#230D12;
+
+  --header-bg:rgba(32,11,16,.82);
+  --header-text:#F6E7DD;
+  --nav-bg:rgba(32,11,16,.82);
+  --footer-bg:#160709;
+  --hero-top:#3A181E;
+  --hero-bottom:#1C0A0E;
+
+  --alt-bg:rgba(58,24,30,.28);
+  --step-num-bg:#FAC81B;
+  --step-num-color:#2B1015;
+
+  --glass-bg:linear-gradient(145deg,rgba(104,46,56,.46) 0%,rgba(58,24,30,.36) 100%);
+  --glass-strong:linear-gradient(145deg,rgba(74,33,41,.80) 0%,rgba(46,19,25,.72) 100%);
+  --glass-edge:rgba(250,200,27,.22);
+  --glass-shadow:0 10px 30px rgba(0,0,0,.38),0 1px 2px rgba(0,0,0,.3);
+  --glass-shadow-hover:0 16px 38px rgba(0,0,0,.5),0 2px 4px rgba(0,0,0,.35);
+  --glass-dark:rgba(32,11,16,.66);
+  --overlay:rgba(8,2,4,.68);
+
+  --pattern:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cdefs%3E%3Cg id='s' fill='none' stroke='rgba(250,200,27,0.075)' stroke-width='1'%3E%3Crect x='-18' y='-18' width='36' height='36'/%3E%3Crect x='-18' y='-18' width='36' height='36' transform='rotate(45)'/%3E%3Ccircle r='7'/%3E%3C/g%3E%3C/defs%3E%3Cuse href='%23s' x='40' y='40'/%3E%3Cuse href='%23s' x='0' y='0'/%3E%3Cuse href='%23s' x='80' y='0'/%3E%3Cuse href='%23s' x='0' y='80'/%3E%3Cuse href='%23s' x='80' y='80'/%3E%3C/svg%3E");
+  --bg-glow:
+    radial-gradient(520px 420px at 92% -4%,rgba(250,200,27,.12),transparent 70%),
+    radial-gradient(600px 480px at 4% 22%,rgba(122,48,60,.55),transparent 70%),
+    radial-gradient(640px 520px at 78% 105%,rgba(168,144,84,.12),transparent 70%);
+}
+
+/* لو المتصفح ما يدعم الزجاج أو المستخدم مفعّل "تقليل الشفافية": أسطح صلبة */
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  :root{--glass-bg:#FFFCF9;--glass-strong:#FFFFFF;--header-bg:#3A181E;--nav-bg:#3A181E;--glass-dark:#3A181E;--overlay:rgba(20,6,10,.9);--alt-bg:#FFF8F2}
+  body.dark-mode{--glass-bg:#2E1319;--glass-strong:#34161D;--header-bg:#200B10;--nav-bg:#200B10;--glass-dark:#200B10;--overlay:rgba(8,2,4,.92);--alt-bg:#220D12}
+}
+@media (prefers-reduced-transparency:reduce){
+  :root{--glass-bg:#FFFCF9;--glass-strong:#FFFFFF;--header-bg:#3A181E;--nav-bg:#3A181E;--glass-dark:#3A181E;--overlay:rgba(20,6,10,.92);--alt-bg:#FFF8F2}
+  body.dark-mode{--glass-bg:#2E1319;--glass-strong:#34161D;--header-bg:#200B10;--nav-bg:#200B10;--glass-dark:#200B10;--overlay:rgba(8,2,4,.94);--alt-bg:#220D12}
+}
+
+/* ---------- خلفية الصفحة ---------- */
+body{background-color:var(--cream);color:var(--ink)}
+body{position:relative}
+body::before{
+  content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:var(--bg-glow),var(--pattern);
+  background-size:auto,80px 80px;
+}
+
+/* ---------- أشرطة علوية (زجاج نبيذي ثابت أثناء التمرير) ---------- */
+header,nav{
+  background:var(--header-bg);
+  -webkit-backdrop-filter:blur(12px);
+  backdrop-filter:blur(12px);
+  box-shadow:0 6px 24px rgba(20,6,10,.22),inset 0 -1px 0 rgba(250,200,27,.20);
+}
+/* الهيدر يتحرك مع الصفحة (مش ثابت) */
+header,nav{position:relative;top:auto}
+nav{background:var(--nav-bg)}
+
+/* ---------- الواجهة الرئيسية (الهيرو) ---------- */
+.hero{
+  background:
+    radial-gradient(60% 90% at 50% 0%,rgba(250,200,27,.18),transparent 72%),
+    var(--pattern-gold) 0 0/80px 80px,
+    linear-gradient(180deg,var(--hero-top),var(--hero-bottom));
+}
+footer{background:var(--footer-bg)}
+
+/* ---------- البطاقات الزجاجية ---------- */
+.card,.table-wrap-glass{
+  background:var(--glass-bg);
+  -webkit-backdrop-filter:blur(10px) saturate(150%);
+  backdrop-filter:blur(10px) saturate(150%);
+  box-shadow:var(--glass-shadow),inset 0 1px 0 var(--glass-edge);
+}
+/* العناصر المتكررة بكثرة: شفافية وحافة لامعة بدون تغبيش (أخف بكثير على الموبايل) */
+.book-card,.matn-card,.matn-toolbar,.stat-card,.chart-card,.item,
+.contact a,.contact div,.steps li,.lib-mode-btn,.tab-btn{
+  background:var(--glass-bg);
+  box-shadow:var(--glass-shadow),inset 0 1px 0 var(--glass-edge);
+}
+/* الجداول والمحتوى الكثيف: زجاج أقل شفافية للحفاظ على وضوح القراءة */
+.table-wrap{
+  background:var(--glass-strong);
+  box-shadow:var(--glass-shadow),inset 0 1px 0 var(--glass-edge);
+}
+.lib-mode-btn.active,.tab-btn.active{background:var(--wine);box-shadow:var(--glass-shadow)}
+/* بطاقة الصورة: بدون تغبيش لأن الصورة تغطي أغلبها */
+.photo-card{
+  background:var(--glass-strong);
+  box-shadow:var(--glass-shadow),inset 0 1px 0 var(--glass-edge);
+}
+
+.card.clickable:hover,.book-card:hover,.photo-card:hover{box-shadow:var(--glass-shadow-hover),inset 0 1px 0 var(--glass-edge)}
+.contact a:hover{box-shadow:var(--glass-shadow-hover),inset 0 1px 0 var(--glass-edge)}
+
+/* ---------- عناصر عائمة وطبقات ---------- */
+button.top,.toast{
+  background:var(--glass-dark);
+  -webkit-backdrop-filter:blur(12px) saturate(150%);
+  backdrop-filter:blur(12px) saturate(150%);
+}
+.zoom,.lb-nav{
+  background:var(--glass-dark);
+  -webkit-backdrop-filter:blur(8px);
+  backdrop-filter:blur(8px);
+}
+.lb-nav:hover{background:var(--gold)}
+.lightbox,.modal{
+  background:var(--overlay);
+  -webkit-backdrop-filter:blur(6px);
+  backdrop-filter:blur(6px);
+}
+.modal-box,.tajweed-box{
+  box-shadow:0 24px 60px rgba(0,0,0,.45);
+}
+
+/* ---------- قراءة أوضح داخل الزجاج في الوضع الليلي ---------- */
+body.dark-mode .pill,
+body.dark-mode .badge,
+body.dark-mode .ic{background:rgba(250,200,27,.16)}
+body.dark-mode .btn-download,
+body.dark-mode .card-link,
+body.dark-mode .primary,
+body.dark-mode .cta.gold{color:#2B1015}
+
+/* حقول الإدخال تبقى صلبة وواضحة فوق الزجاج */
+input,select,textarea{
+  background:var(--input-bg);
+  box-shadow:inset 0 1px 2px rgba(58,24,30,.06);
+}
+body.dark-mode input,
+body.dark-mode select,
+body.dark-mode textarea{box-shadow:inset 0 1px 3px rgba(0,0,0,.35)}
+
+/* ---------- الأزرار الذهبية (زجاج بتدرّج) ---------- */
+.primary,.cta.gold,.card-link,nav .links a.btn,.nav-btn.gold,.btn-download,.lightbox-close{
+  background:linear-gradient(135deg,#FCD22E 0%,#F0B90F 100%);
+  color:#2B1015;
+  border:1px solid rgba(255,244,190,.75);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.7),inset 0 -1px 0 rgba(58,24,30,.18),0 6px 16px -4px rgba(250,200,27,.40);
+}
+.primary:hover:not(:disabled),.cta.gold:hover,.card-link:hover,nav .links a.btn:hover,.nav-btn.gold:hover,.btn-download:hover{
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.85),0 10px 22px -4px rgba(250,200,27,.50);
+}
+
+/* ---------- خط المصحف للآيات والأحاديث والمتون ---------- */
+.quote p,.ayah,.hadith{
+  font-family:"Amiri Quran","Amiri","Traditional Arabic",Georgia,serif;
+}
+.quote p{line-height:2.1}
+
+/* ---------- أزرار تكبير/تصغير الخط (يضيفها theme.js) ---------- */
+.font-ctl{display:inline-flex;gap:6px;align-items:center}
+.font-ctl button{padding-inline:11px;min-width:38px}
+.font-ctl button[disabled]{opacity:.4;cursor:default}
+
+/* ---------- موافقات التسجيل (checkbox) ---------- */
+label.consent{display:flex;align-items:flex-start;gap:10px;font-weight:400;font-size:.88rem;line-height:1.7;margin:14px 0 4px;cursor:pointer}
+label.consent input[type=checkbox]{width:20px;height:20px;min-width:20px;margin:3px 0 0;padding:0;accent-color:var(--gold-earth)}
+label.consent a{color:var(--wine);font-weight:700}
+
+/* ---------- شريط الردود الجديدة ---------- */
+.reply-banner{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;
+  background:linear-gradient(135deg,#FCD22E,#F0B90F);color:#2B1015;border-radius:10px;padding:10px 14px;margin-bottom:14px;
+  box-shadow:0 6px 16px -6px rgba(250,200,27,.5)}
+.reply-banner .link{color:#2B1015;font-weight:700;text-decoration:underline;background:none;border:0;cursor:pointer;font:inherit}
+
+/* ---------- ملخص المتابعة ---------- */
+.prog-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.prog-tile{background:var(--glass-strong);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:2px;box-shadow:var(--glass-shadow)}
+.prog-tile small{color:var(--text-muted);font-size:.8rem}
+.prog-tile strong{font-size:1.15rem;color:var(--wine)}
+.prog-tile span{font-size:.8rem;opacity:.85}
+
+/* ---------- حالات طلب التسجيل ---------- */
+.pill.st-contact{background:#e1ecf9;color:#16417a}
+.pill.st-ok{background:#e5f3e2;color:#1d5a14}
+.pill.st-no{background:#fbe3e3;color:#a4161a}
+body.dark-mode .pill.st-contact{background:#14304f;color:#9cc7ff}
+body.dark-mode .pill.st-ok{background:#0e2e13;color:#85e085}
+body.dark-mode .pill.st-no{background:#3b1012;color:#ff9b9e}
+.upd-tag{display:inline-block;background:#c62828;color:#fff;border-radius:12px;padding:0 9px;font-size:.72rem;font-weight:700;margin-inline-start:6px}
+
+/* ==========================================================
+   لمسات التصميم (إضافات فقط، كلها من ألوان وأشكال الشعار)
+   ========================================================== */
+:root{--star-gold:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='2.3' y='2.3' width='11.4' height='11.4' fill='%23E4C060'/%3E%3Crect x='2.3' y='2.3' width='11.4' height='11.4' transform='rotate(45 8 8)' fill='%23E4C060'/%3E%3C/svg%3E");--book-empty:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 50'%3E%3Cpath d='M4 31 L32 47 L60 31 L56 28 L32 41 L8 28 Z' fill='%23B8975A'/%3E%3Cpath d='M8 10 L31 18 L31 41 L8 30 Z' fill='%23F9E3D6' stroke='%23A89054' stroke-width='1.2' stroke-linejoin='round'/%3E%3Cpath d='M56 10 L33 18 L33 41 L56 30 Z' fill='%23FFFFFF' stroke='%23A89054' stroke-width='1.2' stroke-linejoin='round'/%3E%3C/svg%3E")}
+
+/* 1) فواصل نجمية تحت عناوين الأقسام بدل الخط العادي */
+section .wrap > h2::after{
+  width:180px;height:16px;border-radius:0;margin:10px auto 0;
+  background:
+    var(--star-gold) center/16px 16px no-repeat,
+    linear-gradient(90deg,transparent,var(--gold-earth)) left center/72px 2px no-repeat,
+    linear-gradient(270deg,transparent,var(--gold-earth)) right center/72px 2px no-repeat;
+}
+
+/* 2) إطار الآية/الحديث: إطار ذهبي مزدوج وزخارف نجمية في الأركان */
+.quote .wrap{
+  position:relative;max-width:780px;padding:30px 40px;
+  border:2px solid var(--gold-earth);outline:1px solid var(--gold-soft);outline-offset:-9px;
+  border-radius:6px;
+  background-image:var(--star-gold),var(--star-gold),var(--star-gold),var(--star-gold);
+  background-repeat:no-repeat;background-size:18px 18px;
+  background-position:12px 12px,calc(100% - 12px) 12px,12px calc(100% - 12px),calc(100% - 12px) calc(100% - 12px);
+}
+@media(max-width:520px){.quote .wrap{padding:28px 26px;margin-inline:14px}}
+
+/* 3) أيقونات وأرقام بحافة مسنّنة مثل حافة الشعار */
+.ic{border-radius:0;clip-path:polygon(50.0% 0.0%,60.9% 9.4%,75.0% 6.7%,79.7% 20.3%,93.3% 25.0%,90.6% 39.1%,100.0% 50.0%,90.6% 60.9%,93.3% 75.0%,79.7% 79.7%,75.0% 93.3%,60.9% 90.6%,50.0% 100.0%,39.1% 90.6%,25.0% 93.3%,20.3% 79.7%,6.7% 75.0%,9.4% 60.9%,0.0% 50.0%,9.4% 39.1%,6.7% 25.0%,20.3% 20.3%,25.0% 6.7%,39.1% 9.4%)}
+.steps li::before{border-radius:0;width:34px;height:34px;clip-path:polygon(50.0% 0.0%,60.9% 9.4%,75.0% 6.7%,79.7% 20.3%,93.3% 25.0%,90.6% 39.1%,100.0% 50.0%,90.6% 60.9%,93.3% 75.0%,79.7% 79.7%,75.0% 93.3%,60.9% 90.6%,50.0% 100.0%,39.1% 90.6%,25.0% 93.3%,20.3% 79.7%,6.7% 75.0%,9.4% 60.9%,0.0% 50.0%,9.4% 39.1%,6.7% 25.0%,20.3% 20.3%,25.0% 6.7%,39.1% 9.4%)}
+
+/* 4) تحميل بلمعة ذهبية + ظهور هادئ للشعار */
+.skel{background-image:linear-gradient(90deg,rgba(250,200,27,.05) 20%,rgba(250,200,27,.30) 50%,rgba(250,200,27,.05) 80%)!important;background-size:200% 100%}
+@keyframes dar-rise{from{opacity:0;transform:translateY(14px) scale(.96)}to{opacity:1;transform:none}}
+.hero-logo{animation:dar-rise .7s cubic-bezier(.2,.7,.2,1) both}
+.hero h1{animation:dar-rise .7s .1s cubic-bezier(.2,.7,.2,1) both}
+.hero p{animation:dar-rise .7s .2s cubic-bezier(.2,.7,.2,1) both}
+@media (prefers-reduced-motion:reduce){.hero-logo,.hero h1,.hero p{animation:none}.skel{animation:none!important}}
+
+/* 5) الوضع الليلي: توهّج دافئ كضوء شمعة خلف الشعار والعناوين */
+body.dark-mode .hero-logo{box-shadow:0 0 0 6px rgba(250,200,27,.08),0 0 44px rgba(250,200,27,.35),0 6px 20px rgba(0,0,0,.5)}
+body.dark-mode .hero h1{text-shadow:0 0 26px rgba(250,200,27,.40)}
+body.dark-mode section .wrap > h2{text-shadow:0 0 22px rgba(250,200,27,.22)}
+body.dark-mode .quote p{text-shadow:0 0 20px rgba(250,200,27,.18)}
+
+/* 6) صفحة الطالب: حلقة تقدّم ذهبية وحالات فارغة برسم المصحف */
+.prog-tile{position:relative}
+.prog-tile.has-ring{padding-left:64px}
+.ring{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:42px;height:42px;border-radius:50%;
+  background:conic-gradient(var(--gold) calc(var(--p,0)*1%),rgba(250,200,27,.20) 0);
+  display:grid;place-items:center;filter:drop-shadow(0 0 6px rgba(250,200,27,.35))}
+.ring::after{content:"";width:30px;height:30px;border-radius:50%;background:var(--card-bg)}
+.empty-state{text-align:center;padding:14px 8px 6px;color:var(--text-muted)}
+.empty-state::before{content:"";display:block;width:76px;height:58px;margin:0 auto 6px;background:var(--book-empty) center/contain no-repeat;opacity:.9}
+.empty-state p{margin:0}
+
+/* 7) شريط تنقل سفلي (للموبايل فقط) */
+.bnav{display:none}
+@media (max-width:720px){
+  body.has-bnav{padding-bottom:calc(74px + env(safe-area-inset-bottom,0px))}
+  .bnav{display:flex;position:fixed;inset-inline:0;bottom:0;z-index:90;
+    padding:6px 8px calc(6px + env(safe-area-inset-bottom,0px));
+    background:var(--header-bg);
+    -webkit-backdrop-filter:blur(12px) saturate(140%);backdrop-filter:blur(12px) saturate(140%);
+    border-top:1px solid rgba(250,200,27,.35);box-shadow:0 -6px 22px rgba(20,6,10,.25)}
+  .bnav a{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px;
+    color:#F6E7DD;text-decoration:none;font-size:.72rem;font-weight:700;position:relative;opacity:.88}
+  .bnav a i{font-size:1.15rem;margin:0}
+  .bnav a.active{color:var(--gold);opacity:1}
+  .bnav a.active::before{content:"";position:absolute;top:-7px;left:28%;right:28%;height:3px;border-radius:0 0 3px 3px;background:var(--gold)}
+  body.has-bnav .wa-float{bottom:calc(82px + env(safe-area-inset-bottom,0px))}
+  body.has-bnav button.top{bottom:calc(82px + env(safe-area-inset-bottom,0px))}
+  body.has-bnav .toast{bottom:calc(86px + env(safe-area-inset-bottom,0px))}
+}
+@media print{.bnav{display:none!important}}
+
+/* 8) أطر تركيز واضحة بالذهبي (ثنائية الطبقة لتظهر على الفاتح والداكن) */
+a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visible,
+input:focus-visible,select:focus-visible,textarea:focus-visible,label:focus-visible{
+  outline:3px solid var(--gold);outline-offset:3px;box-shadow:0 0 0 3px #3A181E}
+body.dark-mode a:focus-visible,body.dark-mode button:focus-visible,body.dark-mode summary:focus-visible,
+body.dark-mode [tabindex]:focus-visible,body.dark-mode input:focus-visible,body.dark-mode select:focus-visible,
+body.dark-mode textarea:focus-visible{box-shadow:0 0 0 3px #1C0A0E}
+
+/* إزالة المربع الأزرق الذي يظهر عند الضغط على الموبايل (لون الضغط الافتراضي في كروم) */
+html,body,*,*::before,*::after{-webkit-tap-highlight-color:rgba(0,0,0,0)}
+a,button,summary,label,input,select,textarea,[role="button"],[tabindex]{
+  -webkit-tap-highlight-color:rgba(0,0,0,0);
+  touch-action:manipulation;
+}
+a,button,summary,label,[role="button"]{-webkit-touch-callout:none}
+/* لا نُظهر إطار التركيز عند اللمس (يبقى للكيبورد فقط عبر :focus-visible) */
+a:focus:not(:focus-visible),button:focus:not(:focus-visible),summary:focus:not(:focus-visible),
+[tabindex]:focus:not(:focus-visible){outline:none;box-shadow:none}
+
+/* بديل لون الضغط: توهّج ذهبي ناعم بحواف مدوّرة بدل المربع الأزرق */
+@media (hover:none){
+  a:active,button:active:not(:disabled),summary:active{filter:brightness(1.12)}
+  .bnav a:active{background:rgba(250,200,27,.18);border-radius:14px;filter:none}
+  nav a:active,header a:active{filter:brightness(1.18)}
+}
+
+/* ==========================================================
+   الميزات الجديدة: حماية النماذج، شريط الإعلان، آية اليوم،
+   المنشورات (على طريقة فيسبوك)، خريطة الحفظ، الشارات، التقرير
+   ========================================================== */
+
+/* حماية النماذج: حقل مخفي للروبوتات */
+.hp-field{position:absolute!important;left:-9999px!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important}
+
+/* شريط الإعلان العلوي */
+.annc{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;padding:8px 40px 8px 14px;position:relative;
+  background:linear-gradient(135deg,#FCD22E,#F0B90F);color:#3A181E;font-weight:700;font-size:.9rem;text-align:center}
+.annc a{color:#3A181E;text-decoration:underline;font-weight:800}
+.annc-x{position:absolute;inset-inline-end:8px;top:50%;transform:translateY(-50%);background:none;border:0;font-size:1.4rem;line-height:1;color:#3A181E;cursor:pointer;padding:2px 8px}
+
+/* التاريخ الهجري في الواجهة */
+.hijri-line{color:var(--gold-soft);font-size:.95rem;margin:-6px 0 18px;opacity:.95}
+.hijri-line i{margin-inline-end:4px}
+
+/* آية اليوم */
+.ayah-day{padding:26px 0 8px}
+.ayah-day .wrap{text-align:center;max-width:760px}
+.ayah-label{display:inline-block;background:rgba(250,200,27,.22);color:var(--wine);border-radius:14px;padding:2px 14px;font-weight:700;margin-bottom:10px}
+.ayah-text{font-family:"Amiri Quran","Amiri","Traditional Arabic",Georgia,serif;font-size:1.55rem;line-height:2.2;margin:6px 0;color:var(--wine)}
+.ayah-ref{color:var(--text-muted)}
+body.dark-mode .ayah-text{text-shadow:0 0 20px rgba(250,200,27,.18)}
+
+/* ---------- المنشورات على طريقة فيسبوك ---------- */
+.feed{display:flex;flex-direction:column;gap:16px;max-width:640px;margin:0 auto}
+.feed-wrap{max-width:680px;margin:0 auto;padding:18px 12px 30px}
+.post{background:var(--glass-strong);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--glass-shadow),inset 0 1px 0 var(--glass-edge)}
+.post.pinned{border-top:4px solid var(--gold)}
+.post.flash{animation:dar-flash 2.2s ease}
+@keyframes dar-flash{0%,60%{box-shadow:0 0 0 4px var(--gold)}100%{box-shadow:var(--glass-shadow)}}
+.post-h{display:flex;align-items:center;gap:10px;padding:12px 14px 6px}
+.post-av{width:44px;height:44px;border-radius:50%;flex:none;border:2px solid var(--gold)}
+.post-who{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.35}
+.post-who b{color:var(--wine)}
+.post-v{color:var(--gold-earth);font-size:.8rem}
+.post-who small{color:var(--text-muted)}
+.post-pin{color:var(--gold-earth);font-weight:700}
+.post-kind{flex:none;background:rgba(250,200,27,.22);color:var(--wine);border-radius:12px;padding:1px 11px;font-size:.78rem;font-weight:800}
+.post-kind.contest{background:#c62828;color:#fff}
+.post-kind.ann{background:var(--gold);color:#3A181E}
+.post-b{padding:4px 16px 10px}
+.post-b h3{margin:0 0 4px;font-size:1.08rem}
+.post-t{margin:0;white-space:pre-wrap;line-height:1.85;overflow-wrap:anywhere}
+.post-t.clamp{display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden}
+.post-more{background:none;border:0;color:var(--gold-earth);font:inherit;font-weight:800;padding:4px 0;cursor:pointer}
+.post-img{display:block;width:100%;max-height:520px;object-fit:cover;background:rgba(120,84,60,.12)}
+.post-img-ph{display:block;margin:0 16px 10px;padding:12px;border:1px dashed var(--gold-earth);border-radius:10px;text-align:center;color:var(--wine);text-decoration:none}
+.post-link{display:block;margin:0 16px 10px;padding:10px 12px;border-radius:10px;background:rgba(250,200,27,.16);color:var(--wine);text-decoration:none;font-weight:800}
+.post-f{display:flex;border-top:1px solid var(--line);padding:4px 8px}
+.post-f button{flex:1;background:none;border:0;padding:10px;color:var(--text-muted);font:inherit;font-weight:700;cursor:pointer;border-radius:8px}
+.post-f button:hover{background:rgba(250,200,27,.14);color:var(--wine)}
+.feed-more{align-self:center}
+
+/* ---------- خريطة الحفظ ---------- */
+.extras-box{margin-top:14px}
+.mq summary{cursor:pointer;font-weight:800;color:var(--wine);padding:6px 0;list-style:none}
+.mq summary::-webkit-details-marker{display:none}
+.mq-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:.8rem;color:var(--text-muted);margin:6px 0 10px}
+.mq-dot{display:inline-block;width:12px;height:12px;border-radius:3px;margin-inline-end:5px;vertical-align:-1px;border:1px solid var(--gold-earth)}
+.mq-dot.none{background:transparent;border-style:dashed}
+.mq-dot.part{background:linear-gradient(to top,var(--gold-soft) 55%,transparent 0)}
+.mq-dot.full{background:var(--gold)}
+.mq-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(70px,1fr));gap:6px}
+.mq-tile{border-radius:8px;padding:4px 5px 5px;text-align:center;min-height:48px;display:flex;flex-direction:column;justify-content:space-between;border:1px solid var(--line);font-size:.74rem;line-height:1.25}
+.mq-tile small{font-size:.66rem;opacity:.75}
+.mq-tile span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700}
+.mq-tile.none{opacity:.6;border-style:dashed}
+.mq-tile.part{border-color:var(--gold-earth);background:linear-gradient(to top,rgba(250,200,27,.55) calc(var(--p,10)*1%),transparent 0)}
+.mq-tile.full{background:var(--gold);color:#3A181E;border-color:var(--gold-earth)}
+
+/* ---------- الشارات ---------- */
+.bdg-head{font-weight:800;color:var(--wine);margin-bottom:8px}
+.bdg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:10px}
+.bdg{text-align:center;font-size:.74rem;font-weight:700;color:var(--text-muted);opacity:.7}
+.bdg.on{opacity:1;color:var(--wine)}
+.bdg-ic{display:grid;place-items:center;width:52px;height:52px;margin:0 auto 4px;background:rgba(120,84,60,.18);color:var(--text-muted);
+  clip-path:polygon(50% 0%,58% 6.7%,67.5% 3.3%,73.5% 11.5%,83.5% 11.5%,87.5% 21%,96.7% 25%,95% 35%,100% 44%,95% 52%,98% 62%,90% 67%,90% 77%,80% 79%,75% 89%,65% 88%,58% 96.7%,50% 91%,42% 96.7%,35% 88%,25% 89%,20% 79%,10% 77%,10% 67%,2% 62%,5% 52%,0% 44%,5% 35%,3.3% 25%,12.5% 21%,16.5% 11.5%,26.5% 11.5%,32.5% 3.3%,42% 6.7%)}
+.bdg.on .bdg-ic{background:linear-gradient(135deg,#FCD22E,#F0B90F);color:#3A181E}
+.bdg-n{display:block;line-height:1.3}
+
+/* ---------- التقرير الشهري ---------- */
+.rpt-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:12px 0 0;font-weight:700;color:var(--wine)}
+.rpt-bar select{width:auto;min-width:130px;padding:6px 10px}
+
+/* ---------- أدوات المشغّل الصوتي ---------- */
+.atools{display:flex;flex-direction:column;gap:6px;margin:6px 0 10px;font-size:.82rem}
+.atools-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.atools-row>span{color:var(--text-muted);font-weight:700}
+.atools button{background:transparent;border:1px solid var(--gold-earth);color:var(--wine);border-radius:14px;padding:2px 11px;font:inherit;font-weight:700;cursor:pointer}
+.atools button.on{background:var(--gold);color:#3A181E}
+.atools-info{color:var(--text-muted)}
+
+/* ==========================================================
+   إزالة اللون الأزرق عند الضغط/التحديد (تشديد) — يُستبدل بالذهبي من الهوية
+   ========================================================== */
+html,body,a,button,summary,label,input,select,textarea,[role="button"],.bnav,.bnav a,.bnav a *{
+  -webkit-tap-highlight-color:rgba(0,0,0,0)!important;
+  tap-highlight-color:rgba(0,0,0,0)!important;
+}
+a,button,summary,[role="button"]{touch-action:manipulation}
+/* منع تحديد النص الأزرق عند الضغط المطوّل على أزرار التنقل والأزرار */
+.bnav,.bnav a,button,.cta,.theme-btn,.nav-btn,.top,.wa-float{-webkit-user-select:none;user-select:none}
+/* لون تحديد النص من الهوية بدل الأزرق */
+::selection{background:rgba(250,200,27,.40);color:inherit}
+body.dark-mode ::selection{background:rgba(250,200,27,.45);color:#fff}
+/* لا إطار بعد اللمس، ويبقى إطار الكيبورد الذهبي */
+a:focus:not(:focus-visible),button:focus:not(:focus-visible),summary:focus:not(:focus-visible){outline:none;box-shadow:none}
+/* إحساس بالضغط بدل المربع الأزرق */
+@media (max-width:720px){
+  .bnav a:active{background:rgba(250,200,27,.16);border-radius:12px}
+}
+button:not(:disabled):active,.cta:active,.theme-btn:active,.nav-btn:active,.top:active,.wa-float:active{opacity:.86}
